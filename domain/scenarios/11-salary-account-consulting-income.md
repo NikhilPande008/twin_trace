@@ -28,6 +28,8 @@ Average: ₹4.13L/month — approximately 4.9× declared monthly salary.
 
 CUST-11's KYC declares no secondary employment, no business, no consultancy. No GST registration on file.
 
+**Case record in the seed (`ddp/seed_data.py`, 2026-10-28):** the three NEFT credits above, plus the home-loan EMI (₹35,000) and SIP (₹10,000) each month. Salary credits are not in the case record. ASSUMED: debit dates (June–August 2026).
+
 ---
 
 ### 2. Reasoning Chain
@@ -84,7 +86,7 @@ POE Factor 12 — KYC availability (POE-012)
 
 Following identification of undisclosed consulting income of ₹12,40,000 over months 25–27, CUST-11 was contacted for a KYC update per RBI Master Direction on KYC (without disclosing that an STR review was underway — tipping-off prohibition noted). CUST-11 provided: (a) a consulting agreement with [Client Entity] for software architecture advisory services; (b) invoices raised in CUST-11's name for the three monthly payments; (c) a GST registration certificate (obtained in month 26 upon crossing an annual threshold).
 
-The documented consulting engagement is consistent with CUST-11's professional profile (senior software engineer). The payer (Mr. Vikram S. / [Client Entity]) is identified as a registered startup in the technology sector with a verifiable web presence. The amounts (₹3.4–4.8L/month) are within market range for senior technology consulting.
+The documented consulting engagement is consistent with CUST-11's professional profile (senior software engineer). The payer (Mr. Vikram S. / [Client Entity]) is identified as a registered startup in the technology sector with a verifiable web presence. The amounts (₹3,40,000 to ₹4,80,000 a month) are within market range for senior technology consulting.
 
 Suspicion not formed. KYC updated to reflect consulting income. Alert closed. Documentation retained [corpus: RR-001].
 

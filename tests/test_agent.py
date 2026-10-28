@@ -184,3 +184,23 @@ def test_progress_events_follow_the_loop():
     assert "  get_case: ok" in events
     assert "  submit_assessment: rejected by validation, sent back" in events
     assert events[-1] == "  submit_assessment: accepted by validation"
+
+
+
+def test_prompt_is_the_one_measured_before_the_reverted_item4_change():
+    """2026-10-28: a prompt change was measured (evals/AGENT-LEAN-2026-10-28.md), showed no
+    consistent improvement and was reverted by the human. The README quotes runs with this prompt."""
+    import hashlib
+    from ddp.agent import SYSTEM
+    assert hashlib.sha256(SYSTEM.encode()).hexdigest().startswith("9e7cba49cc89")
+
+
+def test_stress_tool_tells_the_agent_when_a_file_is_unsupported():
+    """2026-10-28: the agent's stress_test result for a FILE on LOW signals leads with the lack
+    of support and marks the survived count as not meaningful."""
+    inv, store, _ = _inv([])
+    from ddp.agent import _CaseState
+    s = _CaseState("ALERT-04", store.get_alert("ALERT-04"), store.transactions_for("ALERT-04"))
+    out = inv._tool_stress_test(s, "FILE")
+    assert out["base_verdict"] == "LOW" and out["robustness"]["meaningful"] is False
+    assert "does not support this FILE" in out["summary"] and "Survives" not in out["summary"]

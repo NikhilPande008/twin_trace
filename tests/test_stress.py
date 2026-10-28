@@ -144,3 +144,31 @@ def test_eval_harness_mock_mode(tmp_path):
     report = next(tmp_path.glob("REPORT-*-mock.md")).read_text()
     assert "MOCK RUN" in report and "| ALERT-01 | MULE_PASSTHROUGH | FILE | HIGH | 1 |" in report
     assert "| ALERT-01 | FILE | submitted |" in report, "mock agent must still reach a submission"
+
+
+# ── 2026-10-28: a disposition against the signals is not called robust ─────────────────────
+def test_low_signal_file_summary_does_not_read_as_support(env):
+    r = _run(env, "ALERT-04", "FILE")                     # PEP case: FILE on LOW signals
+    assert r["base"]["verdict"] == "LOW" and r["robustness"]["meaningful"] is False
+    s = r["summary"]
+    assert "does not hinge" not in s and "Survives" not in s
+    assert "does not support this FILE" in s
+    assert s.index("FILE proposed but calculator signals are LOW") < s.index("does not support")
+
+
+def test_closure_against_high_signals_summary_does_not_read_as_support(env):
+    r = _run(env, "ALERT-01", "NOT_FILE")
+    assert r["base"]["verdict"] == "HIGH" and r["robustness"]["meaningful"] is False
+    assert "does not support this closure" in r["summary"] and "Survives" not in r["summary"]
+    assert "would raise the verdict to HIGH" not in r["summary"]
+
+
+def test_supported_dispositions_keep_their_robustness_count(env):
+    high = _run(env, "ALERT-01", "FILE")
+    assert high["robustness"]["meaningful"] is True and "Survives" in high["summary"]
+    elevated = _run(env, "ALERT-02", "FILE")              # ELEVATED: lowering is possible
+    assert elevated["base"]["verdict"] == "ELEVATED"
+    assert elevated["robustness"]["meaningful"] is True and "Survives" in elevated["summary"]
+    assert "does not hinge" not in elevated["summary"]   # only a HIGH FILE is called that
+    close_low = _run(env, "ALERT-08", "NOT_FILE")
+    assert close_low["robustness"]["meaningful"] is True and "Survives" in close_low["summary"]

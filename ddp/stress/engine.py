@@ -115,7 +115,11 @@ class StressTester:
             "branches": branches,
             "minimal_flip_sets": [[h.to_dict() for h in f] for f in flip_sets],
             "smallest_flip_size": min((len(f) for f in flip_sets), default=None),
-            "robustness": {"single_hypotheses": len(singles), "survived": survived},
+            # A FILE on LOW signals cannot be lowered and a closure on HIGH cannot be raised, so
+            # every challenge "survives" trivially; the count then says nothing (2026-10-28).
+            "robustness": {"single_hypotheses": len(singles), "survived": survived,
+                           "meaningful": not ((mode == "weaken" and base_verdict == "LOW")
+                                              or (mode == "strengthen" and base_verdict == "HIGH"))},
             "load_bearing": [hyp_index[i].to_dict() for i in load_bearing],
             "reopen_triggers": self._reopen_triggers(flip_sets, base_verdict)
             if mode == "strengthen" else [],
@@ -208,23 +212,34 @@ def deterministic_summary(r: dict) -> str:
     fired = [s["label"] for s in r["base"]["signals"] if s["fired"]]
     parts = [f"Calculator signals: {base}"
              + (f" ({'; '.join(fired)})." if fired else " (no signal fired).")]
+    parts.extend(r["notes"])            # a disposition against the signals is said first
     if r["mode"] == "weaken":
         if r["minimal_flip_sets"]:
             sets = [" + ".join(h["label"] for h in f) for f in r["minimal_flip_sets"][:3]]
             parts.append(f"A FILE here rests on specific evidence. The verdict drops below {base} "
                          f"if: " + " | OR | ".join(sets) + ". Document these in the Ground of "
                          "Suspicion.")
+        elif base == "LOW":
+            parts.append("The calculator does not support this FILE: the level is already LOW, "
+                         "so no counter-hypothesis can lower it.")
         else:
             parts.append(f"No combination of up to {r['search']['max_set_size']} counter-"
-                         f"hypotheses lowers the verdict: the FILE does not hinge on one fact.")
+                         f"hypotheses lowers the verdict below {base}"
+                         + (": the FILE does not hinge on one fact." if base == "HIGH" else "."))
     else:
         if r["reopen_triggers"]:
             parts.append("Reopen this alert if: " + " | OR | ".join(
                 " + ".join(t["if"]) for t in r["reopen_triggers"][:3]) + ".")
+        elif base == "HIGH":
+            parts.append("The calculator does not support this closure: the level is already "
+                         "HIGH, so no registry hit can raise it.")
         else:
             parts.append(f"No registry hit on up to {r['search']['max_set_size']} existing "
                          "counterparties would raise the verdict to HIGH.")
-    parts.append(f"Survives {rob['survived']} of {rob['single_hypotheses']} single "
-                 f"counter-hypotheses; {r['search']['runs_used']} branch runs of the calculator.")
-    parts.extend(r["notes"])
+    if rob.get("meaningful", True):
+        parts.append(f"Survives {rob['survived']} of {rob['single_hypotheses']} single "
+                     f"counter-hypotheses; {r['search']['runs_used']} branch runs of the calculator.")
+    else:
+        parts.append(f"{r['search']['runs_used']} branch runs of the calculator; the count of "
+                     "challenges survived is not meaningful here.")
     return " ".join(parts)

@@ -72,8 +72,9 @@ def test_streamlit_theme_matches_tokens(theme, key, token):
 
 
 def test_no_raw_colours_in_app():
-    src = (ROOT / "app.py").read_text()
-    assert not re.findall(r"#[0-9a-fA-F]{6}\b|#[0-9a-fA-F]{3}\b", src)
+    from ddp.ui import source_files   # app.py and every ddp/ui module
+    for path in source_files():
+        assert not re.findall(r"#[0-9a-fA-F]{6}\b|#[0-9a-fA-F]{3}\b", path.read_text()), path.name
 
 
 def test_contrast_helper_known_values():

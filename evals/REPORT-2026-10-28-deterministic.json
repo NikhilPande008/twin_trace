@@ -1,0 +1,155 @@
+{
+ "mode": "deterministic",
+ "started_utc": "2026-10-28T13:32:17.009894+00:00",
+ "seed_sha256": "969dda38cba7eb328e68403b06231272dd272188adec54a62f0110fec6e5e74e",
+ "models": {},
+ "tavily": "not injected",
+ "base_url": "https://api.tokenfactory.nebius.com/v1/",
+ "compute_backend": "local",
+ "rows": [
+  {
+   "alert_id": "ALERT-01",
+   "type": "MULE_PASSTHROUGH",
+   "gold": "FILE",
+   "verdict": "HIGH",
+   "flip": 1,
+   "branches": 23,
+   "backend": null
+  },
+  {
+   "alert_id": "ALERT-02",
+   "type": "STRUCTURING",
+   "gold": "FILE",
+   "verdict": "ELEVATED",
+   "flip": null,
+   "branches": 64,
+   "backend": null
+  },
+  {
+   "alert_id": "ALERT-03",
+   "type": "DORMANT_REACTIVATION",
+   "gold": "CONTESTED",
+   "verdict": "LOW",
+   "flip": 1,
+   "branches": 4,
+   "backend": null
+  },
+  {
+   "alert_id": "ALERT-04",
+   "type": "PEP_INCONSISTENCY",
+   "gold": "FILE",
+   "verdict": "LOW",
+   "flip": null,
+   "branches": 41,
+   "backend": null
+  },
+  {
+   "alert_id": "ALERT-05",
+   "type": "CROSS_BORDER_FATF",
+   "gold": "FILE",
+   "verdict": "LOW",
+   "flip": null,
+   "branches": 63,
+   "backend": null
+  },
+  {
+   "alert_id": "ALERT-06",
+   "type": "NPO_MISUSE",
+   "gold": "FILE",
+   "verdict": "HIGH",
+   "flip": 1,
+   "branches": 64,
+   "backend": null
+  },
+  {
+   "alert_id": "ALERT-07",
+   "type": "LARGE_CASH_DEPOSIT",
+   "gold": "NOT_FILE",
+   "verdict": "ELEVATED",
+   "flip": 1,
+   "branches": 1,
+   "backend": null
+  },
+  {
+   "alert_id": "ALERT-08",
+   "type": "LARGE_CREDIT",
+   "gold": "NOT_FILE",
+   "verdict": "LOW",
+   "flip": 1,
+   "branches": 4,
+   "backend": null
+  },
+  {
+   "alert_id": "ALERT-09",
+   "type": "DEVICE_IDENTITY_LINKAGE",
+   "gold": "FILE",
+   "verdict": "LOW",
+   "flip": null,
+   "branches": 64,
+   "backend": null
+  },
+  {
+   "alert_id": "ALERT-10",
+   "type": "BENEFICIARY_CONCENTRATION",
+   "gold": "FILE",
+   "verdict": "HIGH",
+   "flip": 1,
+   "branches": 64,
+   "backend": null
+  },
+  {
+   "alert_id": "ALERT-11",
+   "type": "INCOME_INCONSISTENCY",
+   "gold": "CONTESTED",
+   "verdict": "LOW",
+   "flip": 1,
+   "branches": 4,
+   "backend": null
+  },
+  {
+   "alert_id": "ALERT-12",
+   "type": "ATTEMPTED_SWIFT",
+   "gold": "FILE",
+   "verdict": "LOW",
+   "flip": null,
+   "branches": 25,
+   "backend": null
+  },
+  {
+   "alert_id": "ALERT-13",
+   "type": "MF_LAYERING",
+   "gold": "CONTESTED",
+   "verdict": "LOW",
+   "flip": null,
+   "branches": 14,
+   "backend": null
+  },
+  {
+   "alert_id": "ALERT-14",
+   "type": "NRI_KYC_MISMATCH",
+   "gold": "CONTESTED",
+   "verdict": "LOW",
+   "flip": 1,
+   "branches": 2,
+   "backend": null
+  },
+  {
+   "alert_id": "ALERT-15",
+   "type": "FIDUCIARY_DIVERSION",
+   "gold": "FILE",
+   "verdict": "LOW",
+   "flip": null,
+   "branches": 64,
+   "backend": null
+  },
+  {
+   "alert_id": "ALERT-16",
+   "type": "MULE_PASSTHROUGH",
+   "gold": "NOT_FILE",
+   "verdict": "ELEVATED",
+   "flip": 1,
+   "branches": 4,
+   "backend": null
+  }
+ ]
+}

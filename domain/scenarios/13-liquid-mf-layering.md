@@ -24,11 +24,13 @@ rules_cited: [STR-001, RFI-001, POE-003, POE-005, POE-006, POE-010, INS-001, INS
 | Cycle 5 (M15) | ₹19,50,000 | ₹19,40,000 | ₹19,58,000 | ₹19,50,000 cash |
 | Cycle 6 (M16) | ₹14,20,000 | ₹14,10,000 | ₹14,25,000 | ₹14,20,000 cash |
 
-**Total cycle volume:** ₹1,20,00,000 (₹1.2 crore) over 4 months.
+**Total cycle volume:** ₹1,16,00,000 (₹1.16 crore; the six cycle amounts above) over 4 months.
 
 The cycle — NEFT in → liquid MF → quick redemption → cash out — repeats 6 times with intervals of 2–3 weeks. The liquid fund positions are held for 3–5 days only (no investment objective is served by a 3–5 day holding).
 
 **Ingested signals:** None from external databases.
+
+**Case record in the seed (`ddp/seed_data.py`, 2026-10-28):** six cycles of four steps, the cash step split into three counter withdrawals: 36 rows, May–August 2026. Credits are the NEFT in plus the redemptions (₹2,32,47,000), which is now the alert amount. The six cycle amounts sum to ₹1,16,00,000, not the ₹1.2 crore stated before; corrected throughout. ASSUMED: the split of each cash withdrawal and the dates. FOR DOMAIN REVIEW: the redemptions above return 0.6–0.9% in 3–5 days, far above a liquid fund's return; the draft no longer quotes a return.
 
 ---
 
@@ -57,7 +59,7 @@ POE Factor 9 — Transaction complexity (POE-010)
     channel (cash withdrawal from savings rather than current).
 
 POE Factor 4 — Income level (POE-005)
-  → ₹1.2 crore cycled over 4 months vs. declared annual income of ₹8L.
+  → ₹1.16 crore cycled over 4 months vs. declared annual income of ₹8L.
     Even for a trader with ₹80L turnover, ₹1.2Cr in cash withdrawals in
     4 months is not consistent with declared activity.
 
@@ -73,7 +75,7 @@ POE Factor 5 — Source of income (POE-006)
 **Reading A — FILE STR:**
 - ₹1.2Cr in cash withdrawn via a liquid-MF layering cycle over 4 months with no plausible investment purpose for the MF step
 - Pattern is deliberate and repeated (6 cycles, consistent structure)
-- 15× declared annual income; inconsistent with stated business scale
+- 14.5× declared annual income; inconsistent with stated business scale
 - The MF step creates a documentary separation that benefits only an ML purpose, not a legitimate investor
 - This is a textbook layering structure
 
@@ -90,11 +92,11 @@ POE Factor 5 — Source of income (POE-006)
 
 ### 3. Draft Ground of Suspicion (Reading A)
 
-Account holder CUST-13 (proprietor, small trading firm, declared annual income ₹8L) engaged in a repeated 4-step cash-extraction cycle over months 13–16: (1) large NEFT from own business account at Bank X; (2) same-day investment in a liquid mutual fund; (3) liquid fund redemption within 3–5 days; (4) cash withdrawal of the redemption proceeds. This cycle was executed 6 times over 4 months, with individual cycle amounts ranging from ₹14.2L to ₹25L, for a total of ₹1.2 crore in cash withdrawals.
+Account holder CUST-13 (proprietor, small trading firm, declared annual income ₹8L) engaged in a repeated 4-step cash-extraction cycle over months 13–16: (1) large NEFT from own business account at Bank X; (2) same-day investment in a liquid mutual fund; (3) liquid fund redemption within 3–5 days; (4) cash withdrawal of the redemption proceeds. This cycle was executed 6 times over 4 months, with individual cycle amounts ranging from ₹14.2L to ₹25L, six cycles in all, each ending in a cash withdrawal of the cycle amount.
 
-A liquid fund holding of 3–5 days yields a negligible return (less than ₹200 per ₹18L at prevailing rates). No investment purpose is served by this holding period. The only functional difference between this cycle and a direct cash withdrawal from the business current account is the creation of a document trail showing cash sourced from "mutual fund redemption" rather than "business account transfer." This structural complexity has no plausible legitimate purpose: it is consistent with layering — using a financial instrument to obscure the relationship between the original funds and the final cash withdrawal.
+No investment purpose is served by this holding period. The only functional difference between this cycle and a direct cash withdrawal from the business current account is the creation of a document trail showing cash sourced from "mutual fund redemption" rather than "business account transfer." This structural complexity has no plausible legitimate purpose: it is consistent with layering — using a financial instrument to obscure the relationship between the original funds and the final cash withdrawal.
 
-₹1.2 crore in cash over 4 months is 15× CUST-13's declared annual income and inconsistent with the declared business turnover of ₹80L annually. No explanation for the cash requirement has been provided.
+Cash withdrawals at this scale over 4 months are about 14.5× CUST-13's declared annual income of ₹8L and exceed the declared annual business turnover. No explanation for the cash requirement has been provided.
 
 Suspicion is formed under PMLA 2002 s.12(1)(b) on the basis of: (a) deliberate and repeated use of a liquid MF as a layering step with no investment rationale (POE Factor 9, RFI-001 adapted); (b) total volume inconsistent with declared income (POE Factor 4); and (c) cash extraction at scale with no declared business purpose (POE Factor 5).
 
@@ -105,7 +107,7 @@ Suspicion is formed under PMLA 2002 s.12(1)(b) on the basis of: (a) deliberate a
 - Uses generic phrases without specifics: **PASS** — 6 cycles, ₹1.2Cr total, 3–5 day holding, ₹200 return estimate
 - Does not cite specific amounts/dates: **PASS**
 - Does not name specific red-flag indicators: **PASS** — POE Factor 9, RFI-001 (adapted) named
-- Does not explain contradiction with stated profile: **PASS** — 15× annual income; turnover vs. cash volume
+- Does not explain contradiction with stated profile: **PASS** — 14.5× annual income; turnover vs. cash volume
 - Does not address relevant PO evaluation factors: **PASS** — Factors 4, 5, 9 addressed
 - Beneficiary relationship not discussed: **N/A** — cash withdrawal, no specific beneficiary
 - Geography risk not discussed: **N/A** — domestic

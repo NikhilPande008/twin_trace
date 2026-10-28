@@ -42,7 +42,8 @@ def test_stakes_add_no_figures_beyond_their_rule():
 def test_ui_source_never_cites_a_needs_verification_rule():
     levels = _levels()
     prefixes = {rid.split("-")[0] for rid in levels}
-    for path in (ROOT / "app.py", ROOT / "ddp" / "stakes.py", ROOT / "ddp" / "glossary.py"):
+    from ddp.ui import source_files   # app.py and every ddp/ui module
+    for path in [*source_files(), ROOT / "ddp" / "stakes.py", ROOT / "ddp" / "glossary.py"]:
         for rid in set(re.findall(r"\b([A-Z]{2,4}-\d{3})\b", path.read_text())):
             if rid.split("-")[0] not in prefixes:
                 continue                     # not a corpus ID (e.g. DG-19 gap notes)

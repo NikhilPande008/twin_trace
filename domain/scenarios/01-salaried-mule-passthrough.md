@@ -71,7 +71,7 @@ Statutory basis:
 
 ### 3. Draft Ground of Suspicion
 
-Account holder CUST-01, a self-declared data entry operator with stated monthly income of ₹28,000, exhibited a materially anomalous transaction pattern in month 14 of the account's operation. After 13 months of consistent salary-only credits (₹27,800–₹28,200/month, single NEFT sender), the account received three credits from four distinct unknown UPI mobile handles totalling ₹3,45,000 over a five-day period — approximately 12.3× the declared monthly income. Within the same period, ₹3,40,700 (98.5% of the non-salary inflows) was transferred out to a single UPI handle (handle C) in two transactions.
+Account holder CUST-01, a self-declared data entry operator with stated monthly income of ₹28,000, exhibited a materially anomalous transaction pattern in month 14 of the account's operation. After 13 months of consistent salary-only credits close to the declared income from a single NEFT sender, the account received three credits from four distinct unknown UPI mobile handles totalling ₹3,45,000 over a five-day period — approximately 12.3× the declared monthly income. Within the same period, ₹3,40,700 (98.5% of the non-salary inflows) was transferred out to a single UPI handle (handle C) in two transactions.
 
 Handle C is registered in the I4C Suspect Registry as associated with a cyber fraud scheme (online gaming), with the registration date three weeks prior to the first credit in this sequence. This RE has no independent information on the identity, business, or relationship of handle C to CUST-01. The KYC record discloses no secondary income, business interest, or other legitimate source that would account for this volume of third-party credits.
 

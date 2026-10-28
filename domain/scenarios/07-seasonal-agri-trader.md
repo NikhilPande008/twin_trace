@@ -30,6 +30,8 @@ rules_cited: [STR-001, CTR-001, POE-001, POE-002, POE-003, POE-005, POE-009, INS
 - Previous 4 years' ITR (audited) confirming seasonal turnover of ₹1.5–2.1 crore
 - Bank's own credit officer conducted business review 8 months ago; report on file confirms seasonal cash business, APMC registration, and farmer supplier relationships
 
+**Case record in the seed (`ddp/seed_data.py`, 2026-10-28):** 22 cash deposits of ₹80,000 to ₹3,50,000 over 45 days, ending the day before the alert date (18 Jul – 31 Aug 2026). ASSUMED: the individual amounts and dates. FOR DOMAIN REVIEW: the seed's alert date (1 Sep 2026) puts these deposits in July–August, not the October–November season described above (the draft no longer names the months); and wheat is a rabi crop, so "kharif wheat" may need correcting.
+
 ---
 
 ### 2. Reasoning Chain
@@ -77,15 +79,15 @@ A PO who files an STR here without engaging with the available documentation wou
 
 ### 4. Draft Closure Rationale
 
-Alert raised by automated CTR monitoring on the October monthly cash aggregate of ₹48,20,000 exceeding ₹10 lakh. CTR is being filed for the relevant months.
+Alert raised by automated CTR monitoring: cash deposits of ₹48,20,000 over 45 days, with each calendar month's cash total above the CTR-001 threshold. CTR is being filed for the relevant months.
 
 STR evaluation conducted by the undersigned PO. Suspicion is not formed for the following reasons:
 
-(a) **Documented business purpose:** CUST-07 is a GST-registered grain trader with a mandi licence operating from the APMC yard, Latur. Cash procurement from farmers is standard market practice in the kharif grain trade. Mandi farukha receipts totalling ₹46.8L for the same period, corresponding to purchases from 15 named registered farmers, have been verified.
+(a) **Documented business purpose:** CUST-07 is a GST-registered grain trader with a mandi licence operating from the APMC yard, Latur. Cash procurement from farmers is standard market practice in the kharif grain trade. Mandi farukha receipts for the same period, corresponding to purchases from 15 named registered farmers, have been verified.
 
-(b) **Consistent 4-year pattern:** The October–November cash deposit pattern (₹35L–₹55L aggregate) is consistent with the prior 4 years of transaction history at this RE. The amount (₹48.2L) falls within the observed historical range.
+(b) **Consistent 4-year pattern:** The seasonal cash deposit pattern is consistent with the prior 4 years of transaction history at this RE. The amount (₹48.2L) falls within the range observed in those years.
 
-(c) **Income consistency:** ₹48.2L represents 26.8% of declared annual turnover of ₹1.8 crore; consistent with scale of operations. Four years of audited ITR are on file.
+(c) **Income consistency:** ₹48.2L represents 26.8% of declared annual turnover; consistent with scale of operations. Four years of audited ITR are on file.
 
 (d) **Recent business review:** The RE's credit officer conducted a business review 8 months ago and confirmed the seasonal cash business model, APMC registration, and farmer supplier relationships.
 

@@ -5,7 +5,8 @@ Computed facts from ddp.compute are accepted as evidence by the hard gate and ar
 the only aggregate figures the GoS drafter is allowed to use.
 
 What did NOT change (and must not drift): the 11 POE factors, the anti-templating
-checklist and its basis caveat, the tipping-off screen, the evidence-sufficiency
+checklist and its basis caveat, the tipping-off screen's refusal (its matching was tightened
+on 2026-10-28: whole words, and the recording gate's list of what must not be disclosed), the evidence-sufficiency
 thresholds, and the counter-evidence review.
 """
 
@@ -19,9 +20,39 @@ from datetime import datetime, timezone
 from decimal import Decimal
 
 from .claims import claim_map
-from .gate import BLOCKING_AT_RECORDING, GATE_VERSION, DeterministicPolicyGate
+from .gate import _PARTY, _SECRET, BLOCKING_AT_RECORDING, GATE_VERSION, DeterministicPolicyGate
+from .identity import SELF_ASSERTED
 from .money import extract_amounts, format_inr
 from .retrieval import CorpusIndex
+
+# Building blocks for screen_request (tipping-off in a request, before any model call).
+# What must not be disclosed reuses the recording gate's _SECRET, so the two cannot drift;
+# the extra cues are ones a request to the customer carries but a GoS does not.
+_REQ_PARTY = (r"(?:" + _PARTY + r"s?|account[\s-]?owners?|depositors?|him|her|them|"
+              r"(?:mr|mrs|ms|shri|smt)\.?\s+\w+)")
+_REQ_TELL = (r"(?:tell(?:ing)?|inform(?:ing)?|notif(?:y|ying)|warn(?:ing)?|advis(?:e|ing)|"
+             r"call(?:ing)?|e-?mail(?:ing)?|messag(?:e|ing)|text(?:ing)?|whatsapp|sms|letter|"
+             r"note|write\s+to|writing\s+to|reach(?:ing)?\s+out\s+to|explain(?:ing)?\s+to|"
+             r"disclos(?:e|ing)\s+to|tip(?:ping)?\s+off)")
+_REQ_ADDRESSES_PARTY = re.compile(
+    r"\b" + _REQ_TELL + r"\b[^.:]{0,20}?\b" + _REQ_PARTY + r"\b"
+    + r"|\blet\s+(?:the\s+)?" + _REQ_PARTY + r"\s+know\b"
+    + r"|\bgiv(?:e|ing)\s+(?:the\s+)?" + _REQ_PARTY
+    + r"\s+(?:a\s+)?(?:heads[\s-]?up|hint|warning|word)\b"
+    + r"|\b" + _REQ_PARTY + r"\b[^.]{0,30}?\b(?:is|are|be|been|gets?)\s+"
+      r"(?:informed|told|notified|warned|made\s+aware|tipped\s+off)\b",
+    re.IGNORECASE,
+)
+_REQ_SECRET = re.compile(
+    r"\b(?:" + _SECRET
+    + r"|compliance(?:\s+team)?\s+(?:is|are)\s+(?:looking|reviewing|investigating|watching|monitoring)"
+      r"|freez(?:e|es|ing)|frozen"
+      r"|(?:move|moving|withdraw|withdrawing|transfer|take\s+out)\s+(?:his\s+|her\s+|their\s+|the\s+)?"
+      r"(?:money|funds|balance)"
+      r"|report(?:ed|ing)\s+(?:him|her|them|the\s+(?:customer|client|account))"
+      r"|we\s+(?:are|'re|have)\s+(?:filing|filed|reporting|reported))\b",
+    re.IGNORECASE,
+)
 
 PROMPT_VERSION = "v2.0-nebius"
 SKILL_VERSION = "v2.0-nebius"
@@ -232,21 +263,16 @@ class CoPilotSkills:
         customer that a report, filing, or suspicion exists. Tipping-off is a criminal
         offence under PMLA 2002 s.12A (corpus SB-003); the system must refuse, not draft.
 
+        Refused when the request both (1) addresses the customer — a tell-verb aimed at them,
+        or "the customer is informed" — and (2) names what must not be disclosed: a report,
+        the FIU, an investigation (the recording gate's list), or a request-only cue such as
+        a freeze or moving the money out. Whole words only, so "history" is not "STR" and
+        asking the customer for documents is allowed.
+
         Returns {allowed: bool, category: str, reason: str}.
         """
-        t = (request_text or "").lower()
-        subject_customer = any(s in t for s in (
-            "customer", "account holder", "client", "account owner", "the depositor",
-        ))
-        action_notify = any(a in t for a in (
-            "tell", "inform", "notify", "warn", "let them know", "let the customer know",
-            "alert", "message", "reach out", "call", "email", "disclose to", "advise",
-        ))
-        about_report = any(r in t for r in (
-            "str", "suspicious transaction report", "report", "filing", "we are filing",
-            "we're filing", "suspicion", "flagged", "investigation", "being reported",
-        ))
-        if subject_customer and action_notify and about_report:
+        t = request_text or ""
+        if _REQ_ADDRESSES_PARTY.search(t) and _REQ_SECRET.search(t):
             return {
                 "allowed": False,
                 "category": "tipping_off",
@@ -508,6 +534,8 @@ Output ONLY the narrative text, no preamble or JSON."""
         model_calls:           list[dict] | None = None,
         validated_draft_sha256: str | None = None,
         agent_run_ref:         str | None = None,
+        decision_maker_basis:  str = SELF_ASSERTED,
+        decision_maker_identity: dict | None = None,
     ) -> dict:
         """
         Record a FILE or NOT-FILE decision in the append-only DECISION_LEDGER.
@@ -521,6 +549,9 @@ Output ONLY the narrative text, no preamble or JSON."""
             rfi_triggers:        List of RFI IDs triggered.
             poe_assessment:      Output from suspicion_evaluator.
             decision_maker_id:   PO identifier.
+            decision_maker_basis: how the ID was established (ddp.identity: self-asserted or
+                                 OIDC sign-in); hashed into the ledger row via METADATA_JSON.
+            decision_maker_identity: OIDC issuer and subject hash, when signed in.
             suspicion_formed_at: ISO timestamp when suspicion arose (SLA clock start).
                                  Defaults to now if not provided.
             str_reference:       FINGate STR reference (required when disposition=FILE).
@@ -609,7 +640,9 @@ Output ONLY the narrative text, no preamble or JSON."""
                 "policy_advisory":   [v["policy"] for v in policy["verdicts"] if v["violated"]],
                 "validated_at":      now,
             },
-            "decision_maker_id_basis": "self-asserted (no authentication in this build)",
+            "decision_maker_id_basis": decision_maker_basis,
+            **({"decision_maker_identity": decision_maker_identity}
+               if decision_maker_identity else {}),
             "agent_run_ref":     agent_run_ref,
             "idempotency_key":   idempotency_key,
         }

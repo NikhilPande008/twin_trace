@@ -50,7 +50,8 @@ def test_case_workspace_exposes_landmarks_and_provenance_before_ai():
 
 
 def test_confirmation_copy_does_not_imply_a_regulatory_submission():
-    source = (ROOT / "app.py").read_text()
+    from ddp.ui import source_files   # app.py and every ddp/ui module (split 2026-10-28)
+    source = "\n".join(p.read_text() for p in source_files())
     assert "Confirmation records a local decision only" in source
     assert "It does not transmit an STR" in source
     assert '"tipping_off_str", "tipping_off_disclosure", "accusation_without_evidence"' in source

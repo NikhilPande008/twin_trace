@@ -22,7 +22,7 @@ rules_cited: [STR-001, STR-002, RFI-009, RFI-006, POE-001, POE-005, POE-006, SB-
 | Month 20 | ₹11,00,000 | ABC Infrastructure Ltd | (same as above) |
 | Month 20 | ₹4,80,000 | GHI Constructions | Road contractor |
 | Month 21 | ₹9,30,000 | DEF Engineering Pvt Ltd | (same as above) |
-| Month 21 | ₹8,20,000 | JKL Roadways Pvt Ltd | Highway contractor |
+| Month 21 | ₹7,90,000 | JKL Roadways Pvt Ltd | Highway contractor |
 
 Total credits from corporate senders over 3 months: ₹47,70,000 (₹47.7 lakh)
 All senders are contractors in the road/civil construction sector — the sector regulated/tendered by PWD.
@@ -33,6 +33,8 @@ Ratio of corporate credits to declared income: 21.2×
 **Ingested signals:** None from external databases. Internal PEP-watchlist monitoring triggered the alert.
 
 **Linked accounts:** None at this RE.
+
+**Case record in the seed (`ddp/seed_data.py`, 2026-10-28):** the six contractor credits above. The JKL Roadways credit is ₹7,90,000 (was ₹8,20,000) so that the table sums to the stated ₹47,70,000 and the 21.2× ratio holds. Salary credits are not in the case record.
 
 ---
 
@@ -82,9 +84,9 @@ Statutory basis:
 
 ### 3. Draft Ground of Suspicion
 
-Account holder CUST-04, a serving Deputy Director in the State Public Works Department and a correctly designated domestic PEP under the RBI Master Direction on KYC, received corporate credits totalling ₹47,70,000 to their personal savings account over a three-month period from six private entities — all of which are contractors operating in the road and civil construction sector regulated and tendered by the PWD. CUST-04's declared government salary for the same period is ₹2,25,000. The corporate credits are 21.2× the declared income and have no basis in the KYC record, which discloses no secondary employment, consultancy, business interest, or other income source.
+Account holder CUST-04, a serving Deputy Director in the State Public Works Department and a correctly designated domestic PEP under the RBI Master Direction on KYC, received corporate credits totalling ₹47,70,000 to their personal savings account over a three-month period in six payments from four private entities — all of which are contractors operating in the road and civil construction sector regulated and tendered by the PWD. CUST-04's declared government salary is ₹75,000 a month. The corporate credits are 21.2× the declared salary for the same three months and have no basis in the KYC record, which discloses no secondary employment, consultancy, business interest, or other income source.
 
-The six creditor entities (ABC Infrastructure Ltd, DEF Engineering Pvt Ltd, GHI Constructions, JKL Roadways Pvt Ltd, and two repeat credits from ABC and DEF) are active PWD contractors. Payments from a regulated contractor to the personal account of a serving regulatory/procurement official in the same department constitute a plausible bribery or kickback pattern and are inconsistent with any legitimate commercial relationship.
+The four creditor entities (ABC Infrastructure Ltd, DEF Engineering Pvt Ltd, GHI Constructions and JKL Roadways Pvt Ltd, with repeat credits from ABC and DEF) are active PWD contractors. Payments from a regulated contractor to the personal account of a serving regulatory/procurement official in the same department constitute a plausible bribery or kickback pattern and are inconsistent with any legitimate commercial relationship.
 
 Enhanced due diligence was applied at onboarding and this monitoring event arises from the PEP watchlist flag. No customer contact has been made (tipping-off prohibition, PMLA s.12A).
 

@@ -289,8 +289,8 @@ def eval_scn20_no_rag_result():
         failed.append(f"regulatory_lookup raised exception: {e}")
 
     # Verify the no-result message logic exists in the UI
-    app_path = Path(__file__).parent.parent / "app.py"
-    app_content = app_path.read_text()
+    from ddp.ui import source_files   # app.py and every ddp/ui module (split 2026-10-28)
+    app_content = "\n".join(p.read_text() for p in source_files())
     if "No matching rules found" in app_content:
         passed.append("UI shows 'No matching rules found' message for empty results")
     else:

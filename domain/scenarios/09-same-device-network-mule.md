@@ -29,13 +29,15 @@ All 7 accounts: different names, different Aadhaar numbers, different PAN number
 
 All 7 accounts become active simultaneously on T+1. Over 15 days:
 
-- **Credits:** Each account receives 3–5 UPI credits from different unknown mobile handles (different payers each time, no overlap across accounts). Amounts per account: ₹30,000–₹80,000 over the period.
+- **Credits:** Each account receives 3–5 UPI credits from different unknown mobile handles (different payers each time, no overlap across accounts). Amounts per credit: ₹50,000–₹1,40,000 (28 credits in all).
 - **Debits:** Every account transfers 90–98% of received funds to the same UPI handle: [HANDLE-DEST].
 
 Total inflows (7 accounts): ₹27,30,000 over 15 days.
 Total to [HANDLE-DEST]: ₹25,80,000 (94.5%).
 
 **Ingested signals:** [HANDLE-DEST] is not flagged in I4C or DPIP as of alert date.
+
+**Case record in the seed (`ddp/seed_data.py`, 2026-10-28):** 28 UPI credits (3–5 per account) from distinct unknown handles, ₹27,30,000 in all, and seven debits to HANDLE-DEST, one per account, each 90–98% of that account's credits, ₹25,80,000 in all. The seed has one case record (CUST-09); the account is not a ledger column. ASSUMED: individual amounts and dates (19 Aug – 2 Sep 2026). The earlier per-account range (₹30,000–₹80,000) could not reach ₹27,30,000 and was replaced by a per-credit range.
 
 ---
 
@@ -98,7 +100,7 @@ Seven savings accounts at this RE (ACCT-09-1 through ACCT-09-7), opened across a
 
 All seven accounts became transaction-active simultaneously on [T+1]. Over the following 15 days, each account received 3–5 UPI credits from different unknown mobile handles (with no overlap of creditors across accounts), totalling ₹27,30,000 in aggregate. In each account, 90–98% of received funds were immediately transferred to a single common UPI handle ([HANDLE-DEST]) — the same destination across all seven accounts. Net funds received by [HANDLE-DEST] from these seven accounts: ₹25,80,000.
 
-The use of a single device fingerprint across seven accounts with distinct KYC identities contradicts legitimate banking use and indicates coordinated control of these accounts by a single orchestrator (RFI-004). Each individual account's credit-then-near-total-debit pattern is consistent with mule pass-through behaviour (RFI-001). The declared incomes across all seven holders (₹8,000–₹15,000/month, or nil) cannot account for the ₹27.3L aggregate flow (POE Factor 4). The shared-address linkage (5 of 7 accounts at 2 addresses) was not identified at account opening.
+The use of a single device fingerprint across seven accounts with distinct KYC identities contradicts legitimate banking use and indicates coordinated control of these accounts by a single orchestrator (RFI-004). Each individual account's credit-then-near-total-debit pattern is consistent with mule pass-through behaviour (RFI-001). The declared incomes of the seven holders (low monthly wages or pension, or nil) cannot account for the ₹27.3L aggregate flow (POE Factor 4). The shared-address linkage (5 of 7 accounts at 2 addresses) was not identified at account opening.
 
 Suspicion is formed under PMLA 2002 s.12(1)(b) for all seven accounts on the basis of: (a) single-device identity linkage across 7 KYC identities (RFI-004); (b) coordinated pass-through pattern, single common beneficiary (RFI-001); (c) income inconsistency across all holders (POE Factor 4); and (d) KYC authenticity undermined by device evidence (POE Factor 12). STRs are being filed for all seven accounts.
 

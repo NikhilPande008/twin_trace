@@ -180,19 +180,24 @@ python -m scripts.verify_package <file>     # re-check an exported decision offl
 Evidence documents: [claims register](docs/CLAIMS_REGISTER.md) ·
 [impact and sources](docs/IMPACT.md) · [evaluations](evals/README.md)
 
-**Live results, 2026-10-21 — 16 synthetic development alerts, Nemotron via Token Factory**
-([report](evals/live-2026-10-21-final/REPORT-2026-10-21-live.md), 09:12 UTC):
+**Live results, 2026-10-28 — 16 synthetic development alerts on the current seed, Nemotron via
+Token Factory** ([report](evals/live-2026-10-28-seed/REPORT-2026-10-28-live.md), 13:38 UTC):
 
 | Metric | Result |
 |---|---|
-| 11-factor assessment: model output schema-valid | **16 / 16** — 14 first try, 2 after one repair (both first attempts were cut off at the token limit); 0 fallbacks |
+| 11-factor assessment: model output schema-valid | **16 / 16**, all first try; 0 repairs, 0 fallbacks |
 | Agent agreement with gold on clear cases | **12 / 12** (9 FILE, 3 NOT_FILE). An always-FILE rule would score 9 / 12 |
 | CONTESTED cases (ambiguous by design) | 4 — the agent chose FILE on all 4 (it leans towards filing) |
-| Agent submissions rejected by validation and corrected | **16** across 12 alerts |
-| Median time per alert | 26.0 s for the 11-factor assessment, 20.2 s for the agent |
+| Agent submissions rejected by validation and corrected | **14** across 9 alerts |
+| Median time per alert | 18.1 s for the 11-factor assessment, 14.9 s for the agent |
+| Gold FILE alerts whose calculator signals are HIGH (deterministic) | **3 / 9** |
 
-Model output varies between runs: an earlier run the same morning
-([report](evals/rerun-2026-10-21/REPORT-2026-10-21-live.md)) had 4 repairs and 19 rejected
+Earlier run on the old seed, before the multi-transaction histories
+([report](evals/live-2026-10-21-final/REPORT-2026-10-21-live.md), 2026-10-21 09:12 UTC): 16 / 16
+valid (14 first try, 2 after one repair; both first attempts cut off at the token limit), 12 / 12,
+FILE on all 4 contested, **16** rejections across 12 alerts, 1 / 9 at HIGH; medians
+26.0 s for the 11-factor assessment, 20.2 s for the agent. Model output varies between runs: a run the same
+morning ([report](evals/rerun-2026-10-21/REPORT-2026-10-21-live.md)) had 4 repairs and 19 rejected
 submissions with the same 12 / 12 and 4 / 4. The first run that morning reported "16/16 valid" but
 counted fallbacks; that figure is withdrawn ([evaluations](evals/README.md)).
 
@@ -212,14 +217,23 @@ No accuracy, latency or cost figure is quoted anywhere unless it comes from a da
 
 ## Limits (honest)
 
-- The stress-test signals are **product heuristics**, not FIU-IND criteria. Most seeded alerts
-  have a single summary transaction, so the calculator sees little in them. The stress test
-  says this explicitly when a FILE rests on evidence outside the signals.
+- The stress-test signals are **product heuristics**, not FIU-IND criteria. On the current seed,
+  **3 of 9** gold-FILE alerts reach a HIGH modeled level from calculator signals
+  ([deterministic report, 2026-10-28](evals/REPORT-2026-10-28-deterministic.md); 1 of 9 on the
+  old seed). The rest rest on evidence the calculator does not see (PEP status, a blocked
+  transfer, correspondent routing), and the stress test says so when a FILE rests on it.
 - The regulatory corpus is a snapshot: 13 of its 49 rules are NEEDS-VERIFICATION and excluded.
 - The ledger is tamper-**evident**, not tamper-proof. The anti-templating checklist is a product
   heuristic.
-- The agent's disposition is advisory and is shown last. The PO decides. In the dated run it
-  chose FILE on all 4 contested cases: it leans towards filing.
+- The agent's disposition is advisory and is shown last. The PO decides. In the dated runs it
+  chose FILE on all 4 contested cases: it leans towards filing. A prompt change tried on
+  2026-10-28 (name the fact a FILE rests on; weigh closing or deferring when the calculator does
+  not support a FILE) moved one contested alert to NEEDS_MORE_INFO in both development runs, but
+  did not change the holdout consistently, and in one run of each set cost a clear case. It was
+  not an improvement and was reverted ([before/after, 8 live runs](evals/AGENT-LEAN-2026-10-28.md)).
+  Correcting the stress-test summary so it no longer calls a FILE on LOW signals robust did not
+  change it either: FILE on 4 / 4 contested in both development runs, 2 / 2 on the holdout
+  ([before/after](evals/AGENT-FRAMING-2026-10-28.md)).
 - The twin alerts' opposite decisions are the scenario's labels. ALERT-16 models ELEVATED, not
   LOW; what clears it (a hospital invoice, family links) is in the case file, outside the
   calculator.

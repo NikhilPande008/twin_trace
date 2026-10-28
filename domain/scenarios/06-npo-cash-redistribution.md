@@ -50,6 +50,8 @@ Total debits days T+9–T+10: ₹16,40,000. None of these mobile handles appear 
 **CTR obligation:** Monthly cash total ₹19.5L > ₹10L → CTR must be filed (corpus: CTR-001). STR warranted independently.
 **NTR obligation:** NPO receiving large cash amounts → NTR may be required (corpus: NTR-001; threshold NEEDS-VERIFICATION — DG-16).
 
+**Case record in the seed (`ddp/seed_data.py`, 2026-10-28):** the 12 credits and 8 debits above; T+1 is 18 Aug 2026.
+
 ---
 
 ### 2. Reasoning Chain
@@ -96,7 +98,7 @@ Statutory basis:
 
 ### 3. Draft Ground of Suspicion
 
-Seva Prakash Welfare Trust (CUST-06), a registered trust with stated purpose of disaster relief, received twelve cash deposits totalling ₹19,50,000 over eight days (T+1 to T+8) — all through walk-in cash deposits at the bank counter, with no PAN identification of donors. The trust's 12-month transaction baseline consisted of occasional cheque credits (₹5,000–₹50,000) from known donors and cheque payments to event vendors; the ₹19.5L cash inflow represents 39× the largest prior monthly inflow.
+Seva Prakash Welfare Trust (CUST-06), a registered trust with stated purpose of disaster relief, received twelve cash deposits totalling ₹19,50,000 over eight days (T+1 to T+8) — all through walk-in cash deposits at the bank counter, with no PAN identification of donors. The trust's 12-month transaction baseline consisted of occasional cheque credits from known donors and cheque payments to event vendors; the ₹19.5L cash inflow represents 39× the largest prior monthly inflow.
 
 On the two days immediately following the deposits (T+9 and T+10), ₹16,40,000 was transferred via UPI to eight mobile handles — none of which appear in the trust's KYC record, prior vendor list, or documented programme activities. No disbursement supporting documentation (field-worker contracts, beneficiary lists, relief programme records) has been provided. No disaster event or relief programme activity has been identified for this period.
 

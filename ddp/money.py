@@ -3,16 +3,15 @@ Rupee amounts in free text → exact values, for the GoS evidence gate (T7.1).
 
 Supported forms (case-insensitive), each normalised to an exact Decimal number of rupees:
   prefix   ₹3,25,000 · ₹ 325000 · Rs. 3,25,000 · Rs.28K · INR 3250000 · ₹32.5 lakh · Rs 1.2 Cr
-  bare     32.5 lakh · 3 lakhs · 1.2 crore            (lakh/lac/crore words imply rupees)
+  bare     32.5 lakh · 3 lakhs · 1.2 crore · 3.95L · 395k · 1.2Cr   (the multiplier implies rupees)
   suffix   3250000 INR · 3,25,000 rupees · 5,000/-
 Commas may be Indian (32,50,000) or western (3,250,000). Multipliers: K / thousand = 10^3,
 L / lakh / lac = 10^5, Cr / crore = 10^7.
 
 Anything that looks monetary but cannot be read as one exact figure is returned UNPARSED, never
-skipped: a currency marker with no number ("₹ thirty lakh"), or a range ("₹3-4 lakh"). The
-gate treats unparsed amounts as failures, so a new phrasing fails closed instead of slipping by.
-
-Not handled (outside deterministic coverage): amounts written in words, other currencies.
+skipped: a currency marker with no number ("₹ thirty lakh"), a range ("₹3-4 lakh"), an amount
+in words ("three lakh rupees"), or another currency ("USD 4,750", "$4,750"). The gate treats
+unparsed amounts as failures, so a new phrasing fails closed instead of slipping by.
 """
 
 from __future__ import annotations
@@ -29,10 +28,15 @@ _AMOUNT_RE = re.compile(
     rf"(?P<pre>{_PRE})\s*(?P<n1>{_NUM})(?:\s*(?P<rng>[-–—])\s*(?P<n2>{_NUM}))?"
     rf"(?:\s*(?P<m1>{_MULT})\b)?"
     rf"|\b(?P<n3>{_NUM})\s*(?P<m3>lakhs?|lacs?|crores?)\b(?:\s*(?:rupees|INR)\b)?"
+    rf"|\b(?P<n5>{_NUM}) ?(?P<m5>cr|l|k)\b"
     rf"|\b(?P<n4>{_NUM})(?:\s*/-|\s+rupees\b|\s+INR\b)",
     re.IGNORECASE,
 )
 _MARKER_RE = re.compile(_PRE, re.IGNORECASE)
+# Money the parser cannot read exactly. Each is reported UNPARSED so the gate fails closed.
+_FX = r"\b(?:USD|EUR|GBP|AED|SGD|AUD|CAD|CHF|JPY|CNY|HKD)\b|US\$|\$|€|£|¥"
+_FOREIGN_RE = re.compile(rf"(?:{_FX})\s*\d[\d,.]*|\b\d[\d,.]*\s*(?:{_FX})", re.IGNORECASE)
+_WORDS_RE = re.compile(r"\b(?:lakhs?|lacs?|crores?|rupees?)\b", re.IGNORECASE)
 
 _MULTIPLIER = {"k": 10**3, "thousand": 10**3, "l": 10**5, "lakh": 10**5, "lakhs": 10**5,
                "lac": 10**5, "lacs": 10**5, "cr": 10**7, "crore": 10**7, "crores": 10**7}
@@ -68,14 +72,31 @@ def extract_amounts(text: str) -> list[Mention]:
             num, mult = m.group("n1"), m.group("m1")
         elif m.group("n3"):
             num, mult = m.group("n3"), m.group("m3")
+        elif m.group("n5"):
+            num, mult = m.group("n5"), m.group("m5")
         else:
             num, mult = m.group("n4"), None
         value = _value(num, mult)
         out.append(Mention(raw, m.start(), value, "" if value is not None else "unreadable"))
+    for m in _FOREIGN_RE.finditer(text or ""):
+        if not any(a <= m.start() < b for a, b in spans):
+            spans.append(m.span())
+            out.append(Mention(m.group(0).strip(), m.start(), None,
+                               "currency other than rupees, not checked"))
     for m in _MARKER_RE.finditer(text or ""):
         if not any(a <= m.start() < b for a, b in spans):
             snippet = text[m.start():m.start() + 24].split("\n")[0]
+            spans.append((m.start(), m.start() + len(snippet)))
             out.append(Mention(snippet, m.start(), None, "currency marker without a figure"))
+    for m in _WORDS_RE.finditer(text or ""):
+        if not any(a <= m.start() < b for a, b in spans):
+            # One mention per sentence: "three lakh ninety-five thousand rupees" is one amount.
+            a = max(text.rfind(".", 0, m.start()) + 1, m.start() - 40)
+            b = text.find(".", m.end())
+            b = len(text) if b == -1 else b
+            spans.append((a, b))
+            out.append(Mention(text[a:min(b, m.end() + 40)].strip(), a, None,
+                               "amount in words or unreadable"))
     return sorted(out, key=lambda x: x.start)
 
 

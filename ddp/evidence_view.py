@@ -8,12 +8,40 @@ came from, so a figure cannot outlive the evidence behind it. Mock runs are neve
 
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 from statistics import median
 
 EVALS = Path(__file__).resolve().parent.parent / "evals"
 CLEAR_GOLD = ("FILE", "NOT_FILE")          # CONTESTED cases are ambiguous by design
+
+
+def seed_fingerprint() -> str:
+    """SHA-256 of the seeded alerts and transactions. Reports record it (from 2026-10-28) so a
+    figure from a run on an earlier seed can be labelled as such."""
+    from . import seed_data
+    blob = json.dumps({"alerts": seed_data.ALERTS, "transactions": seed_data.TRANSACTIONS},
+                      sort_keys=True, default=str)
+    return hashlib.sha256(blob.encode()).hexdigest()
+
+
+def deterministic_reports(evals_dir: Path = EVALS) -> list[tuple[Path, dict]]:
+    """Deterministic (calculator + stress test only, no model) 16-alert reports, newest first."""
+    found = [(p, d) for p in evals_dir.rglob("REPORT-*-deterministic.json")
+             if (d := _load(p)) and d.get("mode") == "deterministic"
+             and isinstance(d.get("rows"), list)]
+    return sorted(found, key=lambda x: x[1].get("started_utc", ""), reverse=True)
+
+
+def summarise_stress(report: dict, path: Path | None = None) -> dict:
+    """Gold-FILE alerts whose calculator signals are HIGH, and whether the run used this seed."""
+    rows = report["rows"]
+    return {"source": str(path.relative_to(EVALS.parent)) if path else "",
+            "started_utc": report.get("started_utc"),
+            "stress_high": sum(1 for r in rows if r.get("gold") == "FILE" and r.get("verdict") == "HIGH"),
+            "gold_file": sum(1 for r in rows if r.get("gold") == "FILE"),
+            "current_seed": report.get("seed_sha256") == seed_fingerprint()}
 
 
 def _load(path: Path) -> dict | None:
@@ -36,6 +64,8 @@ def live_eval_reports(evals_dir: Path = EVALS) -> list[tuple[Path, dict]]:
         if d and d.get("mode") == "live" and isinstance(d.get("rows"), list):
             if any(r.get("assess") == "valid" for r in d["rows"]):
                 continue
+            if not any("assess" in r for r in d["rows"]):
+                continue                    # agent-only run (item 4 measurement), not a full run
             found.append((p, d))
     return sorted(found, key=lambda x: x[1].get("started_utc", ""), reverse=True)
 
@@ -72,6 +102,7 @@ def summarise_live(report: dict, path: Path | None = None) -> dict:
         "median_agent_s": round(median(agent_s), 1) if agent_s else None,
         "stress_high": sum(1 for r in rows if r.get("gold") == "FILE" and r.get("verdict") == "HIGH"),
         "gold_file": sum(1 for r in rows if r.get("gold") == "FILE"),
+        "current_seed": report.get("seed_sha256") == seed_fingerprint(),
     }
 
 

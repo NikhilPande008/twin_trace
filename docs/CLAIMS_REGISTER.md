@@ -1,7 +1,7 @@
 # Claims register
 
 Every public claim (README, Devpost, video) and what supports it. If a claim is not here, do not
-make it. Approval owner for every row: the human. Last updated 2026-10-28.
+make it. Approval owner for every row: the human. Last updated 2026-10-28 (seed histories).
 
 ## Product behaviour
 
@@ -41,10 +41,14 @@ make it. Approval owner for every row: the human. Last updated 2026-10-28.
 | Claim | Status | Evidence |
 |---|---|---|
 | Holdout gate: 10 of 15 seeded faults caught (10 of 12 the gate is designed to catch); 0 of 11 supported narratives rejected | PROVEN (deterministic) | `evals/RUN-20261021T074721Z-gate-only/` |
-| 16-alert live assessment: 16/16 model-valid (14 first try, 2 after one repair; 0 fallbacks); both repairs followed truncation | PROVEN (2026-10-21 09:12 UTC, dev set) — **the figure to quote** | `evals/live-2026-10-21-final/` (README quotes this file) |
-| Agent: 12/12 on clear dev cases (9 FILE, 3 NOT_FILE); chose FILE on all 4 contested; 16 submissions rejected by validation and corrected across 12 alerts | PROVEN (2026-10-21 09:12 UTC, dev set) | `evals/live-2026-10-21-final/` — say "an always-FILE rule scores 9/12" alongside |
+| 16-alert live assessment: 16/16 model-valid (14 first try, 2 after one repair; 0 fallbacks); both repairs followed truncation | PROVEN (2026-10-21 09:12 UTC, dev set, **old seed**) — history; quote the 2026-10-28 row below | `evals/live-2026-10-21-final/` (README quotes this file) |
+| Agent: 12/12 on clear dev cases (9 FILE, 3 NOT_FILE); chose FILE on all 4 contested; 16 submissions rejected by validation and corrected across 12 alerts | PROVEN (2026-10-21 09:12 UTC, dev set, **old seed**) | `evals/live-2026-10-21-final/` — say "an always-FILE rule scores 9/12" alongside |
 | Run-to-run variation: an earlier run the same morning had 4 repairs and 19 rejections, with the same 12/12 and 4/4 | PROVEN (2026-10-21 07:47 UTC) | `evals/rerun-2026-10-21/` — say model output varies between runs |
 | Holdout: same model without controls put unsupported figures in 6/6 drafts (15 figures); the full product's drafter did so in 3/6, all 3 rejected by the gate; 0 unsupported figures in accepted drafts | PROVEN (2026-10-21, 6 cases) | `evals/RUN-20261021T080109Z-live/` — six author-labelled cases, no general claim |
+| 16-alert live run on the current seed: assessment 16/16 model-valid, all first try; agent 12/12 on clear cases (an always-FILE rule scores 9/12), FILE on all 4 contested; 14 submissions rejected by validation and corrected across 9 alerts; medians 18.1 s (assessment), 14.9 s (agent) | PROVEN (2026-10-28 13:38 UTC, dev set, current seed, agent prompt before item 4) — **the figure to quote** | `evals/live-2026-10-28-seed/` (README quotes this file) |
+| Agent prompt change (2026-10-28) to weigh closure or deferral: NOT shown to reduce the filing lean, and reverted. Dev contested filed 4/4, 4/4 → 3/4, 3/4; holdout 2/2, 2/2 → 1/2, 2/2; one run of each set lost a clear case | MEASURED, no improvement claimed (8 live runs, 2026-10-28) | `evals/AGENT-LEAN-2026-10-28.md` |
+| Stress-summary framing fix (2026-10-28): no effect on the filing lean. Contested filed dev 4/4, 4/4 and holdout 2/2, 2/2, as before | MEASURED (4 live runs, 2026-10-28) | `evals/AGENT-FRAMING-2026-10-28.md` |
+| Stress test on the current seed: 3 of 9 gold-FILE alerts reach a HIGH modeled level from calculator signals (ALERT-01, -06, -10); 1 of 9 on the old seed | PROVEN (deterministic, 2026-10-28, no model) | `evals/REPORT-2026-10-28-deterministic.md` — signals are product heuristics; thresholds unchanged |
 | First run's "16/16 assessments valid" | **WITHDRAWN** | counted fallbacks; likely 14/16 (`evals/README.md`) |
 
 ## Impact and context (sourced; see `docs/IMPACT.md`)
