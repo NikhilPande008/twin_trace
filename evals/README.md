@@ -51,8 +51,17 @@ at any scale that supports a claim.
 
 | Date | File | What |
 |---|---|---|
-| 2026-10-21 | `REPORT-2026-10-21-live.md` | first 16-alert live run; its "16/16 valid" counted fallbacks (likely 14/16; see DECISIONS.md) |
+| 2026-10-21 | `REPORT-2026-10-21-live.md` | first 16-alert live run; its "16/16 valid" counted fallbacks (likely 14/16: the runner counted fallback placeholders as valid; fixed before the later runs). **Withdrawn** |
 | 2026-10-21 | `TAVILY-PROBE-2026-10-21.md` | Tavily live probe, 6/6 (topic queries) |
 | 2026-10-21 | `RUN-20261021T074721Z-gate-only/` | holdout gate: 10/15 faults caught (10/12 designed), 0/11 false rejections |
 | 2026-10-21 | `rerun-2026-10-21/` | 16 dev alerts live, Tavily injected: 16/16 model-valid (4 after repair, all truncation), agent 12/12 clear, 19 rejections |
 | 2026-10-21 | `RUN-20261021T080109Z-live/` | holdout, three conditions: baseline 15 unsupported figures in 6/6 drafts; full product 3/6 drafts rejected by the gate, 0 unsupported in accepted |
+| 2026-10-21 | `live-2026-10-21-final/` | 16 dev alerts live, 09:12 UTC: 16/16 model-valid (2 after repair, both truncation), agent 12/12 clear, 16 rejections. **The run the README quotes** |
+
+## Code revisions in these reports
+
+The `git_rev` / "Code revision" values in these reports (`cccac3d`, `9e3333a`) are commits from the
+project's development history before the public repo was created. The public history starts at one
+squashed commit on 2026-10-28, so those revisions cannot be checked out here. All of these runs
+predate the 2026-10-28 output-budget change: model calls now get a larger output
+budget, and a cut-off reply is retried or reported as an error.

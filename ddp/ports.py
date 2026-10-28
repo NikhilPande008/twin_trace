@@ -27,7 +27,7 @@ class LLMPort(Protocol):
         tier: str = "reasoning",
         *,
         system: str | None = None,
-        max_tokens: int = 2048,
+        max_tokens: int | None = None,
         temperature: float = 0.1,
         response_format: dict | None = None,
     ) -> str: ...

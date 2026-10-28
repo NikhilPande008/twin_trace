@@ -42,3 +42,19 @@ htmlcov/
 .vscode/
 *.swp
 *~
+
+# ── Internal working documents: kept locally, never pushed ───────────────────
+# The public repo is the product: README, LICENSE, code, tests, domain data, evals and two
+# reader-facing docs. Session notes, plans, decision logs, audits and drafts stay on this machine.
+/CLAUDE.md
+/HANDOFF.md
+/TASKS.md
+/DECISIONS.md
+/CONTEXT.md
+/CHANGES_SINCE_BASELINE.md
+/DOMAIN.md
+/design/
+/.claude/
+/docs/*
+!/docs/IMPACT.md
+!/docs/CLAIMS_REGISTER.md

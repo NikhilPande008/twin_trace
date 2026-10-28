@@ -51,9 +51,18 @@ class Settings:
             for tier, default in DEFAULT_MODELS.items()
         }
     )
+    # 180 s, not 90: a full-budget reasoning reply runs ~240 tokens/s (observed 2026-10-28).
     request_timeout_s: float = field(
-        default_factory=lambda: float(os.environ.get("LLM_TIMEOUT_S", "90"))
+        default_factory=lambda: float(os.environ.get("LLM_TIMEOUT_S", "180"))
     )
+    # Output budget per model call. Nemotron's hidden reasoning counts against it, so small caps
+    # cut replies off mid-reasoning (2,048 / 4,096 did, 2026-10-28; DECISIONS.md). Tokens are
+    # billed as generated, so the budget is a ceiling, not a cost. A reply cut off at the default
+    # is retried once at the cap; a reply cut off at the cap is an error, never an answer.
+    max_output_tokens: int = field(
+        default_factory=lambda: int(os.environ.get("LLM_MAX_OUTPUT_TOKENS", "16384")))
+    max_output_tokens_cap: int = field(
+        default_factory=lambda: int(os.environ.get("LLM_MAX_OUTPUT_TOKENS_CAP", "32768")))
     db_path: Path = field(
         default_factory=lambda: Path(
             os.environ.get("DDP_DB_PATH", str(REPO_ROOT / "data" / "ddp.sqlite3"))

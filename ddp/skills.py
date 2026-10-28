@@ -82,9 +82,32 @@ class CoPilotSkills:
         import os as _os
         self._structured_mode = _os.environ.get("STRUCTURED_OUTPUT_MODE", "json_object")
         self._schema_rejected: dict[str, bool] = {}
+        from .config import get_settings
+        _s = getattr(llm, "settings", None) or get_settings()
+        self._max_tokens = _s.max_output_tokens
+        self._max_tokens_cap = max(_s.max_output_tokens_cap, _s.max_output_tokens)
 
     # ── plumbing ──────────────────────────────────────────────────────────────
-    def _complete(self, prompt: str, tier: str, **kwargs) -> str:
+    def _complete(self, prompt: str, tier: str, max_tokens: int | None = None, **kwargs) -> str:
+        """One model reply, never a cut-off one. Nemotron's hidden reasoning counts against
+        max_tokens, so a reply stopped at the limit may be empty or half-finished reasoning. It
+        is retried once at the cap; cut off again, it raises LLMError(kind="truncated")."""
+        budget = max_tokens or self._max_tokens
+        text = self._complete_once(prompt, tier, max_tokens=budget, **kwargs)
+        if self.last_model_call.get("finish_reason") != "length":
+            return text
+        if budget < self._max_tokens_cap:
+            budget = self._max_tokens_cap
+            text = self._complete_once(prompt, tier, max_tokens=budget, **kwargs)
+            if self.last_model_call.get("finish_reason") != "length":
+                return text
+        from .llm import LLMError
+        self.last_model_call["truncated"] = True
+        raise LLMError(f"The {tier}-tier reply was cut off at the {budget:,}-token output limit "
+                       "before it finished. Raise LLM_MAX_OUTPUT_TOKENS_CAP or try again.",
+                       kind="truncated")
+
+    def _complete_once(self, prompt: str, tier: str, **kwargs) -> str:
         if self._llm is None:
             from .llm import LLMNotConfigured
             raise LLMNotConfigured("No LLM configured for CoPilotSkills (pass llm= or complete_fn=).")
@@ -118,15 +141,14 @@ class CoPilotSkills:
             self.last_model_call["truncated"] = True
 
     def _complete_structured(self, prompt: str, tier: str, schema_name: str,
-                              max_tokens: int = 4096) -> tuple[dict, int]:
+                              max_tokens: int | None = None) -> tuple[dict, int]:
         """
         Structured call: object-wrapped JSON, validated locally against ddp.structured.SCHEMAS.
         One repair retry on parse/validation failure. Returns (validated_obj, failure_count).
         Raises ValueError after two consecutive failures — callers fail CLOSED.
 
-        max_tokens default is 4096 (not 2048) because Nemotron reasoning models consume
-        internal chain-of-thought tokens that count against max_tokens — observed 2617
-        completion tokens for quality_check on Nano 30B (2026-10-21 T1.2 diagnostic).
+        max_tokens defaults to Settings.max_output_tokens; a cut-off reply is retried at the cap
+        by _complete and never reaches the parser (an LLMError of kind "truncated" propagates).
 
         Mode (STRUCTURED_OUTPUT_MODE): json_object (default) or json_schema. If the endpoint
         rejects json_schema (HTTP 400), this call and later ones on the same tier fall back to
@@ -147,7 +169,8 @@ class CoPilotSkills:
                 if mode == "json_schema" and "HTTP 400" in str(e):
                     self._schema_rejected[tier] = True
                     mode = "json_object"
-                    out = self._complete(p, tier, response_format=S.response_format(schema_name, mode))
+                    out = self._complete(p, tier, response_format=S.response_format(schema_name, mode),
+                                         max_tokens=max_tokens)
                     self.last_model_call["schema_fallback"] = True
                     return out
                 raise
@@ -160,10 +183,7 @@ class CoPilotSkills:
                 self.last_model_call["structured_mode"] = mode
                 return obj, 0
             except S.SchemaError as first:
-                truncated = self.last_model_call.get("finish_reason") == "length"
-                reason = ("output was cut off at max_tokens; reply more briefly" if truncated
-                          else str(first)[:200])
-                repair = (prompt + "\n\n[Your previous response was rejected: " + reason +
+                repair = (prompt + "\n\n[Your previous response was rejected: " + str(first)[:200] +
                           ". Reply with ONLY the JSON object in the exact format specified.]")
                 raw2 = call(repair)
                 try:
@@ -176,7 +196,7 @@ class CoPilotSkills:
             self._aggregate_attempts(start)
 
     def _complete_json_array(self, prompt: str, tier: str, schema_name: str = "poe_assessment",
-                              max_tokens: int = 4096) -> tuple[list, int]:
+                              max_tokens: int | None = None) -> tuple[list, int]:
         """Back-compat wrapper: returns the wrapped list for schema_name."""
         from .structured import WRAPPER_KEY
         obj, fails = self._complete_structured(prompt, tier, schema_name, max_tokens=max_tokens)
@@ -710,14 +730,23 @@ For each of the 10 items, respond with a JSON object:
 Return ONE JSON object of the form {{"items": [ ...all 10 evaluation objects... ]}}.
 Output ONLY the JSON object."""
 
+        from .llm import LLMError
+        unavailable = None
         try:
             results, _pf = self._complete_json_array(prompt, "triage", "quality_check")
         except ValueError:
-            # Fail CLOSED (T3.4 fix): a parse failure must not silently pass everything.
+            unavailable = "parse failure after retry"
+        except LLMError as e:
+            # A cut-off check must not discard the draft it was checking; other errors still raise.
+            if e.kind != "truncated":
+                raise
+            unavailable = "reply cut off at the output limit"
+        if unavailable:
+            # Fail CLOSED (T3.4 fix): a failed check must not silently pass everything.
             # Mark all items as failing so the narrative goes to NEEDS_REVISION, not READY.
             results = [
                 {"item_number": i + 1, "item": item, "applies": True,
-                 "note": "Quality check unavailable — parse failure after retry."}
+                 "note": f"Quality check unavailable — {unavailable}."}
                 for i, item in enumerate(CHECKLIST_ITEMS)
             ]
 

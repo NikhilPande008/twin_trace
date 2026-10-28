@@ -1,5 +1,5 @@
 """
-Offline tests for CoCo Skills.
+Offline tests.
 
 All assertions run offline: no model endpoint, no database. The complete_fn
 injection (WS-0) allows deterministic testing of every skill branch.

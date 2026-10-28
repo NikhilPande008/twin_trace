@@ -10,7 +10,8 @@ Built for the **Nebius × NVIDIA Global AI Hackathon 2026** · Track: Best Apps 
 > else, again at the moment a decision is recorded.**
 >
 > All data in this repo is synthetic. Each capability is labelled **PROVEN** (a test or recorded
-> run shows it), **STUBBED** or **ASSUMED**. Live status is in [HANDOFF.md](HANDOFF.md).
+> run shows it), **STUBBED** or **ASSUMED**. Every public claim and its evidence is in
+> [docs/CLAIMS_REGISTER.md](docs/CLAIMS_REGISTER.md).
 
 **Try it in three minutes (no API key needed):** run the app, open **Twin Cases** to see two
 look-alike alerts and what each decision rests on, then **Proof Check** and try to slip a made-up
@@ -124,7 +125,7 @@ it contains any number that is not a transaction amount or a fact value.
   sandbox through `contree-sdk` and store the sandbox run reference per run. **Not run (blocked):**
   on 2026-10-21 the probe ran with both key and project ID set but received 403 Forbidden from
   `/sandboxes/v1/instances` — Sandboxes access is not provisioned on this account. The
-  calculator runs in a local isolated subprocess, and the app says so. Details: [docs/PLATFORM_NOTES.md](docs/PLATFORM_NOTES.md).
+  calculator runs in a local isolated subprocess, and the app says so.
 
 ## Where Tavily is used
 
@@ -159,7 +160,7 @@ streamlit run app.py                  # Proof Check and the stress test work off
 ```
 
 Optional, for the Sandboxes backend only: `pip install contree-sdk`, set `NEBIUS_PROJECT_ID` in
-`.env`, then `python3 -m scripts.probes.probe_sandbox` (see [PLATFORM_NOTES](docs/PLATFORM_NOTES.md)).
+`.env`, then `python3 -m scripts.probes.probe_sandbox`.
 
 Offline (no key), the calculator, stress test, evidence gate, retrieval and ledger all work.
 The Nemotron steps and the agent are disabled.
@@ -176,11 +177,8 @@ python -m scripts.run_comparison            # LIVE: template vs model-without-co
 python -m scripts.verify_package <file>     # re-check an exported decision offline
 ```
 
-Design and evidence documents: [validation contract](docs/VALIDATION_CONTRACT.md) ·
-[decision package](docs/DECISION_PACKAGE.md) · [user journey](docs/USER_JOURNEY.md) ·
-[claims register](docs/CLAIMS_REGISTER.md) · [impact and sources](docs/IMPACT.md) ·
-[demo runbook](docs/DEMO_RUNBOOK.md) ·
-[evaluations](evals/README.md) · [implementation status](docs/DESIGN_AND_TECH_IMPLEMENTATION.md)
+Evidence documents: [claims register](docs/CLAIMS_REGISTER.md) ·
+[impact and sources](docs/IMPACT.md) · [evaluations](evals/README.md)
 
 **Live results, 2026-10-21 — 16 synthetic development alerts, Nemotron via Token Factory**
 ([report](evals/live-2026-10-21-final/REPORT-2026-10-21-live.md), 09:12 UTC):
@@ -196,7 +194,7 @@ Design and evidence documents: [validation contract](docs/VALIDATION_CONTRACT.md
 Model output varies between runs: an earlier run the same morning
 ([report](evals/rerun-2026-10-21/REPORT-2026-10-21-live.md)) had 4 repairs and 19 rejected
 submissions with the same 12 / 12 and 4 / 4. The first run that morning reported "16/16 valid" but
-counted fallbacks; that figure is withdrawn ([DECISIONS.md](DECISIONS.md)).
+counted fallbacks; that figure is withdrawn ([evaluations](evals/README.md)).
 
 **Holdout (6 synthetic cases, author-labelled — not expert ground truth):**
 
@@ -231,4 +229,4 @@ No accuracy, latency or cost figure is quoted anywhere unless it comes from a da
 
 ## Licence
 
-To be added (TASKS T0.3).
+MIT. See [LICENSE](LICENSE).

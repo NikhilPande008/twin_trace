@@ -27,7 +27,8 @@ _THINK_RE = re.compile(r"<think>.*?</think>", re.DOTALL | re.IGNORECASE)
 
 
 class LLMError(RuntimeError):
-    """kind: timeout | rate_limited | server_error | client_error | network | not_configured."""
+    """kind: timeout | rate_limited | server_error | client_error | network | not_configured |
+    truncated (reply cut off at the output limit even after the retry; ddp/skills.py)."""
 
     def __init__(self, message: str, kind: str = "client_error"):
         super().__init__(message)
@@ -51,7 +52,7 @@ class LLM(Protocol):
     last_call: dict
 
     def complete(self, prompt: str, tier: str = "reasoning", *, system: str | None = None,
-                 max_tokens: int = 2048, temperature: float = 0.1,
+                 max_tokens: int | None = None, temperature: float = 0.1,
                  response_format: dict | None = None) -> str: ...
 
 
@@ -69,8 +70,9 @@ class TokenFactoryClient:
             raise LLMError(f"Unknown model tier '{tier}'. Known: {sorted(self.settings.models)}") from e
 
     def complete(self, prompt: str, tier: str = "reasoning", *, system: str | None = None,
-                 max_tokens: int = 2048, temperature: float = 0.1,
+                 max_tokens: int | None = None, temperature: float = 0.1,
                  response_format: dict | None = None) -> str:
+        max_tokens = max_tokens or self.settings.max_output_tokens
         messages = []
         if system:
             messages.append({"role": "system", "content": system})
@@ -88,7 +90,7 @@ class TokenFactoryClient:
         return self._strip_reasoning(raw)
 
     def chat(self, messages: list[dict], tier: str = "reasoning", *, tools: list[dict] | None = None,
-             tool_choice: str | dict = "auto", max_tokens: int = 2048,
+             tool_choice: str | dict = "auto", max_tokens: int | None = None,
              temperature: float = 0.1) -> dict:
         """One Chat Completions turn with OpenAI-style tool calling.
 
@@ -97,6 +99,7 @@ class TokenFactoryClient:
         quirks. [ASSUMED] Nemotron tool-call arguments may arrive as "" for no-arg tools
         (TensorRT-LLM #20503): treated as {}.
         """
+        max_tokens = max_tokens or self.settings.max_output_tokens
         payload = {"messages": messages, "max_tokens": max_tokens, "temperature": temperature}
         if tools:
             payload["tools"] = tools

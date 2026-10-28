@@ -77,14 +77,63 @@ def test_malformed_then_valid_counts_both_attempts():
     assert mc["usage_all_attempts"]["total_tokens"] == 30          # both attempts, not the last
 
 
-def test_truncation_is_flagged_and_falls_back_visibly():
-    seq = iter([_resp(content='{"factors": [', finish="length")] * 2)
-    skills = CoPilotSkills(None, llm=_client(lambda *a, **k: next(seq)))
-    out = skills.suspicion_evaluator({"transactions": [], "customer_kyc": "", "signal_tags": [],
-                                      "alert_narrative": ""})
-    mc = skills.last_model_call
-    assert mc["truncated"] and mc["fallback"]
-    assert all(f["assessment"] == "insufficient_data" for f in out)
+CTX = {"transactions": [], "customer_kyc": "", "signal_tags": [], "alert_narrative": ""}
+
+
+def _recording(replies):
+    """A transport that returns `replies` in order and records each request's max_tokens."""
+    seq, sent = iter(replies), []
+
+    def post(url, headers, json, timeout):  # noqa: A002
+        sent.append(json["max_tokens"])
+        return next(seq)
+    return post, sent
+
+
+def test_every_call_gets_room_for_reasoning():
+    post, sent = _recording([_resp(content=_valid())])
+    CoPilotSkills(None, llm=_client(post)).suspicion_evaluator(CTX)
+    assert sent == [Settings().max_output_tokens] and sent[0] >= 16384
+
+
+def test_cut_off_reply_is_retried_once_at_the_cap():
+    post, sent = _recording([_resp(content='{"factors": [', finish="length"),
+                             _resp(content=_valid())])
+    out = CoPilotSkills(None, llm=_client(post)).suspicion_evaluator(CTX)
+    assert all(f["assessment"] == "clear" for f in out)
+    assert sent == [Settings().max_output_tokens, Settings().max_output_tokens_cap]
+
+
+def test_reply_cut_off_at_the_cap_is_an_error_not_eleven_gaps():
+    post, sent = _recording([_resp(content='{"factors": [', finish="length")] * 2)
+    skills = CoPilotSkills(None, llm=_client(post))
+    with pytest.raises(LLMError) as e:
+        skills.suspicion_evaluator(CTX)
+    assert e.value.kind == "truncated" and "cut off" in str(e.value)
+    assert len(sent) == 2 and skills.last_model_call["truncated"]
+
+
+def test_cut_off_draft_is_never_returned_as_a_narrative():
+    # A Nemotron reply stopped mid-reasoning can carry the reasoning itself (seen live on Ultra,
+    # 2026-10-28: "~209 words, within 200-350. Good."). It must not become the draft.
+    leaked = _resp(content="~209 words, within 200-350. Good. Check rupee figures", finish="length")
+    post, _ = _recording([leaked, leaked])
+    skills = CoPilotSkills(None, llm=_client(post))
+    with pytest.raises(LLMError) as e:
+        skills.ground_of_suspicion_writer(CTX, [])
+    assert e.value.kind == "truncated"
+
+
+def test_cut_off_quality_check_fails_closed_and_keeps_the_draft():
+    cut = _resp(content='{"items": [', finish="length")
+    post, _ = _recording([_resp(content="I formed suspicion because of T1."), cut, cut])
+    gos = CoPilotSkills(None, llm=_client(post)).ground_of_suspicion_writer(CTX, [])
+    assert gos["narrative"] == "I formed suspicion because of T1."
+    assert gos["status"] == "NEEDS_REVISION" and gos["quality_score"] == 0
+    post2, _ = _recording([cut, cut])
+    check = CoPilotSkills(None, llm=_client(post2)).str_quality_checker(
+        "I formed suspicion because of T1.", CTX)
+    assert all("cut off" in c["note"] for c in check["checklist"]), check["checklist"]
 
 
 def test_provider_failure_during_structured_call_is_logged():

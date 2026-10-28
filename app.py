@@ -409,6 +409,13 @@ def _stakes():
                             f"{_esc(r['SOURCE_SECTION'])}</small>", unsafe_allow_html=True)
 
 
+def _goto(page: str) -> None:
+    """Navigate to another page. The sidebar radio (key="page") is already instantiated by the
+    time a page body runs, so we stage the target and let main() apply it before the radio."""
+    st.session_state["_nav_to"] = page
+    st.rerun()
+
+
 # ── page: Alert Queue ─────────────────────────────────────────────────────────
 def page_alert_queue():
     st.header("Alert Queue")
@@ -417,8 +424,7 @@ def page_alert_queue():
         s_l.markdown("**Start here.** Two alerts fired by the same rules on the same amount; one "
                      "was filed and one was closed. See what each decision rests on.")
         if s_r.button("Twin Cases →", type="primary", use_container_width=True, key="aq_twins"):
-            st.session_state["page"] = "Twin Cases"
-            st.rerun()
+            _goto("Twin Cases")
     _stakes()
     _intro()
     st.caption("Most urgent first · SLA = 7 working days, counted from alert date until suspicion is recorded")
@@ -503,8 +509,7 @@ def page_alert_queue():
             if st.button(f"Open {alert_id}", key=f"review_{alert_id}", use_container_width=True,
                          type="primary" if r["WORK_STATUS"] != "REVIEWED" else "secondary"):
                 st.session_state["selected_alert"] = alert_id
-                st.session_state["page"] = "Disposition Panel"
-                st.rerun()
+                _goto("Disposition Panel")
 
         with st.expander("Customer profile", expanded=False):
             st.markdown(f"{r['CUSTOMER_PROFILE']}  \n"
@@ -515,8 +520,7 @@ def page_alert_queue():
 # ── page: Twin Cases ──────────────────────────────────────────────────────────
 def _open_alert(alert_id: str) -> None:
     st.session_state["selected_alert"] = alert_id
-    st.session_state["page"] = "Disposition Panel"
-    st.rerun()
+    _goto("Disposition Panel")
 
 
 def page_twins():
@@ -1397,6 +1401,12 @@ def _ai_panel_core(selected, alert):
             if step.status != "ok":
                 st.error(f"The AI assessment could not run: {step.blocked_reason}")
                 st.caption("You can still write the Ground of Suspicion and record a decision.")
+            elif step.outputs.get("parse_failed"):
+                # The 11 placeholders are not the model's view; showing them would read as
+                # "the case lacks data" when it was the model's reply that failed.
+                st.error("The AI assessment failed: the model's reply was not valid JSON after "
+                         "one retry. No factor was assessed. Run it again.")
+                st.caption("You can still write the Ground of Suspicion and record a decision.")
             else:
                 st.session_state["poe_assessment"] = step.outputs["assessments"]
                 _add_model_call(selected, step.model_call)
@@ -2174,6 +2184,8 @@ def main():
         # Allow page navigation via session_state (e.g. from Alert Queue buttons).
         # key="page" binds the radio directly to session_state — no index= needed,
         # which avoids the double-click issue caused by index= fighting widget state.
+        if "_nav_to" in st.session_state:
+            st.session_state["page"] = st.session_state.pop("_nav_to")
         if "page" not in st.session_state or st.session_state["page"] not in pages:
             st.session_state["page"] = pages[0]
         selected_page = st.radio("Navigate", pages, key="page")

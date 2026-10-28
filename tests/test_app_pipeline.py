@@ -140,3 +140,27 @@ TESTS = [test_assess_and_draft_land_on_one_run_trace, test_assessment_failure_is
 if __name__ == "__main__":
     for fn in TESTS:
         fn()
+
+
+def test_cut_off_assessment_is_an_error_not_eleven_gaps():
+    with tempfile.TemporaryDirectory() as tmp:
+        at = _app(str(Path(tmp) / "pipe3.sqlite3"))
+        import ddp.llm
+
+        class _Cut(_Resp):
+            def json(self):
+                d = super().json()
+                d["choices"][0]["finish_reason"] = "length"
+                return d
+
+        ddp.llm._requests_post = lambda url, headers, json, timeout: _Cut('{"factors": [')  # noqa: A002
+        at.run()
+        at.sidebar.radio[0].set_value("Disposition Panel").run()
+        at.toggle(key="show_proof").set_value(True).run()
+        next(b for b in at.button if b.label == "Run 11-Factor Assessment").click().run()
+        assert not at.exception, at.exception
+        errors = [e.value for e in at.error]
+        assert any("could not run" in e and "cut off" in e for e in errors), errors
+        assert "poe_assessment" not in at.session_state or not at.session_state["poe_assessment"]
+        assert not any("lack the data" in w.value for w in at.warning)
+    print("  [PASS] app — a cut-off model reply is reported, not shown as 11 data gaps")

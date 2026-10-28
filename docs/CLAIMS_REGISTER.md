@@ -1,7 +1,7 @@
 # Claims register
 
 Every public claim (README, Devpost, video) and what supports it. If a claim is not here, do not
-make it. Approval owner for every row: the human. Last updated 2026-10-22.
+make it. Approval owner for every row: the human. Last updated 2026-10-28.
 
 ## Product behaviour
 
@@ -16,6 +16,7 @@ make it. Approval owner for every row: the human. Last updated 2026-10-22.
 | Off-corpus questions abstain; NEEDS-VERIFICATION rules never appear | PROVEN | `tests/eval_harness.py` SCN-20, `test_needs_verification_rules_unreachable` | heuristic threshold |
 | Tipping-off requests are refused before any model call | PROVEN | `tests/eval_harness.py` SCN-22 | regex; paraphrases across sentences missed |
 | Model failures, retries and truncation are recorded, never shown as success | PROVEN | `tests/test_fault_injection.py` | — |
+| A model reply cut off at the output limit is retried once at a larger cap and otherwise shown as an error; it is never returned as an answer or shown as 11 placeholder factors (fix of 2026-10-28) | PROVEN offline; live: one app run on ALERT-01 and three assessments, 2026-10-28 (not committed as a report) | `tests/test_fault_injection.py`, `tests/test_app_pipeline.py::test_cut_off_assessment_is_an_error_not_eleven_gaps` | the agent and the stress memo were not re-run live on the new budget; the dated 2026-10-21 reports predate this change |
 | Web search sends no case data (typology topic only) | PROVEN | `tests/test_evidence.py::test_query_contains_no_case_data` | not entity screening |
 | The Proof Check page: an invented total is blocked and a recording attempt writes 0 ledger rows, in every currency spelling (₹, Rs., INR, lakh); the same draft with the calculator's figure passes. The attempt uses a throwaway ledger | PROVEN | `tests/test_proofcheck.py`, `tests/test_app_pipeline.py`; checked in the running app 2026-10-21 | values, not meaning |
 | An uploaded decision package is verified in-app without executing any program the deployment does not already trust | PROVEN | `tests/test_package_upload.py` (hostile program with a matching hash is never run) | reproduction is skipped, and the package does not verify, for unknown program versions |
@@ -30,7 +31,7 @@ make it. Approval owner for every row: the human. Last updated 2026-10-22.
 
 | Claim | Status | Evidence |
 |---|---|---|
-| Runtime calls to Nebius Token Factory with NVIDIA Nemotron (Nano 30B, Super 120B, Ultra 550B) | PROVEN | DECISIONS.md 2026-10-21 (T0.4); `evals/REPORT-2026-10-21-live.md` |
+| Runtime calls to Nebius Token Factory with NVIDIA Nemotron (Nano 30B, Super 120B, Ultra 550B) | PROVEN | `scripts/check_models.py --ping`, 2026-10-21 (3/3 tiers answered); `evals/live-2026-10-21-final/` |
 | Tavily live: typology search, regulator-only search, refusal, forced failures 6/6 | PROVEN | `evals/TAVILY-PROBE-2026-10-21.md` |
 | Calculator runs in Token Factory Sandboxes | **BLOCKED, not run** | 2026-10-21: backend corrected to the real `contree-sdk` 0.3.6 call shape; with key and project ID set, `/sandboxes/v1/instances` returned **HTTP 403** (Sandboxes access not provisioned on this account). No `BACKEND_RUN_REF`. Offline tests only (`tests/test_sandbox_backend.py`). **Do not claim sandbox execution**; say "the calculator runs in a local isolated subprocess; the Sandboxes backend is written but our account was refused access" |
 | The app shows which Nemotron tier and model answered each step, with tokens and seconds, from recorded calls only | PROVEN | `tests/test_platform_trace.py`, `tests/test_app_pipeline.py`; one live Nano call checked 2026-10-22 | per session; telemetry, not a performance claim |
@@ -44,7 +45,7 @@ make it. Approval owner for every row: the human. Last updated 2026-10-22.
 | Agent: 12/12 on clear dev cases (9 FILE, 3 NOT_FILE); chose FILE on all 4 contested; 16 submissions rejected by validation and corrected across 12 alerts | PROVEN (2026-10-21 09:12 UTC, dev set) | `evals/live-2026-10-21-final/` — say "an always-FILE rule scores 9/12" alongside |
 | Run-to-run variation: an earlier run the same morning had 4 repairs and 19 rejections, with the same 12/12 and 4/4 | PROVEN (2026-10-21 07:47 UTC) | `evals/rerun-2026-10-21/` — say model output varies between runs |
 | Holdout: same model without controls put unsupported figures in 6/6 drafts (15 figures); the full product's drafter did so in 3/6, all 3 rejected by the gate; 0 unsupported figures in accepted drafts | PROVEN (2026-10-21, 6 cases) | `evals/RUN-20261021T080109Z-live/` — six author-labelled cases, no general claim |
-| First run's "16/16 assessments valid" | **WITHDRAWN** | counted fallbacks; likely 14/16 (DECISIONS.md) |
+| First run's "16/16 assessments valid" | **WITHDRAWN** | counted fallbacks; likely 14/16 (`evals/README.md`) |
 
 ## Impact and context (sourced; see `docs/IMPACT.md`)
 
