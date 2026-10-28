@@ -1,0 +1,44 @@
+# ── Secrets: never commit ─────────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+.claude/settings.local.json
+
+# ── Local data: SQLite databases are rebuilt by `python -m scripts.seed_db` ───
+*.sqlite3
+*.sqlite3-*
+*.db
+
+# ── Generated artifacts that are not evidence ────────────────────────────────
+# Decision packages exported for review (scripts/export_decision.py writes to cwd)
+decision-package-*.json
+# Mock eval reports are harness self-tests; only dated live/gate-only runs are evidence
+evals/*-mock.md
+evals/*-mock.json
+evals/**/RUN-*-mock/
+evals/**/*-mock.md
+evals/**/*-mock.json
+*.log
+
+# ── Python build / cache ──────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# ── Editors / OS ──────────────────────────────────────────────────────────────
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*~

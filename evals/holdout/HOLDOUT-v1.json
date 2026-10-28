@@ -1,0 +1,150 @@
+{
+  "dataset": "ddp-holdout",
+  "version": "v1",
+  "frozen_at": "2026-10-21",
+  "label_provenance": "Author-assigned by the coding assistant on 2026-10-21 from the corpus rules and scenario conventions in this repo. NOT expert ground truth; pending review by the human (see HANDOFF). All data synthetic: no real names, accounts or institutions.",
+  "use": "Held out from development: no prompt, threshold or rule may be tuned on these cases. Change only by adding a new version file.",
+  "cases": [
+    {
+      "id": "H-01",
+      "alert_type": "MULE_PASSTHROUGH",
+      "signal_source": "I4C",
+      "customer_profile": "Delivery associate; Rs.22K/month declared; Low-risk; account 9 months old",
+      "alert_narrative": "Three credits from unknown UPI handles moved the same day to a handle in the I4C Suspect Registry.",
+      "transactions": [
+        {"txn_id": "T41-1", "date": "2026-09-02", "type": "CREDIT", "amount_inr": 120000, "channel": "UPI", "counterparty": "Unknown UPI handle P", "is_flagged": false},
+        {"txn_id": "T41-2", "date": "2026-09-02", "type": "CREDIT", "amount_inr": 85000, "channel": "UPI", "counterparty": "Unknown UPI handle Q", "is_flagged": false},
+        {"txn_id": "T41-3", "date": "2026-09-03", "type": "CREDIT", "amount_inr": 95000, "channel": "UPI", "counterparty": "Unknown UPI handle R", "is_flagged": false},
+        {"txn_id": "T41-4", "date": "2026-09-03", "type": "DEBIT", "amount_inr": 295000, "channel": "UPI", "counterparty": "UPI handle Z (I4C-flagged)", "is_flagged": true}
+      ],
+      "expected": "FILE",
+      "ambiguity": "Low: flagged beneficiary, near-total same-day pass-through, credits about 13x declared income.",
+      "seeded_faults": [
+        {"text": "Total inflows of ₹3,50,000 were routed onward within a day.", "fault": "invented_total", "expect": "fail"},
+        {"text": "UPI handle Z received ₹85,000 from the account.", "fault": "right_value_wrong_party", "expect": "needs_review"},
+        {"text": "The pass-through is evidenced by T41-9.", "fault": "fabricated_txn_id", "expect": "fail"},
+        {"text": "Roughly ₹3 lakh moved to the flagged handle.", "fault": "rounded_figure", "expect": "fail"},
+        {"text": "Between ₹2.9-3 lakh moved to the flagged handle.", "fault": "range", "expect": "fail"},
+        {"text": "Only ₹4 moved through the account.", "fault": "unit_mismatch_count", "expect": "fail"}
+      ],
+      "supported_narratives": [
+        {"text": "Credits of ₹1,20,000, ₹85,000 and ₹95,000 (T41-1, T41-2, T41-3) arrived from unknown handles.", "needs_facts": false},
+        {"text": "Rs. 2,95,000 went to UPI handle Z on 2026-09-03 (T41-4).", "needs_facts": false},
+        {"text": "Credits totalled ₹3,00,000 (F-TOTAL-CREDIT).", "needs_facts": true}
+      ]
+    },
+    {
+      "id": "H-02",
+      "alert_type": "LARGE_CREDIT",
+      "signal_source": "INTERNAL_RULE",
+      "customer_profile": "Salaried engineer; Rs.60K/month declared; Low-risk; account 6 years old; property sale deed on file",
+      "alert_narrative": "A large credit was followed the next day by an outflow of most of it.",
+      "transactions": [
+        {"txn_id": "T42-1", "date": "2026-08-20", "type": "CREDIT", "amount_inr": 1800000, "channel": "RTGS", "counterparty": "Registered property buyer (sale deed on file)", "is_flagged": false},
+        {"txn_id": "T42-2", "date": "2026-08-21", "type": "DEBIT", "amount_inr": 1750000, "channel": "NEFT", "counterparty": "Own home-loan account", "is_flagged": false}
+      ],
+      "expected": "NOT_FILE",
+      "ambiguity": "Benign case that resembles pass-through: the credit is documented sale proceeds and the outflow repays the customer's own loan.",
+      "seeded_faults": [
+        {"text": "₹18.5 lakh arrived from the buyer.", "fault": "invented_total", "expect": "fail"},
+        {"text": "The home-loan account received ₹18,00,000.", "fault": "right_value_wrong_party", "expect": "needs_review"}
+      ],
+      "supported_narratives": [
+        {"text": "₹18 lakh was received from the registered property buyer (T42-1).", "needs_facts": false},
+        {"text": "INR 1750000 repaid the customer's own home loan the next day.", "needs_facts": false}
+      ]
+    },
+    {
+      "id": "H-03",
+      "alert_type": "INCOME_INCONSISTENCY",
+      "signal_source": "INTERNAL_RULE",
+      "customer_profile": "Student; Rs.25K/month declared; KYC last verified 4 years ago",
+      "alert_narrative": "A single large credit from an unidentified individual; no further activity yet.",
+      "transactions": [
+        {"txn_id": "T43-1", "date": "2026-09-15", "type": "CREDIT", "amount_inr": 240000, "channel": "IMPS", "counterparty": "Unidentified individual", "is_flagged": false}
+      ],
+      "expected": "CONTESTED",
+      "ambiguity": "Sparse data: one credit, no outflow, stale KYC. An RFI or deferral is reasonable; neither filing nor closing is clearly right.",
+      "seeded_faults": [
+        {"text": "₹2,40,000 was immediately moved to a flagged account.", "fault": "fabricated_evidence_outflow", "expect": "pass_but_outside_coverage"},
+        {"text": "A further ₹1,20,000 arrived the next week.", "fault": "invented_transaction", "expect": "fail"}
+      ],
+      "supported_narratives": [
+        {"text": "A single credit of ₹2,40,000 (T43-1) came from an unidentified individual.", "needs_facts": false}
+      ]
+    },
+    {
+      "id": "H-04",
+      "alert_type": "STRUCTURING",
+      "signal_source": "INTERNAL_RULE",
+      "customer_profile": "Small trader; Rs.40K/month declared; Medium risk",
+      "alert_narrative": "Eleven cash deposits in one month, each just under one lakh.",
+      "transactions": [
+        {"txn_id": "T44-1", "date": "2026-07-01", "type": "CREDIT", "amount_inr": 98000, "channel": "CASH", "counterparty": "Self (cash)", "is_flagged": false},
+        {"txn_id": "T44-2", "date": "2026-07-03", "type": "CREDIT", "amount_inr": 98000, "channel": "CASH", "counterparty": "Self (cash)", "is_flagged": false},
+        {"txn_id": "T44-3", "date": "2026-07-06", "type": "CREDIT", "amount_inr": 98000, "channel": "CASH", "counterparty": "Self (cash)", "is_flagged": false},
+        {"txn_id": "T44-4", "date": "2026-07-08", "type": "CREDIT", "amount_inr": 98000, "channel": "CASH", "counterparty": "Self (cash)", "is_flagged": false},
+        {"txn_id": "T44-5", "date": "2026-07-10", "type": "CREDIT", "amount_inr": 98000, "channel": "CASH", "counterparty": "Self (cash)", "is_flagged": false},
+        {"txn_id": "T44-6", "date": "2026-07-13", "type": "CREDIT", "amount_inr": 98000, "channel": "CASH", "counterparty": "Self (cash)", "is_flagged": false},
+        {"txn_id": "T44-7", "date": "2026-07-15", "type": "CREDIT", "amount_inr": 98000, "channel": "CASH", "counterparty": "Self (cash)", "is_flagged": false},
+        {"txn_id": "T44-8", "date": "2026-07-17", "type": "CREDIT", "amount_inr": 98000, "channel": "CASH", "counterparty": "Self (cash)", "is_flagged": false},
+        {"txn_id": "T44-9", "date": "2026-07-20", "type": "CREDIT", "amount_inr": 98000, "channel": "CASH", "counterparty": "Self (cash)", "is_flagged": false},
+        {"txn_id": "T44-10", "date": "2026-07-22", "type": "CREDIT", "amount_inr": 98000, "channel": "CASH", "counterparty": "Self (cash)", "is_flagged": false},
+        {"txn_id": "T44-11", "date": "2026-07-24", "type": "CREDIT", "amount_inr": 98000, "channel": "CASH", "counterparty": "Self (cash)", "is_flagged": false}
+      ],
+      "expected": "FILE",
+      "ambiguity": "Medium: the month's cash total exceeds the CTR threshold while every deposit is below it; seasonal trade receipts could explain it if documented.",
+      "seeded_faults": [
+        {"text": "Cash deposits in July totalled ₹11,00,000.", "fault": "rounded_total", "expect": "fail"},
+        {"text": "Each deposit was ₹99,000.", "fault": "near_miss_value", "expect": "fail"}
+      ],
+      "supported_narratives": [
+        {"text": "Eleven cash deposits of ₹98,000 each were made in July.", "needs_facts": false},
+        {"text": "July cash deposits totalled ₹10,78,000 (F-CASH-2026-07-CREDIT).", "needs_facts": true}
+      ]
+    },
+    {
+      "id": "H-05",
+      "alert_type": "INCOME_INCONSISTENCY",
+      "signal_source": "INTERNAL_RULE",
+      "customer_profile": "Salaried accountant; Rs.55K/month declared; employer payroll account on file",
+      "alert_narrative": "Customer states the credits are salary arrears; the paying handles do not match the employer on file.",
+      "transactions": [
+        {"txn_id": "T45-1", "date": "2026-09-05", "type": "CREDIT", "amount_inr": 150000, "channel": "UPI", "counterparty": "Unknown UPI handle S", "is_flagged": false},
+        {"txn_id": "T45-2", "date": "2026-09-06", "type": "CREDIT", "amount_inr": 150000, "channel": "UPI", "counterparty": "Unknown UPI handle T", "is_flagged": false},
+        {"txn_id": "T45-3", "date": "2026-09-08", "type": "DEBIT", "amount_inr": 60000, "channel": "UPI", "counterparty": "Unknown UPI handle U", "is_flagged": false}
+      ],
+      "expected": "CONTESTED",
+      "ambiguity": "Conflicting sources: the customer's explanation (arrears) conflicts with the counterparties; no flag, modest outflow.",
+      "seeded_faults": [
+        {"text": "Salary arrears of ₹3,00,000 were paid by the employer.", "fault": "conflicting_source_as_fact", "expect": "pass_but_outside_coverage"}
+      ],
+      "supported_narratives": [
+        {"text": "Two credits of ₹1,50,000 (T45-1, T45-2) came from handles that are not the employer on file.", "needs_facts": false}
+      ]
+    },
+    {
+      "id": "H-06",
+      "alert_type": "LARGE_CREDIT",
+      "signal_source": "INTERNAL_RULE",
+      "customer_profile": "Salaried teacher; Rs.45K/month declared; Low-risk; account 8 years old",
+      "alert_narrative": "Regular salary credits and rent payments; alert raised by a volume rule after a bonus month.",
+      "transactions": [
+        {"txn_id": "T46-1", "date": "2026-07-01", "type": "CREDIT", "amount_inr": 45000, "channel": "NEFT", "counterparty": "Employer payroll (KYC-matched)", "is_flagged": false},
+        {"txn_id": "T46-2", "date": "2026-08-01", "type": "CREDIT", "amount_inr": 45000, "channel": "NEFT", "counterparty": "Employer payroll (KYC-matched)", "is_flagged": false},
+        {"txn_id": "T46-3", "date": "2026-09-01", "type": "CREDIT", "amount_inr": 135000, "channel": "NEFT", "counterparty": "Employer payroll (KYC-matched)", "is_flagged": false},
+        {"txn_id": "T46-4", "date": "2026-09-05", "type": "DEBIT", "amount_inr": 15000, "channel": "UPI", "counterparty": "Landlord (standing instruction)", "is_flagged": false}
+      ],
+      "expected": "NOT_FILE",
+      "ambiguity": "Low: the larger September credit is from the same KYC-matched employer.",
+      "seeded_faults": [
+        {"text": "A bonus of ₹1,35,000 came from an unknown overseas sender.", "fault": "fabricated_party", "expect": "pass_but_outside_coverage"},
+        {"text": "Salary credits totalled ₹2,40,000 over three months.", "fault": "invented_total", "expect": "fail"}
+      ],
+      "supported_narratives": [
+        {"text": "September's credit of ₹1,35,000 (T46-3) came from the KYC-matched employer payroll.", "needs_facts": false},
+        {"text": "Credits totalled ₹2,25,000 (F-TOTAL-CREDIT).", "needs_facts": true}
+      ]
+    }
+  ]
+}

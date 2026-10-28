@@ -1,0 +1,14 @@
+{
+ "mode": "live",
+ "started_utc": "2026-10-21T08:01:09.543494+00:00",
+ "dataset": "HOLDOUT-v1.json",
+ "dataset_sha256": "e7aaad6ae4d9b05ec35ffbd671d65ec49668b54b3c22e506ed33290d9d781a88",
+ "cases": 6,
+ "git_rev": "9e3333a",
+ "models": {
+  "triage": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+  "reasoning": "nvidia/nemotron-3-super-120b-a12b",
+  "disposition": "nvidia/Nemotron-3-Ultra-550b-a55b"
+ },
+ "label_provenance": "Author-assigned by the coding assistant on 2026-10-21 from the corpus rules and scenario conventions in this repo. NOT expert ground truth; pending review by the human (see HANDOFF). All data synthetic: no real names, accounts or institutions."
+}

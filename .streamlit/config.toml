@@ -1,0 +1,30 @@
+[server]
+headless = true
+enableCORS = false
+enableXsrfProtection = true
+# Port is set by the platform (Streamlit Community Cloud uses 8501 by default)
+
+[browser]
+gatherUsageStats = false
+
+# Two themes; viewers switch in the app menu (⋮ → Settings). Values mirror ddp/palette.py.
+[theme]
+font                     = "sans serif"
+showSidebarBorder        = true
+
+[theme.light]
+primaryColor             = "#0B5C66"
+backgroundColor          = "#F8FAFC"
+secondaryBackgroundColor = "#FFFFFF"
+textColor                = "#111827"
+borderColor              = "#CBD5E1"
+
+[theme.dark]
+primaryColor             = "#0E7490"
+backgroundColor          = "#0F172A"
+secondaryBackgroundColor = "#1E293B"
+textColor                = "#F1F5F9"
+borderColor              = "#334155"
+
+[logger]
+level = "warning"

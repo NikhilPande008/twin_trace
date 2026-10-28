@@ -1,0 +1,115 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "regulatory-corpus-entry",
+  "title": "Regulatory Corpus Entry",
+  "description": "Schema for a single entry in the FIU-IND AML regulatory knowledge corpus",
+  "type": "object",
+  "required": ["id", "rule", "category", "applies_to", "primary_source", "evidence_level", "snapshot_date"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Z]+-[0-9]{3}$",
+      "description": "Unique rule ID. Format: {CATEGORY_PREFIX}-{NNN}. E.g. STR-001, RFI-007."
+    },
+    "rule": {
+      "type": "string",
+      "minLength": 20,
+      "description": "The regulatory fact/rule stated as precisely as the source allows."
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "REPORTING_OBLIGATION",
+        "REPORT_STRUCTURE",
+        "PO_EVALUATION",
+        "RED_FLAG_INDICATOR",
+        "INSPECTION_FOCUS",
+        "STATUTORY_BASIS",
+        "RECORD_RETENTION",
+        "TIPPING_OFF",
+        "MULE_ACCOUNT_CONTEXT"
+      ]
+    },
+    "subcategory": {
+      "type": "string"
+    },
+    "applies_to": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "all_reporting_entities",
+          "banking_companies",
+          "financial_institutions",
+          "intermediaries",
+          "insurance_companies",
+          "payment_system_operators"
+        ]
+      },
+      "minItems": 1
+    },
+    "primary_source": {
+      "type": "object",
+      "required": ["document", "url", "url_verified"],
+      "additionalProperties": false,
+      "properties": {
+        "document": {
+          "type": "string",
+          "description": "Full document name + section. E.g. 'PMLA 2002, Section 12(1)(b)'"
+        },
+        "url": {
+          "type": "string",
+          "description": "URL to the source. Never invented — use best-known URL."
+        },
+        "url_verified": {
+          "type": "boolean",
+          "description": "true only when manually confirmed live and pointing to the right document."
+        },
+        "section": {
+          "type": ["string", "null"]
+        },
+        "accessed_date": {
+          "type": ["string", "null"],
+          "format": "date",
+          "description": "ISO 8601 date. Null = not yet accessed."
+        }
+      }
+    },
+    "effective_date": {
+      "type": ["string", "null"],
+      "description": "ISO 8601 date the rule came into force. Null if unknown — do NOT guess."
+    },
+    "evidence_level": {
+      "type": "string",
+      "enum": ["PROVEN", "ASSUMED", "NEEDS-VERIFICATION"],
+      "description": "Claim-audit tag. NEEDS-VERIFICATION entries must not appear in generated output."
+    },
+    "my_synthesis": {
+      "type": ["string", "null"],
+      "description": "PO-lens interpretation. Not a source. Distinct from rule."
+    },
+    "last_verified": {
+      "type": ["string", "null"],
+      "format": "date",
+      "description": "ISO 8601 date last checked against primary source. Null = never verified."
+    },
+    "snapshot_date": {
+      "type": "string",
+      "format": "date",
+      "description": "ISO 8601 'as of' date for this entry."
+    },
+    "gap_notes": {
+      "type": ["string", "null"],
+      "description": "Open questions or verification tasks specific to this entry."
+    },
+    "related_rules": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z]+-[0-9]{3}$"
+      },
+      "description": "IDs of related corpus entries."
+    }
+  }
+}

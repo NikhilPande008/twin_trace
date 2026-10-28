@@ -1,0 +1,10 @@
+{
+ "mode": "gate-only",
+ "started_utc": "2026-10-21T07:47:21.668900+00:00",
+ "dataset": "HOLDOUT-v1.json",
+ "dataset_sha256": "e7aaad6ae4d9b05ec35ffbd671d65ec49668b54b3c22e506ed33290d9d781a88",
+ "cases": 6,
+ "git_rev": "cccac3d",
+ "models": {},
+ "label_provenance": "Author-assigned by the coding assistant on 2026-10-21 from the corpus rules and scenario conventions in this repo. NOT expert ground truth; pending review by the human (see HANDOFF). All data synthetic: no real names, accounts or institutions."
+}

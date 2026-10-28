@@ -1,0 +1,229 @@
+{
+ "gate": {
+  "faults": [
+   {
+    "case": "H-01",
+    "fault": "invented_total",
+    "text": "Total inflows of \u20b93,50,000 were routed onward within a day.",
+    "expected": "fail",
+    "got": "fail",
+    "caught": true
+   },
+   {
+    "case": "H-01",
+    "fault": "right_value_wrong_party",
+    "text": "UPI handle Z received \u20b985,000 from the account.",
+    "expected": "needs_review",
+    "got": "needs_review",
+    "caught": true
+   },
+   {
+    "case": "H-01",
+    "fault": "fabricated_txn_id",
+    "text": "The pass-through is evidenced by T41-9.",
+    "expected": "fail",
+    "got": "fail",
+    "caught": true
+   },
+   {
+    "case": "H-01",
+    "fault": "rounded_figure",
+    "text": "Roughly \u20b93 lakh moved to the flagged handle.",
+    "expected": "fail",
+    "got": "pass_but_outside_coverage",
+    "caught": false
+   },
+   {
+    "case": "H-01",
+    "fault": "range",
+    "text": "Between \u20b92.9-3 lakh moved to the flagged handle.",
+    "expected": "fail",
+    "got": "fail",
+    "caught": true
+   },
+   {
+    "case": "H-01",
+    "fault": "unit_mismatch_count",
+    "text": "Only \u20b94 moved through the account.",
+    "expected": "fail",
+    "got": "fail",
+    "caught": true
+   },
+   {
+    "case": "H-02",
+    "fault": "invented_total",
+    "text": "\u20b918.5 lakh arrived from the buyer.",
+    "expected": "fail",
+    "got": "fail",
+    "caught": true
+   },
+   {
+    "case": "H-02",
+    "fault": "right_value_wrong_party",
+    "text": "The home-loan account received \u20b918,00,000.",
+    "expected": "needs_review",
+    "got": "pass_but_outside_coverage",
+    "caught": false
+   },
+   {
+    "case": "H-03",
+    "fault": "fabricated_evidence_outflow",
+    "text": "\u20b92,40,000 was immediately moved to a flagged account.",
+    "expected": "pass_but_outside_coverage",
+    "got": "pass_but_outside_coverage",
+    "caught": false
+   },
+   {
+    "case": "H-03",
+    "fault": "invented_transaction",
+    "text": "A further \u20b91,20,000 arrived the next week.",
+    "expected": "fail",
+    "got": "fail",
+    "caught": true
+   },
+   {
+    "case": "H-04",
+    "fault": "rounded_total",
+    "text": "Cash deposits in July totalled \u20b911,00,000.",
+    "expected": "fail",
+    "got": "fail",
+    "caught": true
+   },
+   {
+    "case": "H-04",
+    "fault": "near_miss_value",
+    "text": "Each deposit was \u20b999,000.",
+    "expected": "fail",
+    "got": "fail",
+    "caught": true
+   },
+   {
+    "case": "H-05",
+    "fault": "conflicting_source_as_fact",
+    "text": "Salary arrears of \u20b93,00,000 were paid by the employer.",
+    "expected": "pass_but_outside_coverage",
+    "got": "pass_but_outside_coverage",
+    "caught": false
+   },
+   {
+    "case": "H-06",
+    "fault": "fabricated_party",
+    "text": "A bonus of \u20b91,35,000 came from an unknown overseas sender.",
+    "expected": "pass_but_outside_coverage",
+    "got": "pass_but_outside_coverage",
+    "caught": false
+   },
+   {
+    "case": "H-06",
+    "fault": "invented_total",
+    "text": "Salary credits totalled \u20b92,40,000 over three months.",
+    "expected": "fail",
+    "got": "fail",
+    "caught": true
+   }
+  ],
+  "supported": [
+   {
+    "case": "H-01",
+    "text": "Credits of \u20b91,20,000, \u20b985,000 and \u20b995,000 (T41-1, T41-2, T41-3) arrived from unknown handles.",
+    "rejected": false
+   },
+   {
+    "case": "H-01",
+    "text": "Rs. 2,95,000 went to UPI handle Z on 2026-09-03 (T41-4).",
+    "rejected": false
+   },
+   {
+    "case": "H-01",
+    "text": "Credits totalled \u20b93,00,000 (F-TOTAL-CREDIT).",
+    "rejected": false
+   },
+   {
+    "case": "H-02",
+    "text": "\u20b918 lakh was received from the registered property buyer (T42-1).",
+    "rejected": false
+   },
+   {
+    "case": "H-02",
+    "text": "INR 1750000 repaid the customer's own home loan the next day.",
+    "rejected": false
+   },
+   {
+    "case": "H-03",
+    "text": "A single credit of \u20b92,40,000 (T43-1) came from an unidentified individual.",
+    "rejected": false
+   },
+   {
+    "case": "H-04",
+    "text": "Eleven cash deposits of \u20b998,000 each were made in July.",
+    "rejected": false
+   },
+   {
+    "case": "H-04",
+    "text": "July cash deposits totalled \u20b910,78,000 (F-CASH-2026-07-CREDIT).",
+    "rejected": false
+   },
+   {
+    "case": "H-05",
+    "text": "Two credits of \u20b91,50,000 (T45-1, T45-2) came from handles that are not the employer on file.",
+    "rejected": false
+   },
+   {
+    "case": "H-06",
+    "text": "September's credit of \u20b91,35,000 (T46-3) came from the KYC-matched employer payroll.",
+    "rejected": false
+   },
+   {
+    "case": "H-06",
+    "text": "Credits totalled \u20b92,25,000 (F-TOTAL-CREDIT).",
+    "rejected": false
+   }
+  ],
+  "catch_rate_all": [
+   10,
+   15
+  ],
+  "catch_rate_in_designed_coverage": [
+   10,
+   12
+  ],
+  "false_rejections": [
+   0,
+   11
+  ],
+  "label_mismatches": [
+   {
+    "case": "H-01",
+    "fault": "rounded_figure",
+    "text": "Roughly \u20b93 lakh moved to the flagged handle.",
+    "expected": "fail",
+    "got": "pass_but_outside_coverage",
+    "caught": false
+   },
+   {
+    "case": "H-02",
+    "fault": "right_value_wrong_party",
+    "text": "The home-loan account received \u20b918,00,000.",
+    "expected": "needs_review",
+    "got": "pass_but_outside_coverage",
+    "caught": false
+   }
+  ]
+ },
+ "conditions": {
+  "C1_template": {
+   "drafts": 6,
+   "errors": 0,
+   "unsupported_figures_total": 0,
+   "drafts_with_unsupported": 0,
+   "needs_review_total": 0,
+   "figures_total": 10,
+   "sentences_outside_coverage": 12,
+   "accepted_by_gate": null,
+   "unsupported_in_accepted": 0,
+   "latency_s_total": 0.0,
+   "tokens_all_attempts": 0,
+   "reproduced": 6
+  }
+ }
+}

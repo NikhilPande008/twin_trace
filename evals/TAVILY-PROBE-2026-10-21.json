@@ -1,0 +1,194 @@
+[
+  {
+    "case": "adverse_media:ALERT-01",
+    "step_status": "ok",
+    "screen": {
+      "status": "ok",
+      "completed": true,
+      "query": "UPI money mule account pass-through fraud India",
+      "detail": "",
+      "http_status": 200,
+      "result_count": 5,
+      "checked_at": "2026-10-21T07:33:45.077639+00:00",
+      "evidence_id": "EV-c4c573d57a44"
+    },
+    "seconds": 0.79,
+    "evidence_rows": 6,
+    "hits": [
+      {
+        "title": "Combating Money Mule Fraud for Safer Banking in India",
+        "url": "https://risk.lexisnexis.com/global/en/insights-resources/article/stopping-money-mules-in-india"
+      },
+      {
+        "title": "Detection of Mule Accounts and Fraudsters in UPI Transactions Using AI and Machine Learnin",
+        "url": "https://www.irejournals.com/paper-details/1716166"
+      },
+      {
+        "title": "Don\u2019t Be a Money Mule Protect Yourself from Fraud - Indian Bank",
+        "url": "https://indianbank.bank.in/en/don-t-be-a-money-mule-protect-yourself-from-fraud"
+      },
+      {
+        "title": "UPI Fraud: Common Types and Methods to Prevent UPI Payment Scams",
+        "url": "https://razorpay.com/blog/upi-frauds-types-tactics"
+      },
+      {
+        "title": "Don't Become a Money Mule! Your bank account should ...",
+        "url": "https://www.facebook.com/SSOIndia2/posts/dont-become-a-money-mule-your-bank-account-should-never-be-used-to-receive-or-tr/1053262484236093"
+      }
+    ],
+    "expected": [
+      "no_results",
+      "ok"
+    ],
+    "pass": true
+  },
+  {
+    "case": "adverse_media:ALERT-16",
+    "step_status": "ok",
+    "screen": {
+      "status": "ok",
+      "completed": true,
+      "query": "UPI money mule account pass-through fraud India",
+      "detail": "",
+      "http_status": 200,
+      "result_count": 5,
+      "checked_at": "2026-10-21T07:33:45.789137+00:00",
+      "evidence_id": "EV-a861e97afc7d"
+    },
+    "seconds": 0.71,
+    "evidence_rows": 6,
+    "hits": [
+      {
+        "title": "Combating Money Mule Fraud for Safer Banking in India",
+        "url": "https://risk.lexisnexis.com/global/en/insights-resources/article/stopping-money-mules-in-india"
+      },
+      {
+        "title": "Detection of Mule Accounts and Fraudsters in UPI Transactions Using AI and Machine Learnin",
+        "url": "https://www.irejournals.com/paper-details/1716166"
+      },
+      {
+        "title": "Don\u2019t Be a Money Mule Protect Yourself from Fraud - Indian Bank",
+        "url": "https://indianbank.bank.in/en/don-t-be-a-money-mule-protect-yourself-from-fraud"
+      },
+      {
+        "title": "UPI Fraud: Common Types and Methods to Prevent UPI Payment Scams",
+        "url": "https://razorpay.com/blog/upi-frauds-types-tactics"
+      },
+      {
+        "title": "Don't Become a Money Mule! Your bank account should ...",
+        "url": "https://www.facebook.com/SSOIndia2/posts/dont-become-a-money-mule-your-bank-account-should-never-be-used-to-receive-or-tr/1053262484236093"
+      }
+    ],
+    "expected": [
+      "no_results",
+      "ok"
+    ],
+    "pass": true
+  },
+  {
+    "case": "regulator_search",
+    "screen": {
+      "status": "ok",
+      "completed": true,
+      "query": "RBI master direction KYC customer due diligence amendment",
+      "detail": "",
+      "http_status": 200,
+      "result_count": 5,
+      "checked_at": "2026-10-21T07:33:46.582495+00:00"
+    },
+    "seconds": 0.79,
+    "hits": [
+      {
+        "title": "Master Directions | Official Website of Reserve Bank of India",
+        "url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=12896",
+        "domain": "www.rbi.org.in"
+      },
+      {
+        "title": "Notifications| Official Website of Reserve Bank of India",
+        "url": "https://m.rbi.org.in/Scripts/NotificationUser.aspx?Id=12746&Mode=0",
+        "domain": "m.rbi.org.in"
+      },
+      {
+        "title": "Database| Official Website of Reserve Bank of India",
+        "url": "https://m.rbi.org.in/scripts/BS_ViewMasDirections.aspx?id=13141",
+        "domain": "m.rbi.org.in"
+      },
+      {
+        "title": "Reserve Bank of India - Master Directions",
+        "url": "https://m.rbi.org.in/Scripts/BS_ViewMasterDirections.aspx?id=10201",
+        "domain": "m.rbi.org.in"
+      },
+      {
+        "title": "Know Your Customer (KYC) Direction, 2016 (Updated as ...",
+        "url": "https://www.rbi.org.in/CommonPerson/english/scripts/notification.aspx?id=2607",
+        "domain": "www.rbi.org.in"
+      }
+    ],
+    "expected": [
+      "no_results",
+      "ok"
+    ],
+    "pass": true
+  },
+  {
+    "case": "regulator_search_refused",
+    "screen": {
+      "status": "refused",
+      "completed": false,
+      "query": "",
+      "detail": "question contains a case identifier",
+      "http_status": null,
+      "result_count": 0,
+      "checked_at": "2026-10-21T07:33:46.583523+00:00"
+    },
+    "seconds": 0.0,
+    "hits": [],
+    "expected": [
+      "refused"
+    ],
+    "pass": true
+  },
+  {
+    "case": "forced_failure:invalid_key",
+    "step_status": "error",
+    "screen": {
+      "status": "http_error",
+      "completed": false,
+      "query": "UPI money mule account pass-through fraud India",
+      "detail": "HTTP 401",
+      "http_status": 401,
+      "result_count": 0,
+      "checked_at": "2026-10-21T07:33:47.411990+00:00",
+      "evidence_id": "EV-5002805d5b18"
+    },
+    "seconds": 0.78,
+    "evidence_rows": 1,
+    "hits": [],
+    "expected": [
+      "http_error"
+    ],
+    "pass": true
+  },
+  {
+    "case": "forced_failure:timeout",
+    "step_status": "error",
+    "screen": {
+      "status": "timeout",
+      "completed": false,
+      "query": "UPI money mule account pass-through fraud India",
+      "detail": "ConnectTimeout: HTTPSConnectionPool(host='api.tavily.com', port=443): Max retries exceeded with url: /search (Caused by ConnectTimeoutError(<HTTPSConnection(host='api.tavily.com', port=443) at 0x106b7",
+      "http_status": null,
+      "result_count": 0,
+      "checked_at": "2026-10-21T07:33:47.471680+00:00",
+      "evidence_id": "EV-4c9f9388cca5"
+    },
+    "seconds": 0.01,
+    "evidence_rows": 1,
+    "hits": [],
+    "expected": [
+      "network_error",
+      "timeout"
+    ],
+    "pass": true
+  }
+]

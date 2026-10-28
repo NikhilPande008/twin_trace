@@ -1,0 +1,10 @@
+# Exact versions the offline gate was run with (T7, 2026-10-21; Python 3.11.15 and 3.14.3).
+# requirements.txt is read-only and keeps lower bounds; pin with:
+#     pip install -r requirements.txt -c constraints.txt
+streamlit==1.56.0
+requests==2.33.0
+python-dotenv==1.2.2
+pyyaml==6.0.2
+pandas==3.0.2
+pytest==9.0.2
+contree-sdk==0.3.6   # sandbox backend only; probed 2026-10-21 (needs NEBIUS_PROJECT_ID)
