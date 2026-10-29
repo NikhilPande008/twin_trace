@@ -218,6 +218,8 @@ python -m scripts.run_inspection_eval       # LIVE: + Nemotron cross-examination
 python -m scripts.run_panel_eval            # LIVE: Nano/Super/Ultra tier panel on 16 dev + 6 holdout cases
 python -m scripts.run_retrieval_eval        # LIVE: BM25 vs BM25 + Token Factory embeddings
 python -m scripts.probes.probe_lookback     # LIVE: Tavily Extract + passage check on cited rules
+python -m scripts.run_scale_test --csv data/external/HI-Small_Trans.csv --max-rows 1000000
+                                            # signal rules on the IBM/ETH dataset (download it from Kaggle yourself)
 ```
 
 Evidence documents: [claims register](docs/CLAIMS_REGISTER.md) ·
@@ -259,10 +261,11 @@ Six cases support no general accuracy claim. Officer review time was not measure
 
 | Measure | Result |
 |---|---|
-| Inspector questions answered from the record alone, 16 alerts (deterministic) | Twin Trace record **96 / 174**; a cursory one-line closure of the same alerts **32 / 160** ([report](evals/INSPECTION-2026-10-28-deterministic.md)). Neither has a factor assessment (it needs a model) or a signed-in officer, and 14 of 16 seeded alerts cite NEEDS-VERIFICATION red-flag rules, which the check flags |
+| Inspector questions answered from the record alone, 16 alerts (deterministic) | Twin Trace record **110 / 174**; a cursory one-line closure of the same alerts **32 / 160** ([report](evals/INSPECTION-2026-10-29-deterministic.md)). Neither has a factor assessment (it needs a model) or a signed-in officer. The earlier 96 / 174 (2026-10-28) predates the recorder dropping NEEDS-VERIFICATION rule IDs, which 14 of 16 seeded alerts cite |
 | Nemotron Super cross-examination of the 16 Twin Trace records (live) | 79 further questions: 25 answered with row citations that passed the code check, 54 not answered by the record, 0 citations rejected ([report](evals/INSPECTION-2026-10-28-live.md)) |
 | Regulatory lookup on 16 paraphrased questions (live) | labelled rule in the top 3: BM25 **13 / 16**, hybrid with embeddings **16 / 16**; off-corpus questions answered by neither, **4 / 4** ([report](evals/RETRIEVAL-2026-10-28-live.md); questions written by the coding assistant, so a fairer test needs a reviewer's own) |
 | Tier panel: Nano, Super and Ultra on 16 dev + 6 holdout cases (live) | **Did not pick out the CONTESTED cases: 0 / 6** (all three tiers said FILE on every one). It marked 4 cases contested, all labelled NOT_FILE (ALERT-08, ALERT-16, H-02, H-06): Nano and Super said FILE, Ultra did not. It never marked a FILE-labelled case contested (0 / 11) ([report](evals/PANEL-2026-10-28-live.md)). Too few cases for a claim either way |
+| Signal rules on the IBM/ETH synthetic AML dataset (deterministic; first 1,000,000 rows of `HI-Small_Trans.csv`, 500 laundering + 500 clean accounts sampled) | The modeled level barely separates them: **4 / 500** laundering accounts ELEVATED, the rest LOW; **0 / 500** clean accounts above LOW. Single signals fire more often on laundering accounts (pass-through 196 vs 119, fan-in 32 vs 3), but this dataset has no registry flags, so the strong signal the level rule needs cannot fire ([report](evals/SCALE-2026-10-29-HI-Small_Trans.md)). Not Indian or UPI data |
 | Reopen watch | deterministic and offline; PROVEN by tests, not measured on real data |
 
 No accuracy, latency or cost figure is quoted anywhere unless it comes from a dated report in
@@ -270,12 +273,15 @@ No accuracy, latency or cost figure is quoted anywhere unless it comes from a da
 
 ## Limits (honest)
 
-- The stress-test signals are **product heuristics**, not FIU-IND criteria. On the current seed,
+- The stress-test signals are **product heuristics**, not FIU-IND criteria. On a public synthetic
+  AML dataset without registry flags they rate almost every account LOW, laundering or not
+  ([scale test](evals/SCALE-2026-10-29-HI-Small_Trans.md)): the levels lean on registry flags. On the current seed,
   **3 of 9** gold-FILE alerts reach a HIGH modeled level from calculator signals
   ([deterministic report, 2026-10-28](evals/REPORT-2026-10-28-deterministic.md); 1 of 9 on the
   old seed). The rest rest on evidence the calculator does not see (PEP status, a blocked
   transfer, correspondent routing), and the stress test says so when a FILE rests on it.
-- The regulatory corpus is a snapshot: 13 of its 49 rules are NEEDS-VERIFICATION and excluded.
+- The regulatory corpus is a snapshot (2026-10-29): 11 of its 49 rules are NEEDS-VERIFICATION and
+  excluded; 46 cite primary documents fetched and read that day.
 - The ledger is tamper-**evident**, not tamper-proof. The anti-templating checklist is a product
   heuristic.
 - The agent's disposition is advisory and is shown last. The PO decides. In the dated runs it

@@ -1,6 +1,6 @@
 """
 DeterministicPolicyGate: telling the customer about a report, the FIU or an investigation is
-blocked (PMLA s.12A, corpus SB-003). Filing references addressed to FIU-IND, and fraud-victim
+blocked (PML Rules 2005 Rule 8(6), corpus SB-003). Filing references addressed to FIU-IND, and fraud-victim
 or KYC conversations with the customer, are not. Offline.
 """
 from __future__ import annotations

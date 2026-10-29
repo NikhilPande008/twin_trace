@@ -193,7 +193,8 @@ def external_screen_ran(c):
 
 
 def earlier_closures(c):
-    cust = c["alert"].get("CUSTOMER_REF") or c["decision"].get("CUSTOMER_REF")
+    # the customer as RECORDED on the decision; the alert table is only a fallback
+    cust = c["decision"].get("CUSTOMER_REF") or c["alert"].get("CUSTOMER_REF")
     seq = c["decision"].get("SEQ")
     rows = [r for r in c["store"].closures_for_customer(cust, before_seq=seq)
             if r["ALERT_ID"] != c["alert_id"]] if cust else []

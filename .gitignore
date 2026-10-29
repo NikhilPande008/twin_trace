@@ -58,3 +58,7 @@ htmlcov/
 /docs/*
 !/docs/IMPACT.md
 !/docs/CLAIMS_REGISTER.md
+
+# ── External datasets: downloaded by the human, never committed ──────────────
+# IBM/ETH synthetic AML transactions (Kaggle, CDLA-Sharing 1.0) for scripts/run_scale_test.py.
+/data/external/

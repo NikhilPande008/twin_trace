@@ -280,9 +280,9 @@ def alert_reasons(store, alert_id: str) -> list[dict]:
         out.append({"kind": "contested", "text": "Contested: needs your judgement",
                     "evidence_id": panels[-1]["EVIDENCE_ID"]})
     alert = store.get_alert(alert_id) or {}
-    if alert.get("CUSTOMER_REF"):
-        closures = [c for c in store.closures_for_customer(alert["CUSTOMER_REF"])
-                    if c["ALERT_ID"] != alert_id]
+    cust = (standing[0]["CUSTOMER_REF"] if standing else None) or alert.get("CUSTOMER_REF")
+    if cust:
+        closures = [c for c in store.closures_for_customer(cust) if c["ALERT_ID"] != alert_id]
         if closures:
             out.append({"kind": "repeat_closure",
                         "text": f"{len(closures)} earlier closure(s) on this customer",

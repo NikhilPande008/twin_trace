@@ -59,3 +59,9 @@ def coverage_table() -> list[dict]:
                      "orders": orders_citing(code), "order_count": counts.get(code, 0),
                      "controls": spec.get("controls", []), "gap": spec.get("gap", "")})
     return sorted(rows, key=lambda r: (-r["order_count"], r["code"]))
+
+
+@lru_cache(maxsize=None)
+def order_scenarios() -> list[dict]:
+    """Synthetic scenarios modelled on order fact patterns (replayed in tests, never seeded)."""
+    return _load("order_scenarios.yaml")[0]["scenarios"]

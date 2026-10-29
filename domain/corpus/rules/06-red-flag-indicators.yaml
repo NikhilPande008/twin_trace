@@ -25,11 +25,11 @@ rules:
       - banking_companies
       - financial_institutions
     primary_source:
-      document: "FIU-IND Typology Report / Master Circular — exact document to be located"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "NEEDS-VERIFICATION"
-      accessed_date: null
+      document: "FIU-IND Reporting Format – Introduction, Version 1.14 (2024) — Table 23 (GS1) Red Flag Indicator field; list contents not published there"
+      url: "https://fiuindia.gov.in/pdfs/quicklinks/Reporting_Format.pdf"
+      url_verified: true
+      section: "Table 23 (GS1), p.77"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: NEEDS-VERIFICATION
     my_synthesis: >
@@ -38,10 +38,13 @@ rules:
       The account is being used as a pass-through, not for genuine banking.
       Triggers: POE factors 1, 2, 7, 8, 9.
     last_verified: null
-    snapshot_date: "2026-09-11"
+    snapshot_date: "2026-10-29"
     gap_notes: >
-      Map to exact FIU-IND typology report citation. Confirm the pattern description
-      matches FIU-IND's published language. This is the highest-priority RFI to source.
+      Map to exact FIU-IND typology report citation. Confirm the pattern description matches
+      FIU-IND's published language. This is the highest-priority RFI to source. 2026-10-29
+      source review (primary sources fetched and read; approved by the human): v1.14 confirms
+      an FIU-IND Red Flag Indicator drop-down by RE category; its contents are not in that
+      document (DG-07).
     related_rules:
       - POE-008
       - POE-009
@@ -58,11 +61,11 @@ rules:
       - banking_companies
       - financial_institutions
     primary_source:
-      document: "FIU-IND Typology Report — exact document to be located"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "NEEDS-VERIFICATION"
-      accessed_date: null
+      document: "FIU-IND Reporting Format – Introduction, Version 1.14 (2024) — Table 23 (GS1) Red Flag Indicator field; list contents not published there"
+      url: "https://fiuindia.gov.in/pdfs/quicklinks/Reporting_Format.pdf"
+      url_verified: true
+      section: "Table 23 (GS1), p.77"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: NEEDS-VERIFICATION
     my_synthesis: >
@@ -71,8 +74,13 @@ rules:
       triggers the CTR threshold. The pattern itself triggers an STR obligation.
       Triggers: POE factors 7, 8, 9.
     last_verified: null
-    snapshot_date: "2026-09-11"
-    gap_notes: "Map to exact FIU-IND typology or PMLA structuring provision. Note: PMLA explicitly covers structuring as an offence."
+    snapshot_date: "2026-10-29"
+    gap_notes: >
+      Map to exact FIU-IND typology or PMLA structuring provision. Note: PMLA explicitly
+      covers structuring as an offence. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): v1.14 confirms an FIU-IND Red
+      Flag Indicator drop-down by RE category; its contents are not in that document
+      (DG-07).
     related_rules:
       - CTR-001
       - POE-009
@@ -87,11 +95,11 @@ rules:
       - banking_companies
       - financial_institutions
     primary_source:
-      document: "FIU-IND Typology Report — exact document to be located"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "NEEDS-VERIFICATION"
-      accessed_date: null
+      document: "FIU-IND Reporting Format – Introduction, Version 1.14 (2024) — Table 23 (GS1) Red Flag Indicator field; list contents not published there"
+      url: "https://fiuindia.gov.in/pdfs/quicklinks/Reporting_Format.pdf"
+      url_verified: true
+      section: "Table 23 (GS1), p.77"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: NEEDS-VERIFICATION
     my_synthesis: >
@@ -99,12 +107,15 @@ rules:
       The 6-month dormancy threshold is an industry standard but the exact FIU-IND
       specification should be confirmed. Triggers: POE factors 2, 7, 8.
     last_verified: null
-    snapshot_date: "2026-09-11"
+    snapshot_date: "2026-10-29"
     gap_notes: >
-      Verify the 6-month dormancy definition against FIU-IND / RBI guidance.
-      Note that RBI defines a 'dormant account' as inactive for 24 months —
-      the 6-month figure here is an AML detection threshold, not the regulatory
-      dormancy classification. Distinguish these clearly in product output.
+      Verify the 6-month dormancy definition against FIU-IND / RBI guidance. Note that RBI
+      defines a 'dormant account' as inactive for 24 months — the 6-month figure here is an
+      AML detection threshold, not the regulatory dormancy classification. Distinguish these
+      clearly in product output. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): v1.14 confirms an FIU-IND Red
+      Flag Indicator drop-down by RE category; its contents are not in that document
+      (DG-07).
     related_rules:
       - POE-003
 
@@ -119,11 +130,11 @@ rules:
       - banking_companies
       - payment_system_operators
     primary_source:
-      document: "FIU-IND Typology Report / RBI MuleHunter.AI signals — exact document to be located"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "NEEDS-VERIFICATION"
-      accessed_date: null
+      document: "FIU-IND Reporting Format – Introduction, Version 1.14 (2024) — Table 23 (GS1) Red Flag Indicator field; list contents not published there"
+      url: "https://fiuindia.gov.in/pdfs/quicklinks/Reporting_Format.pdf"
+      url_verified: true
+      section: "Table 23 (GS1), p.77"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: NEEDS-VERIFICATION
     my_synthesis: >
@@ -133,8 +144,13 @@ rules:
       this linkage explicitly in the Ground of Suspicion.
       Triggers: POE factor 11 (KYC — inconsistent registration data).
     last_verified: null
-    snapshot_date: "2026-09-11"
-    gap_notes: "Confirm this is an enumerated FIU-IND indicator or primarily an RBI MuleHunter.AI signal. Locate primary citation."
+    snapshot_date: "2026-10-29"
+    gap_notes: >
+      Confirm this is an enumerated FIU-IND indicator or primarily an RBI MuleHunter.AI
+      signal. Locate primary citation. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): v1.14 confirms an FIU-IND Red
+      Flag Indicator drop-down by RE category; its contents are not in that document
+      (DG-07).
     related_rules:
       - POE-012
       - MAC-001
@@ -150,11 +166,11 @@ rules:
       - banking_companies
       - financial_institutions
     primary_source:
-      document: "I4C suspect registry; RBI DPIP; MuleHunter.AI — signal-based, not direct FIU-IND citation"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "NEEDS-VERIFICATION"
-      accessed_date: null
+      document: "FIU-IND Reporting Format – Introduction, Version 1.14 (2024) — Table 23 (GS1) Red Flag Indicator field; list contents not published there"
+      url: "https://fiuindia.gov.in/pdfs/quicklinks/Reporting_Format.pdf"
+      url_verified: true
+      section: "Table 23 (GS1), p.77"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: NEEDS-VERIFICATION
     my_synthesis: >
@@ -163,12 +179,15 @@ rules:
       the PO must still form suspicion and document the evaluation. A match
       without STR filing is a significant compliance risk.
     last_verified: null
-    snapshot_date: "2026-09-11"
+    snapshot_date: "2026-10-29"
     gap_notes: >
-      Confirm DPIP and I4C signals are legally permitted as suspicion inputs under
-      PMLA. Locate FIU-IND guidance on using regulatory signal databases as STR
-      triggers. Clarify whether a suspect-registry match alone is sufficient evidence
-      for suspicion or requires corroboration.
+      Confirm DPIP and I4C signals are legally permitted as suspicion inputs under PMLA.
+      Locate FIU-IND guidance on using regulatory signal databases as STR triggers. Clarify
+      whether a suspect-registry match alone is sufficient evidence for suspicion or
+      requires corroboration. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): v1.14 confirms an FIU-IND Red
+      Flag Indicator drop-down by RE category; its contents are not in that document
+      (DG-07).
     related_rules:
       - MAC-001
 
@@ -183,11 +202,11 @@ rules:
     applies_to:
       - banking_companies
     primary_source:
-      document: "FIU-IND Typology Report — exact document to be located"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "NEEDS-VERIFICATION"
-      accessed_date: null
+      document: "FIU-IND Reporting Format – Introduction, Version 1.14 (2024) — Table 23 (GS1) Red Flag Indicator field; list contents not published there"
+      url: "https://fiuindia.gov.in/pdfs/quicklinks/Reporting_Format.pdf"
+      url_verified: true
+      section: "Table 23 (GS1), p.77"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: NEEDS-VERIFICATION
     my_synthesis: >
@@ -196,8 +215,12 @@ rules:
       actual use (pass-through for third-party funds) is the core of the suspicion
       narrative. Triggers: POE factors 1, 2, 4, 5.
     last_verified: null
-    snapshot_date: "2026-09-11"
-    gap_notes: "Map to exact FIU-IND typology report or RBI guidance on salary account misuse."
+    snapshot_date: "2026-10-29"
+    gap_notes: >
+      Map to exact FIU-IND typology report or RBI guidance on salary account misuse.
+      2026-10-29 source review (primary sources fetched and read; approved by the human): v1.14
+      confirms an FIU-IND Red Flag Indicator drop-down by RE category; its contents are not
+      in that document (DG-07).
     related_rules:
       - POE-004
       - POE-005
@@ -213,11 +236,11 @@ rules:
       - banking_companies
       - financial_institutions
     primary_source:
-      document: "FIU-IND Typology Report — exact document to be located"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "NEEDS-VERIFICATION"
-      accessed_date: null
+      document: "FIU-IND Reporting Format – Introduction, Version 1.14 (2024) — Table 23 (GS1) Red Flag Indicator field; list contents not published there"
+      url: "https://fiuindia.gov.in/pdfs/quicklinks/Reporting_Format.pdf"
+      url_verified: true
+      section: "Table 23 (GS1), p.77"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: NEEDS-VERIFICATION
     my_synthesis: >
@@ -227,8 +250,11 @@ rules:
       the shared beneficiary is not commercially explained.
       Triggers: POE factors 6, 9.
     last_verified: null
-    snapshot_date: "2026-09-11"
-    gap_notes: "Map to exact FIU-IND typology citation. Requires cross-account analysis capability in product."
+    snapshot_date: "2026-10-29"
+    gap_notes: >
+      Map to exact FIU-IND typology citation. Requires cross-account analysis capability in
+      product. 2026-10-29 source review (primary sources fetched and read; approved by the human): v1.14 confirms an FIU-IND Red Flag Indicator drop-down by RE category; its
+      contents are not in that document (DG-07).
     related_rules:
       - POE-007
       - POE-010
@@ -277,26 +303,29 @@ rules:
     applies_to:
       - all_reporting_entities
     primary_source:
-      document: "FIU-IND Typology Report; RBI Master Direction on KYC (PEP definition)"
+      document: "RBI Master Direction – KYC Direction, 2016 — PEP paragraph"
       url: "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=11566"
-      url_verified: false
-      section: "PEP — enhanced due diligence"
-      accessed_date: null
+      url_verified: true
+      section: "Accounts of PEPs"
+      accessed_date: "2026-10-29"
     effective_date: null
-    evidence_level: NEEDS-VERIFICATION
+    evidence_level: ASSUMED
     my_synthesis: >
       PEPs are subject to enhanced due diligence (EDD) under RBI KYC norms.
       A PEP transaction that exceeds what their known official income can justify
       is a strong suspicion indicator. The PO must document the income assessment
       explicitly in the Ground of Suspicion.
       Triggers: POE factors 3, 4, 5.
-    last_verified: null
-    snapshot_date: "2026-09-11"
+    last_verified: "2026-10-29"
+    snapshot_date: "2026-10-29"
     gap_notes: >
-      Verify RBI Master Direction on KYC URL and PEP definition section.
-      Confirm current KYC Master Direction version/date. The URL given is
-      commonly cited for the RBI KYC Master Direction (as of 2022) but needs
-      to be verified as still pointing to the current version.
+      Verify RBI Master Direction on KYC URL and PEP definition section. Confirm current KYC
+      Master Direction version/date. The URL given is commonly cited for the RBI KYC Master
+      Direction (as of 2022) but needs to be verified as still pointing to the current
+      version. 2026-10-29 source review (primary sources fetched and read; approved by the human): the KYC MD defines PEPs and requires EDD for PEPs, family members and close
+      associates. Promoted NEEDS-VERIFICATION -> ASSUMED by the human on 2026-10-29: the PEP
+      due-diligence basis is sourced; the red-flag pattern itself is not an FIU-IND text
+      (DG-07).
     related_rules:
       - POE-004
       - POE-005
@@ -312,11 +341,11 @@ rules:
       - banking_companies
       - financial_institutions
     primary_source:
-      document: "FIU-IND Typology Report; FATF Guidance on NPOs"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "NEEDS-VERIFICATION"
-      accessed_date: null
+      document: "FIU-IND Reporting Format – Introduction, Version 1.14 (2024) — Table 23 (GS1) Red Flag Indicator field; list contents not published there"
+      url: "https://fiuindia.gov.in/pdfs/quicklinks/Reporting_Format.pdf"
+      url_verified: true
+      section: "Table 23 (GS1), p.77"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: NEEDS-VERIFICATION
     my_synthesis: >
@@ -326,10 +355,13 @@ rules:
       transaction pattern does not fit the NPO's stated charitable activity.
       Triggers: POE factors 1, 2, 6, 7.
     last_verified: null
-    snapshot_date: "2026-09-11"
+    snapshot_date: "2026-10-29"
     gap_notes: >
-      Map to exact FIU-IND typology or FATF NPO guidance citation.
-      Confirm definition of 'immediate redistribution' in context of this indicator.
+      Map to exact FIU-IND typology or FATF NPO guidance citation. Confirm definition of
+      'immediate redistribution' in context of this indicator. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): v1.14 confirms an FIU-IND Red
+      Flag Indicator drop-down by RE category; its contents are not in that document
+      (DG-07).
     related_rules:
       - NTR-001
       - POE-001

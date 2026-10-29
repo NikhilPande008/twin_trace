@@ -56,7 +56,7 @@ _REQ_SECRET = re.compile(
 
 PROMPT_VERSION = "v2.0-nebius"
 SKILL_VERSION = "v2.0-nebius"
-CORPUS_VERSION = "2026-09-17"
+CORPUS_VERSION = "2026-10-29"
 
 # The 11 POE evaluation factors (corpus IDs + names)
 POE_FACTORS = [
@@ -236,6 +236,15 @@ class CoPilotSkills:
         obj, fails = self._complete_structured(prompt, tier, schema_name, max_tokens=max_tokens)
         return obj[WRAPPER_KEY[schema_name]], fails
 
+    def usable_rule_ids(self, rule_ids: list[str]) -> tuple[list[str], int]:
+        """(rule IDs that are PROVEN/ASSUMED in the corpus, how many were dropped). A decision may
+        cite only usable rules: NEEDS-VERIFICATION or unknown IDs never enter the ledger."""
+        if not rule_ids or self._store is None:
+            return list(rule_ids or []), 0
+        usable = {r["RULE_ID"] for r in self._store.corpus_rows()}
+        kept = [r for r in rule_ids if r in usable]
+        return kept, len(rule_ids) - len(kept)
+
     def _corpus_index(self) -> CorpusIndex:
         if self._index is None:
             rows = self._store.corpus_rows() if self._store else []
@@ -265,8 +274,9 @@ class CoPilotSkills:
         Deterministic safety screen for a free-text user request BEFORE any drafting.
 
         Refuses tipping-off requests — asking the system to tell/inform/notify the
-        customer that a report, filing, or suspicion exists. Tipping-off is a criminal
-        offence under PMLA 2002 s.12A (corpus SB-003); the system must refuse, not draft.
+        customer that a report, filing, or suspicion exists. Tipping-off breaches the duty to keep
+        the fact of reporting confidential (PML Rules 2005, Rule 8(6); corpus SB-003); the system
+        must refuse, not draft.
 
         Refused when the request both (1) addresses the customer — a tell-verb aimed at them,
         or "the customer is informed" — and (2) names what must not be disclosed: a report,
@@ -282,7 +292,8 @@ class CoPilotSkills:
                 "allowed": False,
                 "category": "tipping_off",
                 "reason": ("Refused: informing the customer that a report or suspicion exists is "
-                           "tipping-off — a criminal offence under PMLA 2002 s.12A (corpus SB-003). "
+                           "tipping-off, which the duty to keep reporting confidential prohibits (PML Rules "
+                           "2005, Rule 8(6); corpus SB-003). "
                            "The system cannot draft or send any such communication."),
             }
         return {"allowed": True, "category": "ok", "reason": ""}
@@ -632,6 +643,9 @@ Output ONLY the narrative text, no preamble or JSON."""
             [alert_id, disposition, draft_sha256, decision_maker_id, suspicion_given,
              str_reference], default=str).encode()).hexdigest()
 
+        # NEEDS-VERIFICATION rules never appear in any output (CLAUDE.md §3), the ledger included:
+        # cited IDs are filtered to PROVEN/ASSUMED; only the count of dropped IDs is kept.
+        rules_cited, rules_dropped = self.usable_rule_ids(list(rules_cited or []))
         provenance = {
             "ai_recommendation": ai_recommendation,
             "override_reason":   override_reason,
@@ -655,6 +669,7 @@ Output ONLY the narrative text, no preamble or JSON."""
             **({"decision_maker_identity": decision_maker_identity}
                if decision_maker_identity else {}),
             "agent_run_ref":     agent_run_ref,
+            **({"rules_cited_dropped_unverified": rules_dropped} if rules_dropped else {}),
             # T12.10: what the pre-inspection check found unanswered when the officer recorded
             **({"pre_inspection": {k: pre_inspection.get(k) for k in
                                    ("bank_sha256", "answered", "asked", "gaps")}}

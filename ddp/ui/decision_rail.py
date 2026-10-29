@@ -383,7 +383,8 @@ def _pre_inspection(selected, alert, action, narrative, assessment, computed, ch
     A warning, not a block; the gaps are written into the ledger row."""
     pre = pre_inspect(
         get_store(), alert_id=selected, disposition=action, rationale=narrative,
-        rules_cited=json.loads(str(alert.get("RULES_CITED") or "[]")),
+        rules_cited=get_skills().usable_rule_ids(
+            json.loads(str(alert.get("RULES_CITED") or "[]")))[0],
         poe_assessment=assessment, compute_run_id=(computed or {}).get("run_id"),
         suspicion_formed_at=suspicion_ts, decision_maker_id=ident.officer_id or "",
         decision_maker_basis=ident.basis, evidence_check=dict(

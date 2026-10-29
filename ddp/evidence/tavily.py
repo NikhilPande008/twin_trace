@@ -6,7 +6,7 @@ counterparties. Each result is stored as an EVIDENCE row (type = adverse_media).
 
 Privacy / anti-tipping-off rules (enforced here, not only by screen_request):
   - Query NEVER includes "STR", "suspicious transaction report", "report", "filing",
-    or "suspicion" — PMLA 2002 s.12A via corpus SB-003.
+    or "suspicion" — PML Rules 2005 Rule 8(6) via corpus SB-003.
   - Snippets are truncated to SNIPPET_MAX_CHARS before storage; downstream prompts
     must fence them as untrusted data (injection protection).
   - This data is for the PO's situational awareness; it is NEVER sent to the customer.

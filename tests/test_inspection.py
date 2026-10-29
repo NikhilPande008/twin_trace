@@ -61,9 +61,10 @@ def test_full_record_answers_more_than_a_cursory_closure(store):
     for q in ("IQ-01", "IQ-02", "IQ-04", "IQ-08"):
         assert _status(full, q) == "answered", q
         assert _status(cursory, q) != "answered", q
-    # The seed cites RFI-001/RFI-005, which are NEEDS-VERIFICATION: flagged, not passed.
+    # The seed cites RFI-001/RFI-005 (NEEDS-VERIFICATION); the recorder drops them, so the
+    # recorded citations are all usable.
     iq6 = next(r for r in full["results"] if r["id"] == "IQ-06")
-    assert iq6["status"] == "needs_review" and "RFI-001" in iq6["answer"]
+    assert iq6["status"] == "answered" and "RFI-001" not in iq6["answer"]
     assert _status(cursory, "IQ-06") == "unanswered"
 
 

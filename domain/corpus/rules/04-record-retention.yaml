@@ -20,11 +20,11 @@ rules:
     applies_to:
       - all_reporting_entities
     primary_source:
-      document: "Prevention of Money-Laundering Act, 2002 — Section 12(1)(c)"
-      url: "https://www.indiacode.nic.in/handle/123456789/2205"
-      url_verified: false
-      section: "Section 12(1)(c)"
-      accessed_date: null
+      document: "Prevention of Money-Laundering Act, 2002 — Section 12(3)"
+      url: "https://fiuindia.gov.in/files/AML_Legislation/pmla_2002.html"
+      url_verified: true
+      section: "Section 12(3)"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: PROVEN
     my_synthesis: >
@@ -34,13 +34,15 @@ rules:
       least 5 years from the date of each entry. Do not allow deletion of disposition
       records. The product's append-only constraint directly satisfies the retention
       requirement for STR documentation.
-    last_verified: null
-    snapshot_date: "2026-09-17"
+    last_verified: "2026-10-29"
+    snapshot_date: "2026-10-29"
     gap_notes: >
       Verify whether the 2023 PMLA amendments altered the 5-year base retention period.
-      Clarify the exact retention anchor for identity/KYC documents: is it cessation
-      of the business relationship, or a fixed period after the last transaction?
-      This distinction matters for dormant account KYC records.
+      Clarify the exact retention anchor for identity/KYC documents: is it cessation of the
+      business relationship, or a fixed period after the last transaction? This distinction
+      matters for dormant account KYC records. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): section corrected from
+      12(1)(c): s.12(3) sets five years from the date of transaction.
     related_rules:
       - RR-002
 
@@ -56,11 +58,11 @@ rules:
     applies_to:
       - all_reporting_entities
     primary_source:
-      document: "FIU-IND Reporting Format Guide v2.2 (referenced); PMLA 2002 s.12(1)(c)"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "STR record retention"
-      accessed_date: null
+      document: "Prevention of Money-Laundering Act, 2002 — Section 12(3)-(4)"
+      url: "https://fiuindia.gov.in/files/AML_Legislation/pmla_2002.html"
+      url_verified: true
+      section: "Section 12(3)-(4)"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: NEEDS-VERIFICATION
     my_synthesis: >
@@ -69,11 +71,13 @@ rules:
       the product should surface only the 5-year PMLA floor and note that STR
       records "may be subject to extended retention requirements."
     last_verified: null
-    snapshot_date: "2026-09-11"
+    snapshot_date: "2026-10-29"
     gap_notes: >
-      VERIFY: Exact retention period for STR-specific records. Is the 10-year figure
-      from a specific FIU-IND circular or from the PMLA amendment? Locate the
-      precise provision. See DG-02 in GAPS.md. Until verified, use 5-year floor only.
+      VERIFY: Exact retention period for STR-specific records. Is the 10-year figure from a
+      specific FIU-IND circular or from the PMLA amendment? Locate the precise provision.
+      See DG-02 in GAPS.md. Until verified, use 5-year floor only. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): five years found in
+      s.12(3)-(4); no ten-year STR retention found (DG-02).
     related_rules:
       - RR-001
       - STR-001

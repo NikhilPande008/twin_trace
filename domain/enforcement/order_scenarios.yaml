@@ -1,0 +1,37 @@
+# Synthetic scenarios modelled on fact patterns in FIU-IND Section 13 orders (T12.2). They do NOT
+# add alerts to the 16-alert seed (ddp/seed_data.py is read-only and every dated report rests on
+# it). Each one is replayed on an in-memory store through the real recorder, inspector and inbox
+# (tests/test_order_scenarios.py). Customer references are synthetic; no order's customer appears.
+version: 1
+scenarios:
+  - id: OS-01
+    title: "Many alerts on one account, each closed cursorily"
+    source: "FIU-13/2024-UBI"            # direction: alerts generated on a client account but closed in a cursory manner
+    customer_ref: "CUST-OS01-SYNTH"
+    closures:                             # earlier closures, oldest first: seed alert IDs reused only as containers
+      - {alert_id: "ALERT-07", rationale: "Reviewed; activity consistent with profile. Closed."}
+      - {alert_id: "ALERT-08", rationale: "Reviewed; no concern found on review. Closed."}
+      - {alert_id: "ALERT-03", rationale: "Reviewed; customer explanation accepted. Closed."}
+    current: {alert_id: "ALERT-16", disposition: "NOT_FILE",
+              rationale: "Reviewed again; activity consistent with profile. Closed."}
+    expect:
+      inbox_chip: "3 earlier closure(s) on this customer"
+      inspector: {IQ-10: needs_review, IQ-01: needs_review}
+  - id: OS-02
+    title: "Alert decided long after suspicion was formed"
+    source: "FIU-09/2024-AXIS"           # charge: failure to address alerts and close them within a reasonable period
+    customer_ref: "CUST-OS02-SYNTH"
+    current: {alert_id: "ALERT-01", disposition: "FILE", suspicion_formed_days_ago: 20,
+              rationale: "Debits went to the I4C-flagged handle C within days of credits from unknown UPI handles, a pass-through pattern inconsistent with the declared salary."}
+    expect:
+      inspector: {IQ-05: needs_review}
+  - id: OS-03
+    title: "A closure that should have been reported once the facts moved"
+    source: "FIU-19/2022-HSBC"           # charge: no STR filed until a law-enforcement notice arrived
+    customer_ref: null                    # use the seed alert's own customer
+    current: {alert_id: "ALERT-16", disposition: "NOT_FILE",
+              rationale: "Credits are family support and one hospital payment backed by an invoice on file; the senders are KYC-linked family members and no counterparty is on a registry."}
+    then_feed: ["REG-0002"]
+    expect:
+      watch_outcome: reopened
+      inspector_after_watch: {IQ-11: needs_review}

@@ -15,11 +15,11 @@ rules:
     applies_to:
       - all_reporting_entities
     primary_source:
-      document: "Prevention of Money-Laundering Act, 2002 — Section 12(1)(b)"
-      url: "https://www.indiacode.nic.in/handle/123456789/2205"
-      url_verified: false
-      section: "Section 12(1)(b)"
-      accessed_date: null
+      document: "Prevention of Money-Laundering Act, 2002 — Section 12(1)(b); PML (Maintenance of Records) Rules, 2005 — Rule 3(1)(D)"
+      url: "https://fiuindia.gov.in/files/AML_Legislation/pmla_2002.html"
+      url_verified: true
+      section: "Section 12(1)(b); Rule 3(1)(D)"
+      accessed_date: "2026-10-29"
     effective_date: null  # PMLA in-force date — see gap DG-11
     evidence_level: PROVEN
     my_synthesis: >
@@ -27,9 +27,12 @@ rules:
       declines to file because "the amount is small" is non-compliant. This is the
       foundational rule of the Indian AML regime. Every disposition decision must
       ask: does suspicion exist? Not: is the amount large enough?
-    last_verified: null
-    snapshot_date: "2026-09-11"
-    gap_notes: "Verify exact PMLA in-force date (Act 15 of 2003; in force ~2005). Confirm India Code URL."
+    last_verified: "2026-10-29"
+    snapshot_date: "2026-10-29"
+    gap_notes: >
+      Verify exact PMLA in-force date (Act 15 of 2003; in force ~2005). Confirm India Code
+      URL. 2026-10-29 source review (primary sources fetched and read; approved by the human):
+      URL moved to FIU-IND's copy of the Act.
     related_rules:
       - STR-002
       - STR-003
@@ -45,11 +48,11 @@ rules:
     applies_to:
       - all_reporting_entities
     primary_source:
-      document: "FIU-IND Reporting Format Guide v2.2"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "STR filing deadline"
-      accessed_date: null
+      document: "FIU-IND FAQs; PML (Maintenance of Records) Rules, 2005 — Rule 8(2)"
+      url: "https://fiuindia.gov.in/files/FAQs/faqs.html"
+      url_verified: true
+      section: "FAQs (STR timeline); Rule 8(2)"
+      accessed_date: "2026-10-29"
     effective_date: null  # version date of RFG v2.2 unknown
     evidence_level: PROVEN
     my_synthesis: >
@@ -57,9 +60,13 @@ rules:
       date. This is the SLA the product must track. FIU-IND inspectors verify whether
       the decision was made by authorised staff within this window. Late filing without
       documented justification is a compliance breach.
-    last_verified: null
-    snapshot_date: "2026-09-11"
-    gap_notes: "Confirm this is still 7 working days in latest FINGate 2.0 guidance. Verify RFG v2.2 publication date."
+    last_verified: "2026-10-29"
+    snapshot_date: "2026-10-29"
+    gap_notes: >
+      Confirm this is still 7 working days in latest FINGate 2.0 guidance. Verify RFG v2.2
+      publication date. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): the FAQs state 'not later than
+      seven working days'; Rule 8(2) as published says 'promptly'.
     related_rules:
       - STR-001
       - INS-002
@@ -73,48 +80,56 @@ rules:
     applies_to:
       - all_reporting_entities
     primary_source:
-      document: "FIU-IND Reporting Format Guide v2.2"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "Attempted transactions"
-      accessed_date: null
+      document: "PML (Maintenance of Records) Rules, 2005 — Rule 2(1)(g); Prevention of Money-Laundering Act, 2002 — Section 12(1)(b)"
+      url: "https://fiuindia.gov.in/files/AML_Legislation/notification.html"
+      url_verified: true
+      section: "Rule 2(1)(g)"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: PROVEN
     my_synthesis: >
       Attempted transactions are in scope. If a customer tries to wire funds to a
       FATF high-risk jurisdiction and the bank stops it, an STR is still required.
       Failure to file on attempts is a common gap FIU-IND inspectors find.
-    last_verified: null
-    snapshot_date: "2026-09-11"
-    gap_notes: "Confirm exact language in FINGate 2.0 UI for attempted transaction flag field."
+    last_verified: "2026-10-29"
+    snapshot_date: "2026-10-29"
+    gap_notes: >
+      Confirm exact language in FINGate 2.0 UI for attempted transaction flag field.
+      2026-10-29 source review (primary sources fetched and read; approved by the human): the
+      definition of suspicious transaction includes 'an attempted transaction'.
     related_rules:
       - STR-001
 
   - id: STR-004
     rule: >
-      The tipping-off prohibition under PMLA prohibits a Reporting Entity or any of
-      its officers from directly or indirectly revealing to the person concerned, or
-      to any other person, that an STR has been filed or is being contemplated.
+      The tipping-off prohibition (PML Rules 2005, Rule 8(6); PMLA 2002 s.12(2)) prohibits a
+      Reporting Entity or any of its officers from directly or indirectly revealing to the
+      person concerned, or to any other person, that an STR has been filed or is being
+      contemplated.
     category: TIPPING_OFF
     subcategory: TIPPING_OFF_PROHIBITION
     applies_to:
       - all_reporting_entities
     primary_source:
-      document: "Prevention of Money-Laundering Act, 2002 — Section 12A"
-      url: "https://www.indiacode.nic.in/handle/123456789/2205"
-      url_verified: false
-      section: "Section 12A"
-      accessed_date: null
+      document: "PML (Maintenance of Records) Rules, 2005 — Rule 8(6); Prevention of Money-Laundering Act, 2002 — Section 12(2)"
+      url: "https://fiuindia.gov.in/files/AML_Legislation/notification.html"
+      url_verified: true
+      section: "Rule 8(6); Section 12(2)"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: PROVEN
     my_synthesis: >
-      Tipping off is a criminal offence. The decision ledger must be access-controlled;
-      STR filing decisions must not surface in any customer-facing communication or
-      in channel data visible to the subject. This creates a product constraint:
-      the disposition UI must be staff-only, not customer-facing.
-    last_verified: null
-    snapshot_date: "2026-09-11"
-    gap_notes: "Verify s.12A text in latest PMLA amendment. Check if the 2023 PMLA amendment introduced any changes."
+      Tipping off breaches the reporting entity's confidentiality duty (Rule 8(6)). The
+      decision ledger must be access-controlled; STR filing decisions must not surface in
+      any customer-facing communication or in channel data visible to the subject. The
+      disposition UI must be staff-only, not customer-facing.
+    last_verified: "2026-10-29"
+    snapshot_date: "2026-10-29"
+    gap_notes: >
+      Verify s.12A text in latest PMLA amendment. Check if the 2023 PMLA amendment
+      introduced any changes. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): corrected from 'PMLA s.12A'
+      (that section is 'Access to information'); see SB-003.
     related_rules:
       - STR-001
 
@@ -127,11 +142,11 @@ rules:
     applies_to:
       - all_reporting_entities
     primary_source:
-      document: "Prevention of Money-Laundering Act, 2002 — Section 12(1)(b); FIU-IND FAQs"
-      url: "https://fiuindia.gov.in"
-      url_verified: false
-      section: "FAQs — STR"
-      accessed_date: null
+      document: "PML (Maintenance of Records) Rules, 2005 — Rule 3(1)(D)"
+      url: "https://fiuindia.gov.in/files/AML_Legislation/notification.html"
+      url_verified: true
+      section: "Rule 3(1)(D)"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: PROVEN
     my_synthesis: >
@@ -139,9 +154,13 @@ rules:
       "small transactions don't need an STR." This is the counterpoint to CTR thresholds:
       CTR is threshold-triggered; STR is suspicion-triggered. The product must not
       impose any amount filter on STR eligibility.
-    last_verified: null
-    snapshot_date: "2026-09-11"
-    gap_notes: "Locate exact FAQ page URL on fiuindia.gov.in. The main site was being redesigned as of 2025 — URLs may have changed."
+    last_verified: "2026-10-29"
+    snapshot_date: "2026-10-29"
+    gap_notes: >
+      Locate exact FAQ page URL on fiuindia.gov.in. The main site was being redesigned as of
+      2025 — URLs may have changed. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): Rule 3(1)(D) covers 'all
+      suspicious transactions whether or not made in cash', with no amount condition.
     related_rules:
       - STR-001
       - CTR-001
@@ -163,11 +182,11 @@ rules:
         mechanism is superseded and must NOT be cited as the filing method. A query
         that assumes FINnet direct upload should be qualified with this successor.
     primary_source:
-      document: "FIU-IND — FINGate 2.0 portal; fiuindia.gov.in"
-      url: "https://fiuindia.gov.in"
-      url_verified: false
+      document: "FIU-IND Reporting Format – Introduction, Version 1.14 (2024); FINGate 2.0 Reports manual v1.6"
+      url: "https://fiuindia.gov.in/pdfs/quicklinks/Reporting_Format.pdf"
+      url_verified: true
       section: "FINGate 2.0"
-      accessed_date: null
+      accessed_date: "2026-10-29"
     effective_date: null  # FINGate 2.0 launch date unknown — NEEDS-VERIFICATION
     evidence_level: ASSUMED
     my_synthesis: >
@@ -175,12 +194,14 @@ rules:
       "FINnet" (legacy). The 3-part STR structure (KYC + Transaction + Ground of
       Suspicion) is encoded in FINGate's form fields. The Ground of Suspicion field
       is the primary defensibility surface the product targets.
-    last_verified: null
-    snapshot_date: "2026-09-11"
+    last_verified: "2026-10-29"
+    snapshot_date: "2026-10-29"
     gap_notes: >
-      Confirm FINGate 2.0 is the current portal name and that FINnet direct upload
-      is fully deprecated. Verify FINGate 2.0 launch date. Check if the portal URL
-      is fingateservices.in or a subdomain of fiuindia.gov.in.
+      Confirm FINGate 2.0 is the current portal name and that FINnet direct upload is fully
+      deprecated. Verify FINGate 2.0 launch date. Check if the portal URL is
+      fingateservices.in or a subdomain of fiuindia.gov.in. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): v1.14: 'All reporting entities
+      (REs) are migrated to the FINGate 2.0 reporting formats'.
     related_rules:
       - RS-001
       - RS-002

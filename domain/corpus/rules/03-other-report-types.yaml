@@ -14,82 +14,96 @@ rules:
       - banking_companies
       - financial_institutions
     primary_source:
-      document: "FIU-IND Reporting Format Guide v2.2"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "CCR — filing obligation"
-      accessed_date: null
+      document: "PML (Maintenance of Records) Rules, 2005 — Rule 3(1)(C), Rule 8(1)"
+      url: "https://fiuindia.gov.in/files/AML_Legislation/notification.html"
+      url_verified: true
+      section: "Rule 3(1)(C)"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: PROVEN
     my_synthesis: >
       CCR is triggered by detection, not by suspicion of ML. It is a separate report
       type with its own format. Out of scope for the core STR-disposition product,
       but the corpus should note it exists to avoid gaps in the RE's compliance picture.
-    last_verified: null
-    snapshot_date: "2026-09-11"
-    gap_notes: "Verify CCR deadline (same 15-day monthly rule as CTR, or event-triggered?). Confirm FINGate 2.0 field structure."
+    last_verified: "2026-10-29"
+    snapshot_date: "2026-10-29"
+    gap_notes: >
+      Verify CCR deadline (same 15-day monthly rule as CTR, or event-triggered?). Confirm
+      FINGate 2.0 field structure. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): source moved from the
+      Reporting Format Guide to the Rules, which state the obligation.
     related_rules: []
 
   - id: NTR-001
     rule: >
-      A Reporting Entity must file a Non-Profit Organisation Transaction Report (NTR)
-      for transactions involving NPOs that meet specified thresholds or patterns.
+      A Reporting Entity must report all transactions involving receipts by non-profit
+      organisations of value more than ₹10 lakh (or its equivalent in foreign currency)
+      (PML Rules 2005, Rule 3(1)(BA)), monthly by the 15th day of the succeeding month
+      (Rule 8(1)).
     category: REPORTING_OBLIGATION
     subcategory: NTR_TRIGGER
     applies_to:
       - banking_companies
       - financial_institutions
     primary_source:
-      document: "FIU-IND Reporting Format Guide v2.2"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "NTR — filing obligation"
-      accessed_date: null
+      document: "PML (Maintenance of Records) Rules, 2005 — Rule 3(1)(BA), Rule 8(1)"
+      url: "https://fiuindia.gov.in/files/AML_Legislation/notification.html"
+      url_verified: true
+      section: "Rule 3(1)(BA)"
+      accessed_date: "2026-10-29"
     effective_date: null
-    evidence_level: ASSUMED
+    evidence_level: PROVEN
     my_synthesis: >
-      NTR targets the TF risk from NPO accounts. The exact threshold criteria and
-      NPO definition are in the FIU-IND format guide. The product's red-flag indicator
+      NTR targets the TF risk from NPO accounts. The threshold is in the Rules; which
+      entities count as an NPO is not settled here (DG-16). The product's red-flag indicator
       RFI-010 (NPO misuse) should reference this obligation.
-    last_verified: null
-    snapshot_date: "2026-09-11"
+    last_verified: "2026-10-29"
+    snapshot_date: "2026-10-29"
     gap_notes: >
-      Verify exact NTR threshold (rupee amount and/or frequency criteria).
-      Verify definition of "NPO" for PMLA/FIU-IND purposes — does it match NGO/
-      trust/society/Section 8 company? Locate primary source beyond v2.2 format guide.
+      Verify exact NTR threshold (rupee amount and/or frequency criteria). Verify definition
+      of "NPO" for PMLA/FIU-IND purposes — does it match NGO/ trust/society/Section 8
+      company? Locate primary source beyond v2.2 format guide. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): the Rules state NPO receipts
+      'of value more than rupees ten lakh' (DG-16 threshold part). Promoted ASSUMED -> PROVEN
+      by the human on 2026-10-29 for the threshold and deadline only; the NPO definition
+      stays open (DG-16).
     related_rules:
       - RFI-010
 
   - id: CBTR-001
     rule: >
-      A Reporting Entity must file a Cross Border Wire Transfer Report (CBTR) for
-      international wire transfers at or above the specified threshold. The indicative
-      threshold is ₹5 lakh per transaction.
+      A Reporting Entity must report every cross border wire transfer of the value of more
+      than ₹5 lakh (or its equivalent in foreign currency) where either the origin or the
+      destination of the funds is in India (PML Rules 2005, Rule 3(1)(E)), monthly by the
+      15th day of the succeeding month (Rule 8(1)).
     category: REPORTING_OBLIGATION
     subcategory: CBTR_THRESHOLD
     applies_to:
       - banking_companies
       - financial_institutions
     primary_source:
-      document: "FIU-IND Reporting Format Guide v2.2"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "CBTR — filing threshold"
-      accessed_date: null
+      document: "PML (Maintenance of Records) Rules, 2005 — Rule 3(1)(E), Rule 8(1)"
+      url: "https://fiuindia.gov.in/files/AML_Legislation/notification.html"
+      url_verified: true
+      section: "Rule 3(1)(E)"
+      accessed_date: "2026-10-29"
     effective_date: null
-    evidence_level: NEEDS-VERIFICATION
+    evidence_level: PROVEN
     my_synthesis: >
-      The ₹5 lakh figure is carried forward from an earlier FIU-IND notification.
-      This threshold may have been revised. Do not surface this specific figure in
-      product output until verified against the current FIU-IND circular.
-      CBTR also triggers a parallel STR obligation if the transfer is suspicious.
-    last_verified: null
-    snapshot_date: "2026-09-11"
+      The threshold is per transfer ("of the value of more than five lakh rupees") in the
+      PML Rules as published on fiuindia.gov.in (read 2026-10-29). CBTR also triggers a
+      parallel STR obligation if the transfer is suspicious.
+    last_verified: "2026-10-29"
+    snapshot_date: "2026-10-29"
     gap_notes: >
-      HIGH PRIORITY — verify exact current CBTR threshold against FIU-IND circular.
-      See also DG-01. The ₹5 lakh figure may be outdated. Confirm whether CBTR
-      covers both inward and outward transfers, and whether the threshold is per-
-      transaction or monthly aggregate. This is gap DG-01 in GAPS.md.
+      HIGH PRIORITY — verify exact current CBTR threshold against FIU-IND circular. See also
+      DG-01. The ₹5 lakh figure may be outdated. Confirm whether CBTR covers both inward and
+      outward transfers, and whether the threshold is per- transaction or monthly aggregate.
+      This is gap DG-01 in GAPS.md. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): the published Rules state
+      'more than five lakh rupees'. Promoted NEEDS-VERIFICATION -> PROVEN by the human on
+      2026-10-29; rule text aligned to Rule 3(1)(E) ("more than", origin or destination in
+      India, per transfer). DG-01 resolved.
     related_rules:
       - STR-001
       - RFI-008

@@ -111,9 +111,9 @@ def main():
         with st.expander("Glossary (all terms; hover a dotted term anywhere)"):
             _glossary()
         st.divider()
-        st.caption("Corpus snapshot: 2026-09-17  \n"
-                   "PROVEN: 15  ·  ASSUMED: 21  \n"
-                   "NEEDS-VERIFICATION: 13 (excluded from output)  \n"
+        st.caption("Corpus snapshot: 2026-10-29  \n"
+                   "PROVEN: 17  ·  ASSUMED: 21  \n"
+                   "NEEDS-VERIFICATION: 11 (excluded from output)  \n"
                    "POE framework: product-compiled (DG-19)")
 
     # Route to page

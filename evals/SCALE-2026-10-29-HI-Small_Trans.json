@@ -1,0 +1,28 @@
+{
+ "generated_at": "2026-10-29T04:26:52+00:00",
+ "file": "HI-Small_Trans.csv",
+ "file_sha256": "b19d39f515523373f991b689c07e11e7b0b95c17a2c27a87d91584ae16c5b040",
+ "fixture_only": false,
+ "accounts_seen": 199303,
+ "max_rows": 1000000,
+ "seed": 20261029,
+ "accounts_by_label": {
+  "laundering": 592,
+  "clean": 198711
+ },
+ "sampled_by_label": {
+  "laundering": 500,
+  "clean": 500
+ },
+ "signals_fired": {
+  "clean|S-FAN-IN": 3,
+  "clean|S-PASSTHROUGH": 119,
+  "laundering|S-FAN-IN": 32,
+  "laundering|S-PASSTHROUGH": 196
+ },
+ "by_label_and_level": {
+  "clean|LOW": 500,
+  "laundering|ELEVATED": 4,
+  "laundering|LOW": 496
+ }
+}
