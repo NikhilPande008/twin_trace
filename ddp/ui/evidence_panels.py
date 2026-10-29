@@ -39,12 +39,15 @@ def _signal_brief(selected, alert):
     st.markdown(f"**Signal Brief — {alert['ALERT_ID']} · {alert['ALERT_TYPE'].replace('_', ' ').title()}**")
     _kind("Source facts", "transaction rows; totals from the calculator of record")
     st.caption(f"Source: {alert.get('SIGNAL_SOURCE', '—')}  ·  Why triggered: {', '.join(rfi) or '—'}")
-    b1, b2, b3, b4 = st.columns(4)
-    b1.metric("Transactions", len(txns))
-    # exact calculator figures, never a rounded lakh value
-    b2.metric("Credits", format_inr(total_credit), help="F-TOTAL-CREDIT, calculator of record")
-    b3.metric("Debits", format_inr(total_debit), help="F-TOTAL-DEBIT, calculator of record")
-    b4.metric("Flagged", len(flagged))
+    # exact calculator figures, never a rounded lakh value; a 2x2 grid and a smaller value font
+    # (CSS on st-key-signal_brief_tiles) so ₹2,32,47,000 is not clipped in the proof column
+    with st.container(key="signal_brief_tiles"):
+        b1, b2 = st.columns(2)
+        b1.metric("Credits", format_inr(total_credit), help="F-TOTAL-CREDIT, calculator of record")
+        b2.metric("Debits", format_inr(total_debit), help="F-TOTAL-DEBIT, calculator of record")
+        b3, b4 = st.columns(2)
+        b3.metric("Transactions", len(txns))
+        b4.metric("Flagged", len(flagged))
     if dates:
         st.caption(f"Observed window {dates[0]} → {dates[-1]}  ·  {len(counterparties)} counterparties")
     if flagged:

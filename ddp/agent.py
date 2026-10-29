@@ -30,7 +30,7 @@ import uuid
 from .stress import StressTester
 from .gate import BLOCKING_AT_RECORDING, DeterministicPolicyGate
 from .money import rupee_evidence, unsupported_money
-from .stress.engine import numbers_in
+from .stress.engine import fact_numbers, numbers_in, scaled_misstatements, strip_labelled_scaled
 
 TIER = "reasoning"
 MAX_STEPS = 10
@@ -321,23 +321,20 @@ class Investigator:
             problems.append(f"txn ids not in the case: {unknown_t}")
         if unknown_r:
             problems.append(f"rules not returned by lookup_rule: {unknown_r}")
+        facts = list((s.facts or {}).values())
         allowed = {float(t.get("amount_inr") or 0) for t in s.txns}
-        for f in (s.facts or {}).values():
-            if isinstance(f.get("value"), (int, float)):
-                allowed.add(float(f["value"]))
-                # deterministic display forms of the same fact (12.3x, 98.75%)
-                if f.get("unit") == "tenths":
-                    allowed.add(round(f["value"] / 10, 1))
-                if f.get("unit") == "basis_points":
-                    allowed |= {round(f["value"] / 100, 2), round(f["value"] / 100, 1),
-                                float(round(f["value"] / 100))}
+        # scaled facts count in display form only (12.3x, 98.75%): "420 times income" from a
+        # tenths fact of 420 is a 10x error, so the bare raw value is not allowed
+        allowed |= fact_numbers(facts)
         allowed |= numbers_in(" ".join([s.alert_id, *[t["txn_id"] for t in s.txns],
                                         *cited_rule_ids, *cited_fact_ids]))
         allowed |= {float(n) for n in range(0, 13)}  # small ordinals / counts in prose
-        bad = sorted(n for n in numbers_in(rationale) if n not in allowed)
+        bad = sorted(n for n in numbers_in(strip_labelled_scaled(rationale or "", facts))
+                     if n not in allowed)
         if bad:
+            hint = "; ".join(scaled_misstatements(bad, facts))
             problems.append(f"rationale contains numbers not from the tools: {bad[:5]} "
-                            "(cite facts instead of computing)")
+                            "(cite facts instead of computing" + (f"; {hint}" if hint else "") + ")")
         # Rupee figures are checked as whole amounts ("₹3 lakh" is 3,00,000, not the ordinal 3).
         bad_money = unsupported_money(rationale, rupee_evidence(s.txns, (s.facts or {}).values()))
         if bad_money:

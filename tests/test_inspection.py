@@ -205,3 +205,18 @@ def test_pending_answers_cite_pending_not_none(store):
                     evidence_check={"passed": True, "amounts_checked": 0})
     refs = [x for res in r["results"] for x in res["rows"]]
     assert "ledger:pending" in refs and "ledger:None" not in refs
+
+
+@pytest.mark.parametrize("alert, side, prefix", [("ALERT-01", "file", "Rests on: "),
+                                                 ("ALERT-16", "close", "Reopen if: ")])
+def test_decision_basis_answer_matches_the_verdict_card(store, alert, side, prefix):
+    """IQ-02 names what the card names, smallest flip set first: for ALERT-01 the I4C flag,
+    not the first transactions by ID (seen on the confirmation screen, 2026-10-29)."""
+    from ddp.verdict import card, readings
+    result = inspect_decision(store, _full(store, alert), record=False)
+    iq02 = next(r for r in result["results"] if r["id"] == "IQ-02")
+    chips = card(readings(StressTester(ComputeRunner(store), None), store, alert,
+                          compute_params(store, alert)))[side]["chips"]
+    assert iq02["answer"].startswith(prefix + chips[0]), (iq02["answer"], chips)
+    if alert == "ALERT-01":
+        assert iq02["answer"].startswith("Rests on: registry flag on UPI handle C")

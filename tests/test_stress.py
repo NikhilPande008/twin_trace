@@ -172,3 +172,16 @@ def test_supported_dispositions_keep_their_robustness_count(env):
     assert "does not hinge" not in elevated["summary"]   # only a HIGH FILE is called that
     close_low = _run(env, "ALERT-08", "NOT_FILE")
     assert close_low["robustness"]["meaningful"] is True and "Survives" in close_low["summary"]
+
+
+def test_memo_with_scaled_fact_as_plain_multiple_is_rejected(env):
+    """F-INCOME-MULTIPLE-X10 = 123 is 12.3x; '123 times' is a 10x error."""
+    store, runner, _ = env
+    for summary, status in (("Credits are 123 times declared income.", "rejected"),
+                            ("Credits are 12.3x declared income.", "ok")):
+        skills = CoPilotSkills(store, llm=_memo_llm(json.dumps({
+            "summary": summary, "load_bearing_evidence": [], "reopen_triggers": []})))
+        r = StressTester(runner, store, skills).run(
+            "ALERT-01", store.transactions_for("ALERT-01"), compute_params(store, "ALERT-01"),
+            disposition="FILE", with_memo=True)
+        assert r["memo"]["status"] == status, (summary, r["memo"])
