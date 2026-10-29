@@ -120,7 +120,11 @@ def build(settings: Settings | None = None, store: Store | None = None):
     llm = TokenFactoryClient(settings) if settings.llm_configured else None
     if llm is not None and settings.demo_mode:
         llm = CallBudget(llm, settings.demo_max_model_calls)
-    skills = CoPilotSkills(store, llm=llm)
+    embedder = None
+    if llm is not None and settings.retrieval_mode == "hybrid":
+        from .embeddings import TokenFactoryEmbedder
+        embedder = TokenFactoryEmbedder(settings, settings.embedding_model)
+    skills = CoPilotSkills(store, llm=llm, embedder=embedder)
     runner = ComputeRunner(store, backend_from_name(settings.compute_backend,
                                                     api_key=settings.api_key,
                                                     project_id=settings.nebius_project_id))
@@ -149,3 +153,17 @@ def build_investigator(store: Store, skills, runner, settings: Settings | None =
 def build_stress_tester(store: Store, skills, runner):
     from .stress import StressTester
     return StressTester(runner, store, skills)
+
+
+def build_panel(store: Store, settings: Settings | None = None):
+    """Tier panel (T12.7): one fresh Token Factory client per tier so the calls can run in
+    parallel. In public demo mode the shared call budget applies, so the tiers run one after
+    another on the budgeted client. None without a key."""
+    from .panel import TierPanel
+    settings = settings or get_settings()
+    if not settings.llm_configured:
+        return None
+    if settings.demo_mode:
+        shared = CallBudget(TokenFactoryClient(settings), settings.demo_max_model_calls)
+        return TierPanel(lambda: CoPilotSkills(store, llm=shared), parallel=False)
+    return TierPanel(lambda: CoPilotSkills(store, llm=TokenFactoryClient(settings)))

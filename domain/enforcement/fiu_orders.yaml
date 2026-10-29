@@ -1,0 +1,170 @@
+# FIU-IND orders under Section 13 PMLA, read in full for T12.2 (2026-10-28).
+#
+# Source: the published order summaries at fiuindia.gov.in/pdfs/judgements/. Each carries FIU-IND's
+# own disclaimer that the summary is representational and is not a precedent, so these entries show
+# what FIU-IND has penalised. They are not regulatory rules and never enter the regulatory corpus.
+# Findings are paraphrased. `kind` is how the order frames the finding:
+#   charge       a contravention the Director found substantiated
+#   observation  a fact stated in the order that is not framed as a separate charge
+#   direction    a remedial direction under s.13(2)(b)
+#   warning      a warning under s.13(2)(a)
+# `codes` refers to failures.yaml. Only orders that were read page by page are listed.
+version: 1
+read_on: "2026-10-28"
+orders:
+  - order_id: "FIU-13/2024-UBI"
+    entity: "Union Bank of India"
+    order_no: "13/DIR/FIU-IND/2024"
+    date: "2024-10-01"
+    url: "https://fiuindia.gov.in/pdfs/judgements/UBI_Order_13_2024.pdf"
+    findings:
+      - kind: observation
+        codes: [STR-NOT-FILED]
+        text: "Only one STR was filed despite a high volume of transactions and several alerts on the accounts."
+      - kind: observation
+        codes: [CLOSURE-QUALITY]
+        text: "Alerts on the accounts were closed with minimal justification."
+      - kind: charge
+        codes: [STR-NOT-FILED]
+        rules: ["PMLA s.12(1)", "PMLR 7(2)", "PMLR 8(2)", "PMLR 3(1)(D)", "PMLR 7(3)"]
+        text: "Failure to report suspicious transactions for the entities' accounts and several alerted transactions."
+      - kind: charge
+        codes: [CDD-ONGOING]
+        rules: ["PMLR 9(12)(i)", "PMLR 9(12)(ii)", "PMLR 9(12)(iii)"]
+        text: "Failure to carry out and review ongoing due diligence on the accounts."
+      - kind: charge
+        codes: [MECHANISM]
+        rules: ["PMLR 7(3)", "PMLR 3(1)(D)", "PMLR 8(2)"]
+        text: "Failure to evolve an internal mechanism to detect and report suspicious transactions."
+      - kind: direction
+        codes: [CLOSURE-QUALITY, REPEAT-CLOSURE]
+        text: "Reassess monitoring where many alerts are generated on one client account but closed in a cursory manner."
+
+  - order_id: "FIU-01/2025-UBI"
+    entity: "Union Bank of India"
+    order_no: "01/DIR/FIU-IND/2025"
+    date: "2025-04-08"
+    url: "https://fiuindia.gov.in/pdfs/judgements/UBI_Order_1_2025.pdf"
+    findings:
+      - kind: charge
+        codes: [UNSPECIFIED]
+        rules: ["PMLA s.12", "PMLR 3", "PMLR 7", "PMLR 9"]
+        text: "Contraventions of s.12 read with Rules 3, 7 and 9; the summary does not itemise them."
+
+  - order_id: "FIU-09/2024-AXIS"
+    entity: "Axis Bank Ltd."
+    order_no: "09/DIR/FIU-IND/2024"
+    date: "2024-06-03"
+    url: "https://fiuindia.gov.in/pdfs/judgements/ABL_Order_09_2024.pdf"
+    findings:
+      - kind: charge
+        codes: [MECHANISM, CLOSURE-QUALITY]
+        rules: ["PMLA s.12(1)", "PMLR 3(1)(D)", "PMLR 7(3)"]
+        text: "No system to detect and report suspicious transactions, evidenced by failure to investigate and close alerts with application of mind."
+      - kind: charge
+        codes: [MECHANISM, CLOSURE-TIMELINESS]
+        rules: ["PMLA s.12(1)", "PMLR 3(1)(D)", "PMLR 7(3)"]
+        text: "Failure to address alerts and close them within a reasonable period."
+      - kind: charge
+        codes: [STR-NOT-FILED]
+        rules: ["PMLA s.12(1)", "PMLR 8(2)"]
+        text: "Failure to file STRs on transactions out of line with the account's profile."
+      - kind: charge
+        codes: [CDD-ONGOING]
+        rules: ["PMLR 9(1)(a)", "PMLR 9(10)", "PMLR 9(12)(i)"]
+        text: "Failure to verify that the person was authorised to act for the account holder."
+      - kind: direction
+        codes: [DATA-ACCURACY]
+        text: "Respond to FIU-IND with structured, organised data; the bank had supplied disorganised data dumps."
+
+  - order_id: "FIU-07/2024-PPBL"
+    entity: "Paytm Payments Bank Ltd."
+    order_no: "07/DIR/FIU-IND/2024"
+    date: "2024-03-01"
+    url: "https://fiuindia.gov.in/pdfs/judgements/PPBL_Order_07_2024.pdf"
+    findings:
+      - kind: charge
+        codes: [MECHANISM]
+        rules: ["PMLA s.12(1)", "PMLR 3(1)(D)", "PMLR 7(3)"]
+        text: "No internal mechanism to detect and report suspicious transactions for its payout service."
+      - kind: charge
+        codes: [CDD-ONGOING]
+        rules: ["PMLR 9(12)"]
+        text: "Failure to exercise ongoing due diligence on the payout service and beneficiary accounts."
+      - kind: charge
+        codes: [THIRD-PARTY-KYC]
+        rules: ["PMLR 9(2)(c)", "PMLR 9(2)(f)"]
+        text: "Reliance on third-party KYC from a non-compliant or unregulated entity."
+      - kind: charge
+        codes: [STR-NOT-FILED]
+        rules: ["PMLA s.12(1)", "PMLR 3(D)", "PMLR 8"]
+        text: "Failure to file STRs on beneficiary accounts in the prescribed manner and within the timelines."
+
+  - order_id: "FIU-19/2022-HSBC"
+    entity: "The Hongkong and Shanghai Banking Corporation Ltd."
+    order_no: "19/DIR/FIU-IND/2022"
+    date: "2022-10-31"
+    url: "https://fiuindia.gov.in/pdfs/judgements/HSBCL_Order_19_2022.pdf"
+    findings:
+      - kind: charge
+        codes: [CLOSURE-QUALITY]
+        rules: ["PMLR 7(3)", "PMLR 2(1)(g)"]
+        text: "Improperly closing the alerts generated on the entities' accounts."
+      - kind: charge
+        codes: [STR-NOT-FILED]
+        rules: ["PMLR 8(2)", "PMLR 3(1)(D)", "PMLR 2(1)(g)"]
+        text: "No STR filed until a law-enforcement notice arrived."
+      - kind: charge
+        codes: [DATA-ACCURACY, THRESHOLD-REPORTS]
+        rules: ["PMLR 3(1)(E)", "PMLR 8(1)"]
+        text: "Misreported figures in cross-border wire transfer reports."
+      - kind: charge
+        codes: [CDD-ONGOING]
+        rules: ["PMLR 9(12)", "PMLR 9(14)"]
+        text: "Failure to exercise ongoing and enhanced due diligence."
+      - kind: charge
+        codes: [MECHANISM]
+        text: "Failure to implement an effective mechanism to detect and report STRs; the largest single head of penalty in the order."
+
+  - order_id: "FIU-01/2024-FINO"
+    entity: "Fino Payments Bank Ltd."
+    order_no: "01/DIR/FIU-IND/2024"
+    date: "2024-01-25"
+    url: "https://fiuindia.gov.in/pdfs/judgements/FPBL_Order_01_2024.pdf"
+    findings:
+      - kind: charge
+        codes: [MECHANISM]
+        rules: ["PMLA s.12(1)(a)-(b)", "PMLR 2(1)(g)", "PMLR 3(1)(D)", "PMLR 5", "PMLR 7(3)", "PMLR 8(2)"]
+        text: "Failure to evolve an effective internal mechanism to detect and report suspicious transactions."
+      - kind: charge
+        codes: [STR-NOT-FILED]
+        rules: ["PMLA s.12(1)(a)-(b)", "PMLR 3(1)(D)", "PMLR 7(2)", "PMLR 7(4)"]
+        text: "Failure to report STRs."
+
+  - order_id: "FIU-08/2019-PNB"
+    entity: "Punjab National Bank"
+    order_no: "8/DIR/FIU-IND/2019"
+    date: "2019-07-29"
+    url: "https://fiuindia.gov.in/pdfs/judgements/PunjabNationalBank_8_2019.pdf"
+    findings:
+      - kind: charge
+        codes: [THRESHOLD-REPORTS]
+        rules: ["PMLA s.12", "PMLA s.12A", "PMLR 3", "PMLR 7"]
+        text: "Failure to file some threshold-based reports, or to file them accurately and on time."
+      - kind: charge
+        codes: [STR-NOT-FILED]
+        text: "Failure to file suspicious transaction reports on time and accurately."
+      - kind: charge
+        codes: [MECHANISM]
+        text: "Failure to evolve and implement an effective internal mechanism for threshold reports and STRs."
+      - kind: charge
+        codes: [DATA-ACCURACY]
+        text: "Failure to submit correct data to FIU-IND."
+      - kind: warning
+        codes: [ATTEMPTED-BELOW-THRESHOLD]
+        rules: ["PMLR 9"]
+        text: "No system to record a pattern of attempted transactions just below the threshold."
+      - kind: warning
+        codes: [CDD-ONGOING, RISK-ASSESSMENT]
+        rules: ["PMLR 9"]
+        text: "Failures on beneficial-owner identification, ML/TF risk assessment and the client due diligence programme."

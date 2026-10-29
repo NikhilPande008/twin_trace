@@ -14,6 +14,7 @@ from .case_state import (_add_model_call, _calls_mark, _current_assessment, _log
                          _model_label, _platform_calls, _trace)
 from .evidence_panels import (_adverse_media_panel, _calculator_panel, _signal_brief,
                               _stress_panel, _trace_panel)
+from .panel_view import panel_section
 from .runtime import (_llm_ready, _load_transactions, get_pipeline, get_runner, get_skills,
                       get_store)
 from .widgets import _kind, badge, disp_badge
@@ -23,6 +24,7 @@ def _ai_panel(selected, alert):
     """Right column. Order matters (anti-anchoring): evidence and the stress test first, AI
     outputs after, and the agent's advisory disposition last of all."""
     _ai_panel_core(selected, alert)
+    panel_section(selected, alert)
     _agent_panel(selected)
     _trace_panel(selected)
 

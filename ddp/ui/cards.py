@@ -11,7 +11,7 @@ from ..palette import ACCENT, EVIDENCE_BADGE, MUTED_TEXT, READING_STYLE, VERDICT
 from ..stakes import STAKES, USER
 from .case_state import _current_computed, _ensure_computed, _platform_calls, _readings
 from .runtime import _llm_ready, get_store
-from .widgets import _chips, _esc, badge
+from .widgets import _chips, _esc, badge, _term
 
 
 def _workbench_steps() -> None:
@@ -125,12 +125,12 @@ def _stakes():
         if r is None:
             continue
         _icon, bg, fg = EVIDENCE_BADGE[r["EVIDENCE_LEVEL"]]
-        rows += (f"<tr><td>{_esc(s['claim'])}</td>"
+        rows += (f"<tr><td>{_term(s['claim'])}</td>"
                  f"<td style='white-space:nowrap'><code>{_esc(r['RULE_ID'])}</code> "
                  f"{badge(r['EVIDENCE_LEVEL'], bg, fg)}</td><td>{_esc(s['here'])}</td></tr>")
     st.markdown(
         f'<div class="ddp-card"><div class="ddp-kicker">Who this is for</div>'
-        f'<div style="margin:0 0 14px">{_esc(USER)}</div>'
+        f'<div style="margin:0 0 14px">{_term(USER)}</div>'
         f'<div class="ddp-kicker">What is at stake</div><table class="ddp-table">'
         f'<tr><th>The rule</th><th>Source</th><th>What this tool does</th></tr>{rows}</table>'
         f'<div class="ddp-foot">Rules from this project\'s corpus snapshot; only PROVEN and '

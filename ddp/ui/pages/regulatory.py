@@ -5,6 +5,7 @@ from __future__ import annotations
 import streamlit as st
 
 from ...palette import EVIDENCE_BADGE, EVIDENCE_UNKNOWN
+from ..lookback_view import lookback_section
 from ..runtime import get_skills, get_store
 from ..widgets import badge
 
@@ -12,8 +13,9 @@ from ..widgets import badge
 # ── page: Regulatory Reference ────────────────────────────────────────────────
 def page_regulatory():
     st.header("Regulatory Reference")
-    st.caption("Lexical search over the FIU-IND AML corpus (PROVEN + ASSUMED only). "
-               "Returns nothing when no rule covers the question.")
+    st.caption("Search over the FIU-IND AML corpus (PROVEN + ASSUMED only): lexical, re-ranked "
+               "with Token Factory embeddings when a key is set. Returns nothing when no rule "
+               "covers the question.")
 
     query = st.text_input(
         "Ask a regulatory question",
@@ -54,6 +56,9 @@ def page_regulatory():
                     cols[1].markdown(f"**Snapshot:** {r.get('snapshot_date', '—')}")
                     if r.get("source_url"):
                         cols[2].markdown(f"[Primary source link]({r['source_url']})")
+
+    st.divider()
+    lookback_section()
 
     st.divider()
     st.subheader("Key rules quick-reference")

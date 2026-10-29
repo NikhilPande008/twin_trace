@@ -73,6 +73,11 @@ class Settings:
         default_factory=lambda: os.environ.get("COMPUTE_BACKEND", "local")
     )
     tavily_api_key: str | None = field(default_factory=lambda: os.environ.get("TAVILY_API_KEY"))
+    # Regulatory lookup (T12.11): "hybrid" = BM25 + Token Factory embeddings when a key is set,
+    # "bm25" = lexical only. Abstention is the BM25 rule either way.
+    retrieval_mode: str = field(default_factory=lambda: os.environ.get("RETRIEVAL_MODE", "hybrid"))
+    embedding_model: str = field(
+        default_factory=lambda: os.environ.get("EMBEDDING_MODEL", "Qwen/Qwen3-Embedding-8B"))
     # Token Factory Sandboxes reject requests without a project (observed 2026-10-21).
     nebius_project_id: str | None = field(
         default_factory=lambda: os.environ.get("NEBIUS_PROJECT_ID"))

@@ -82,3 +82,50 @@ class CorpusIndex:
                 scored.append((s, self.rows[i]))
         scored.sort(key=lambda x: (-x[0], x[1].get("RULE_ID") or ""))
         return scored[:limit]
+
+
+RRF_K = 60   # reciprocal-rank fusion constant (the usual default)
+
+
+class HybridIndex(CorpusIndex):
+    """BM25 + Token Factory embeddings, fused by reciprocal rank (T12.11).
+
+    Abstention is unchanged and deterministic: if BM25 returns nothing (coverage gate or score
+    floor), the hybrid returns nothing, whatever the embeddings say. When BM25 does find
+    something, the candidates are the BM25 hits plus the `limit` nearest rules by embedding,
+    all from the same PROVEN/ASSUMED index, and the order is the fused rank. If the embedding
+    call fails, the BM25 order is returned and `last_mode` says so.
+    """
+
+    def __init__(self, rows: list[dict], embedder, **kw):
+        super().__init__(rows, **kw)
+        self.embedder = embedder
+        self._vecs: list[list[float]] | None = None
+        self.last_mode = "bm25"
+
+    def _rule_vectors(self) -> list[list[float]]:
+        if self._vecs is None:
+            self._vecs = self.embedder.embed([self._doc_text(r) for r in self.rows])
+        return self._vecs
+
+    def search(self, question: str, limit: int = 5) -> list[tuple[float, dict]]:
+        lexical = super().search(question, limit=len(self.rows))
+        if not lexical:
+            self.last_mode = "abstained"
+            return []
+        try:
+            from .embeddings import cosine
+            qv = self.embedder.embed([question])[0]
+            sims = [(cosine(qv, v), i) for i, v in enumerate(self._rule_vectors())]
+        except Exception:  # noqa: BLE001 — degrade to lexical, never to a guess
+            self.last_mode = "bm25 (embeddings unavailable)"
+            return lexical[:limit]
+        self.last_mode = "hybrid"
+        idx = {id(r): i for i, r in enumerate(self.rows)}
+        bm_rank = {idx[id(r)]: k for k, (_, r) in enumerate(lexical)}
+        emb_order = [i for _, i in sorted(sims, key=lambda x: (-x[0], x[1]))]
+        emb_rank = {i: k for k, i in enumerate(emb_order)}
+        cands = set(bm_rank) | set(emb_order[:limit])
+        fused = sorted(((sum(1 / (RRF_K + 1 + rk[i]) for rk in (bm_rank, emb_rank) if i in rk), i)
+                        for i in cands), key=lambda x: (-x[0], self.rows[x[1]].get("RULE_ID") or ""))
+        return [(round(s * 1000, 3), self.rows[i]) for s, i in fused[:limit]]

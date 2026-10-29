@@ -5,10 +5,11 @@ Principal Officer workflow UI (Streamlit, runs locally or on any container host)
 Data from ddp.store (SQLite); models from Nebius Token Factory (ddp.llm);
 figures from the calculator of record (ddp.compute).
 
-Pages (sidebar):
-  Alert Queue · Twin Cases (ALERT-01 vs ALERT-16) · Proof Check · Disposition Panel (verdict card
-  first, proof behind a toggle, GoS drafting) · Decision Ledger · Dashboard · Measured Results ·
-  Regulatory Reference
+Pages (sidebar), in four areas:
+  Inbox     Alert Queue · Twin Cases (ALERT-01 vs ALERT-16)
+  Decide    Disposition Panel (verdict card first, proof behind a toggle, GoS drafting) · Proof Check
+  Watch     decisions re-checked when the facts they rest on change
+  Evidence  Decision Ledger · Measured Results · Dashboard · Regulatory Reference
 """
 
 import sys
@@ -28,6 +29,7 @@ from ddp.ui.pages.measured_results import page_measured_results  # noqa: E402
 from ddp.ui.pages.proof_check import page_proof_check  # noqa: E402
 from ddp.ui.pages.regulatory import page_regulatory  # noqa: E402
 from ddp.ui.pages.twins import page_twins  # noqa: E402
+from ddp.ui.pages.watch import page_watch  # noqa: E402
 from ddp.ui.officer import sign_in_controls  # noqa: E402
 from ddp.ui.runtime import get_skills  # noqa: E402
 from ddp.ui.widgets import _style  # noqa: E402
@@ -57,6 +59,15 @@ def _glossary():
         st.markdown(f"**{term}** — {meaning}")
 
 
+# The officer's week in four areas (T12.14, D2). Twin Cases stays the opening story.
+AREAS = [
+    ("Inbox", ["Alert Queue", "Twin Cases"]),
+    ("Decide", ["Disposition Panel", "Proof Check"]),
+    ("Watch", ["Watch"]),
+    ("Evidence", ["Decision Ledger", "Measured Results", "Dashboard", "Regulatory Reference"]),
+]
+
+
 # ── main shell ────────────────────────────────────────────────────────────────
 def main():
     st.set_page_config(
@@ -82,16 +93,8 @@ def main():
         sign_in_controls()
         st.divider()
 
-        pages = [
-            "Alert Queue",
-            "Twin Cases",
-            "Proof Check",
-            "Disposition Panel",
-            "Decision Ledger",
-            "Dashboard",
-            "Measured Results",
-            "Regulatory Reference",
-        ]
+        pages = [p for _, group in AREAS for p in group]
+        area_of = {p: a for a, group in AREAS for p in group}
         # Allow page navigation via session_state (e.g. from Alert Queue buttons).
         # key="page" binds the radio directly to session_state — no index= needed,
         # which avoids the double-click issue caused by index= fighting widget state.
@@ -99,9 +102,13 @@ def main():
             st.session_state["page"] = st.session_state.pop("_nav_to")
         if "page" not in st.session_state or st.session_state["page"] not in pages:
             st.session_state["page"] = pages[0]
-        selected_page = st.radio("Navigate", pages, key="page")
+        selected_page = st.radio(
+            "Navigate", pages, key="page",
+            format_func=lambda p: p if area_of[p] == p else f"{area_of[p]} · {p}",
+            help="Inbox: what needs you. Decide: one alert. Watch: decisions re-checked when "
+                 "their facts change. Evidence: the ledger, measurements and the corpus.")
 
-        with st.expander("Glossary"):
+        with st.expander("Glossary (all terms; hover a dotted term anywhere)"):
             _glossary()
         st.divider()
         st.caption("Corpus snapshot: 2026-09-17  \n"
@@ -121,6 +128,8 @@ def main():
         page_disposition()
     elif selected_page == "Decision Ledger":
         page_ledger()
+    elif selected_page == "Watch":
+        page_watch()
     elif selected_page == "Dashboard":
         page_dashboard()
     elif selected_page == "Measured Results":

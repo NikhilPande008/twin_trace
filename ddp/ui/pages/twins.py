@@ -10,7 +10,7 @@ from ...palette import VERDICT_COLORS
 from ..cards import _reading_html
 from ..case_state import _readings
 from ..runtime import get_store
-from ..widgets import _esc, _goto, badge, disp_badge
+from ..widgets import _esc, _goto, _term, badge, disp_badge
 
 
 # ── page: Twin Cases ──────────────────────────────────────────────────────────
@@ -21,8 +21,10 @@ def _open_alert(alert_id: str) -> None:
 
 def page_twins():
     st.header("Twin Cases")
-    st.markdown("Two alerts fired by the same rules on the same amount. In the scenario, one was "
-                "filed and one was closed. Here is what each decision rests on.")
+    st.markdown(_term("Two alerts fired by the same rules on the same amount. In the scenario, "
+                      "one was filed as an STR and one was closed. Here is what each decision "
+                      "rests on, and what the Principal Officer must document."),
+                unsafe_allow_html=True)
     store = get_store()
     a_id, b_id = V.TWIN_PAIR
     alerts = {i: store.get_alert(i) for i in V.TWIN_PAIR}
@@ -71,3 +73,10 @@ def page_twins():
                f"it, from {runs} runs of the calculator of record and no model. Signal rules are "
                "product heuristics, not FIU-IND criteria. The hospital invoice and family links "
                "that explain the closure are in the case file, outside the calculator.")
+    with st.container(border=True):
+        w_l, w_r = st.columns([4, 1], vertical_alignment="center")
+        w_l.markdown("**Then the facts move.** Months later the registry flags the hospital's "
+                     "handle. Watch the closure come back, and see why flagging the sister does "
+                     "not.")
+        if w_r.button("Watch it →", key="twin_watch", width="stretch"):
+            _goto("Watch")

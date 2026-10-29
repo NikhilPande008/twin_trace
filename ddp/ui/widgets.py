@@ -138,6 +138,7 @@ def _style():
 .ddp-queue-meta{{display:flex;flex-wrap:wrap;gap:8px 16px;color:{MUTED_TEXT};font-size:.82rem;margin-top:5px}}
 .ddp-provenance{{border-left:3px solid {ACCENT};padding:8px 12px;margin:8px 0;background:{var('brand_bg')};
   font-size:.84rem}}
+abbr[title]{{text-decoration:underline dotted;text-underline-offset:3px;cursor:help}}
 :focus-visible{{outline:2px solid {FOCUS} !important;outline-offset:2px}}
 @media (max-width: 760px){{
   .ddp-card{{padding:14px 14px 12px}}
@@ -149,6 +150,12 @@ def _style():
 
 def _esc(text) -> str:
     return html.escape(str(text))
+
+
+def _term(text) -> str:
+    """Escaped text with inline glossary tooltips on known terms (T12.14)."""
+    from ..glossary import with_tooltips
+    return with_tooltips(_esc(text))
 
 
 def _chips(items: list[str], style: tuple[str, str]) -> str:

@@ -92,6 +92,7 @@ DISP_STYLE = {
     "OPEN":      INFO,
     "REVIEWED":  BRAND,
     "CLOSED":    NEUTRAL,
+    "REOPENED":  ERROR,       # same colour as a reopened watch outcome (T12.14)
 }
 SLA_URGENT, SLA_SOON, SLA_OK = ERROR, WARNING, SUCCESS
 SCORE_GOOD, SCORE_MID, SCORE_BAD = SUCCESS, WARNING, ERROR
@@ -136,3 +137,6 @@ def contrast(fg: str, bg: str) -> float:
     """WCAG contrast ratio between two #rrggbb colours."""
     hi, lo = sorted((_luminance(_rgb(fg)), _luminance(_rgb(bg))), reverse=True)
     return (hi + 0.05) / (lo + 0.05)
+# Watch outcomes (T12.6): the same three colours everywhere they appear.
+WATCH_STYLE = {"holds": SUCCESS, "reopened": ERROR, "needs_review": WARNING,
+               "repeat_closure": INFO, "contested": WARNING}

@@ -14,7 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-PAGES = ["Alert Queue", "Twin Cases", "Proof Check", "Disposition Panel", "Decision Ledger", "Dashboard", "Measured Results", "Regulatory Reference"]
+PAGES = ["Alert Queue", "Twin Cases", "Proof Check", "Disposition Panel", "Decision Ledger", "Watch", "Dashboard", "Measured Results", "Regulatory Reference"]
 
 
 def _app(db_path: str):
@@ -81,6 +81,8 @@ def test_verdict_card_leads_and_proof_is_collapsed():
         at.sidebar.radio[0].set_value("Disposition Panel").run()
         assert not at.exception, at.exception
         text = _md(at)
+        # the header shows the exact alerted amount, Indian grouping, never a rounded lakh figure
+        assert "Alerted amount ₹3,45,000 ·" in text and "(3.5L)" not in text
         assert "What the decision rests on" in text
         assert "This FILE rests on exactly one fact." in text           # if you file
         assert "registry flag on UPI handle C (I4C-flagged) is correct" in text
@@ -93,6 +95,9 @@ def test_verdict_card_leads_and_proof_is_collapsed():
         _proof_on(at)
         text = _md(at)
         assert "Calculator of record" in text and "AI suspicion assessment" in text
+        # Signal Brief tiles show the calculator's exact totals, not rounded lakh values
+        tiles = {m.label: m.value for m in at.metric}
+        assert tiles["Credits"] == "₹3,45,000" and tiles["Debits"] == "₹3,40,700", tiles
         # the card comes before the proof in reading order
         assert text.index("What the decision rests on") < text.index("Calculator of record")
     print("  [PASS] app — verdict card leads; the proof is one toggle away")

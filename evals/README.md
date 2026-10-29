@@ -57,6 +57,11 @@ at any scale that supports a claim.
 | 2026-10-21 | `rerun-2026-10-21/` | 16 dev alerts live, Tavily injected: 16/16 model-valid (4 after repair, all truncation), agent 12/12 clear, 19 rejections |
 | 2026-10-21 | `RUN-20261021T080109Z-live/` | holdout, three conditions: baseline 15 unsupported figures in 6/6 drafts; full product 3/6 drafts rejected by the gate, 0 unsupported in accepted |
 | 2026-10-21 | `live-2026-10-21-final/` | 16 dev alerts live, 09:12 UTC: 16/16 model-valid (2 after repair, both truncation), agent 12/12 clear, 16 rejections. **The run the README quotes** |
+| 2026-10-28 | `INSPECTION-2026-10-28-deterministic.md` | inspector questions answered from the record, 16 alerts: Twin Trace record 96/174, cursory closure 32/160 (no model) |
+| 2026-10-28 | `INSPECTION-2026-10-28-live.md` | same, plus Nemotron Super cross-examination: 79 questions, 25 answered with valid citations, 54 not answered, 0 citations rejected |
+| 2026-10-28 | `RETRIEVAL-2026-10-28-live.md` | 16 paraphrased questions: labelled rule in top 3, BM25 13/16 vs hybrid (Token Factory embeddings) 16/16; off-corpus 4/4 abstained in both. Questions by the coding assistant |
+| 2026-10-28 | `PANEL-2026-10-28-live.md` | tier panel, 16 dev + 6 holdout: CONTESTED caught 0/6; contested flags 4, all on NOT_FILE cases (Nano/Super FILE, Ultra not); FILE cases flagged 0/11; clear cases unanimous and matching gold dev 10/12, holdout 2/4 |
+| 2026-10-28 | `LOOKBACK-2026-10-28-live.md` | rule-change lookback on 3 rules: fetch and passage check ran; nothing kept (corpus source links are landing pages) |
 
 ## Code revisions in these reports
 

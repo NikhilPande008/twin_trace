@@ -4,12 +4,14 @@ from __future__ import annotations
 
 import streamlit as st
 
+from ...money import format_inr
 from ...palette import NEUTRAL
 from ..ai_panel import _ai_panel
 from ..cards import _platform_strip, _provenance_status, _verdict_card, _workbench_steps
 from ..case_state import _current_assessment, _ensure_computed
 from ..decision_rail import _decision_rail
 from ..runtime import get_store
+from ..watch_view import render_timeline
 from ..widgets import _sticky, badge, sla_days_left, sla_pill
 
 
@@ -37,6 +39,10 @@ def page_disposition():
     _workbench_steps()
     _provenance_status(selected)
     _verdict_card(selected)
+    if get_store().events_for_alert(selected):
+        with st.expander("Since the decision: watch events", expanded=any(
+                e["OUTCOME"] != "holds" for e in get_store().events_for_alert(selected))):
+            render_timeline(get_store(), selected)
     _platform_strip(selected)
     # Evidence first in reading and keyboard order (D1). On a narrow screen the columns stack:
     # proof (evidence → sensitivity → model interpretation) → draft → decision.
@@ -59,7 +65,6 @@ def page_disposition():
 
 
 def _case_header(selected, alert):
-    amt  = float(alert["ALERT_AMOUNT_INR"] or 0)
     days = sla_days_left(alert["ALERT_DATE"])
     st.markdown(
         f"**{alert['ALERT_ID']} — {alert['ALERT_TYPE'].replace('_', ' ').title()}**"
@@ -68,7 +73,7 @@ def _case_header(selected, alert):
         unsafe_allow_html=True,
     )
     st.markdown(
-        f"Alerted amount ₹{amt:,.0f} ({amt/1e5:.1f}L) · `{alert['SIGNAL_SOURCE']}` · "
+        f"Alerted amount {format_inr(alert['ALERT_AMOUNT_INR'] or 0)} · `{alert['SIGNAL_SOURCE']}` · "
         f"{alert['ACCOUNT_TYPE']} · alerted {alert['ALERT_DATE']}  \n"
         f"{alert['CUSTOMER_PROFILE']}"
     )

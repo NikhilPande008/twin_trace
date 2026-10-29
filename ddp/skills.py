@@ -23,7 +23,7 @@ from .claims import claim_map
 from .gate import _PARTY, _SECRET, BLOCKING_AT_RECORDING, GATE_VERSION, DeterministicPolicyGate
 from .identity import SELF_ASSERTED
 from .money import extract_amounts, format_inr
-from .retrieval import CorpusIndex
+from .retrieval import CorpusIndex, HybridIndex
 
 # Building blocks for screen_request (tipping-off in a request, before any model call).
 # What must not be disclosed reuses the recording gate's _SECRET, so the two cannot drift;
@@ -96,13 +96,16 @@ CHECKLIST_ITEMS = [
 class CoPilotSkills:
     """Disposition workflow skills over a Store and an LLM."""
 
-    def __init__(self, store=None, llm=None, complete_fn=None):
+    def __init__(self, store=None, llm=None, complete_fn=None, embedder=None):
         """
         store:       ddp.store.Store (required for lookup / recording; optional for pure checks)
         llm:         object with .complete(prompt, tier=...) and .last_call (ddp.llm)
         complete_fn: convenience for tests — fn(prompt) -> str, wrapped as an LLM
+        embedder:    optional ddp.embeddings.TokenFactoryEmbedder; with it, regulatory lookup
+                     is hybrid (BM25 + embeddings), with the same deterministic abstention
         """
         self._store = store
+        self._embedder = embedder
         if complete_fn is not None:
             from .llm import FunctionLLM
             llm = FunctionLLM(complete_fn)
@@ -235,7 +238,9 @@ class CoPilotSkills:
 
     def _corpus_index(self) -> CorpusIndex:
         if self._index is None:
-            self._index = CorpusIndex(self._store.corpus_rows() if self._store else [])
+            rows = self._store.corpus_rows() if self._store else []
+            self._index = (HybridIndex(rows, self._embedder) if self._embedder is not None
+                           else CorpusIndex(rows))
         return self._index
 
     @staticmethod
@@ -294,7 +299,9 @@ class CoPilotSkills:
             List of {rule_id, rule_text, evidence_level, source_document,
                      source_url, snapshot_date, my_synthesis, category, score}
         """
-        hits = self._corpus_index().search(question, limit=limit)
+        index = self._corpus_index()
+        hits = index.search(question, limit=limit)
+        mode = getattr(index, "last_mode", "bm25")
         return [
             {
                 "rule_id":         r.get("RULE_ID"),
@@ -306,13 +313,14 @@ class CoPilotSkills:
                 "snapshot_date":   str(r.get("SNAPSHOT_DATE") or ""),
                 "category":        r.get("CATEGORY"),
                 "score":           round(score, 3),
+                "retrieval":       mode,
             }
             for score, r in hits
         ]
 
     # ── SKILL 2: suspicion_evaluator ─────────────────────────────────────────
 
-    def suspicion_evaluator(self, case_context: dict) -> list[dict]:
+    def suspicion_evaluator(self, case_context: dict, tier: str = "reasoning") -> list[dict]:
         """
         Evaluate an alert against all 11 PO suspicion factors (POE-002 to POE-012).
 
@@ -323,6 +331,8 @@ class CoPilotSkills:
                 signal_tags:    list  — e.g. ["I4C_FLAG", "PASS_THROUGH"],
                 alert_narrative: str  — alert queue description (optional)
             }
+
+            tier: model tier; "reasoning" in the product, any tier for the tier panel (T12.7).
 
         Returns:
             List of {factor_id, factor_name, assessment, evidence, rules_cited}
@@ -371,7 +381,7 @@ Be specific — cite actual amounts and dates from the transaction data. Do NOT 
 language. If data is insufficient for a factor, say so. Output ONLY the JSON object."""
 
         try:
-            assessments, parse_failures = self._complete_json_array(prompt, "reasoning", "poe_assessment")
+            assessments, parse_failures = self._complete_json_array(prompt, tier, "poe_assessment")
             if parse_failures and self.last_model_call:
                 self.last_model_call["parse_failures"] = parse_failures
             # Citation existence: a factor citing a transaction that is not in this case is not
@@ -535,6 +545,7 @@ Output ONLY the narrative text, no preamble or JSON."""
         validated_draft_sha256: str | None = None,
         agent_run_ref:         str | None = None,
         decision_maker_basis:  str = SELF_ASSERTED,
+        pre_inspection:        dict | None = None,
         decision_maker_identity: dict | None = None,
     ) -> dict:
         """
@@ -644,6 +655,10 @@ Output ONLY the narrative text, no preamble or JSON."""
             **({"decision_maker_identity": decision_maker_identity}
                if decision_maker_identity else {}),
             "agent_run_ref":     agent_run_ref,
+            # T12.10: what the pre-inspection check found unanswered when the officer recorded
+            **({"pre_inspection": {k: pre_inspection.get(k) for k in
+                                   ("bank_sha256", "answered", "asked", "gaps")}}
+               if pre_inspection else {}),
             "idempotency_key":   idempotency_key,
         }
 

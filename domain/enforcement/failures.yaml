@@ -1,0 +1,71 @@
+# Failure taxonomy coded from fiu_orders.yaml (T12.2, 2026-10-28), mapped to Twin Trace.
+#
+# coverage:
+#   ADDRESSED  a Twin Trace control acts on this failure in the product today or in Week 7
+#   PARTIAL    a control helps, but the failure is mostly outside what the product sees
+#   GAP        outside the product's scope; it starts after an alert has fired
+# A count of orders is a direct count over fiu_orders.yaml (D1). It is not a rate and supports no
+# claim about how common a failure is across Indian banks: only seven orders were read.
+version: 1
+failures:
+  CLOSURE-QUALITY:
+    label: "Alerts closed improperly, cursorily or without application of mind"
+    coverage: ADDRESSED
+    controls:
+      - "Recording is refused without a substantive rationale; every ₹ figure in it is checked (validate_gos_evidence)"
+      - "Stress test: the facts a decision rests on, and reopen triggers for a closure"
+      - "Pre-inspection check before recording (T12.10)"
+      - "Reopen watch re-checks closures when a load-bearing fact changes (T12.5)"
+  REPEAT-CLOSURE:
+    label: "Many alerts on one client account, each closed in a cursory manner"
+    coverage: ADDRESSED
+    controls:
+      - "Inbox chip and inspector question count the earlier closures on the same customer (ledger count, D1)"
+  CLOSURE-TIMELINESS:
+    label: "Alerts not addressed or closed within a reasonable period"
+    coverage: PARTIAL
+    controls:
+      - "SLA clock from suspicion formed (STR-002) on every decision; SLA breaches on the Dashboard"
+    gap: "Alerts never opened are not tracked as ageing work; the queue has no age-based escalation."
+  STR-NOT-FILED:
+    label: "Suspicious transactions not reported, or reported late or inaccurately"
+    coverage: PARTIAL
+    controls:
+      - "Defensible FILE drafts with figures from the calculator of record"
+      - "Tier panel routes contested alerts to the officer instead of an automatic call (T12.7)"
+    gap: "Twin Trace does not decide whether to file and does not file with FIU-IND."
+  MECHANISM:
+    label: "No effective internal mechanism to detect and report suspicious transactions"
+    coverage: PARTIAL
+    controls:
+      - "Each alert's handling is recorded in a hash-chained ledger, which is evidence of the mechanism working"
+    gap: "Alert generation and transaction monitoring are upstream of Twin Trace."
+  DATA-ACCURACY:
+    label: "Incorrect or disorganised figures or data supplied to FIU-IND"
+    coverage: ADDRESSED
+    controls:
+      - "Calculator of record: every figure hashed and reproducible"
+      - "Decision package export: one structured, verifiable file per decision"
+  THRESHOLD-REPORTS:
+    label: "Threshold-based reports (CTR, NTR, CBWTR) missing or wrong"
+    coverage: GAP
+    gap: "Twin Trace prepares no threshold reports; the CTR threshold is used only by the structuring signal."
+  ATTEMPTED-BELOW-THRESHOLD:
+    label: "No record of attempted transactions just below the threshold"
+    coverage: PARTIAL
+    controls:
+      - "Cash-structuring signal on completed deposits"
+    gap: "Attempted (not completed) transactions are not in the case data."
+  CDD-ONGOING:
+    label: "Ongoing or enhanced due diligence not carried out"
+    coverage: GAP
+    gap: "KYC and due diligence are upstream; the income-multiple signal only reads the declared profile."
+  THIRD-PARTY-KYC:
+    label: "Reliance on non-compliant third-party KYC"
+    coverage: GAP
+  RISK-ASSESSMENT:
+    label: "No ML/TF risk assessment of products, channels or geographies"
+    coverage: GAP
+  UNSPECIFIED:
+    label: "Contraventions the published summary does not itemise"
+    coverage: GAP

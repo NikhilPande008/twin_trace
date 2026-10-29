@@ -41,10 +41,9 @@ def _signal_brief(selected, alert):
     st.caption(f"Source: {alert.get('SIGNAL_SOURCE', '—')}  ·  Why triggered: {', '.join(rfi) or '—'}")
     b1, b2, b3, b4 = st.columns(4)
     b1.metric("Transactions", len(txns))
-    b2.metric("Credits", format_inr(total_credit) if total_credit < 1e5 else
-              f"₹{total_credit / 1e5:.2f}L", help=f"F-TOTAL-CREDIT = {format_inr(total_credit)}")
-    b3.metric("Debits", format_inr(total_debit) if total_debit < 1e5 else
-              f"₹{total_debit / 1e5:.2f}L", help=f"F-TOTAL-DEBIT = {format_inr(total_debit)}")
+    # exact calculator figures, never a rounded lakh value
+    b2.metric("Credits", format_inr(total_credit), help="F-TOTAL-CREDIT, calculator of record")
+    b3.metric("Debits", format_inr(total_debit), help="F-TOTAL-DEBIT, calculator of record")
     b4.metric("Flagged", len(flagged))
     if dates:
         st.caption(f"Observed window {dates[0]} → {dates[-1]}  ·  {len(counterparties)} counterparties")

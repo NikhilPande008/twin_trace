@@ -1,0 +1,9 @@
+Timestamp,From Bank,Account,To Bank,Account,Amount Received,Receiving Currency,Amount Paid,Payment Currency,Payment Format,Is Laundering
+2022/09/01 00:20,10,8000EBD30,10,8000EBD30,3697.34,US Dollar,3697.34,US Dollar,Reinvestment,0
+2022/09/01 08:00,11,A1,20,MULE1,5000.00,US Dollar,5000.00,US Dollar,ACH,1
+2022/09/01 09:00,12,A2,20,MULE1,4800.00,US Dollar,4800.00,US Dollar,ACH,1
+2022/09/01 10:00,13,A3,20,MULE1,5100.00,US Dollar,5100.00,US Dollar,ACH,1
+2022/09/02 11:00,20,MULE1,30,SINK,14700.00,US Dollar,14700.00,US Dollar,Wire,1
+2022/09/03 12:00,40,SALARY,50,EMP1,2500.00,US Dollar,2500.00,US Dollar,ACH,0
+2022/09/10 12:00,50,EMP1,60,SHOP,300.00,US Dollar,300.00,US Dollar,Credit Card,0
+2022/09/15 12:00,50,EMP1,61,RENT,1200.00,US Dollar,1200.00,US Dollar,Cheque,0

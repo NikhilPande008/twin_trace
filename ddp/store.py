@@ -29,6 +29,8 @@ from pathlib import Path
 from typing import Any, Iterable
 
 GENESIS_HASH = "0" * 64
+# Evidence types added after the first schema; an older DB is widened by _migrate().
+EVIDENCE_TYPES_ADDED = ("adverse_media_screen", "tier_panel", "inspection", "regulator_page")
 
 SCHEMA_SQL = """
 PRAGMA foreign_keys = ON;
@@ -155,13 +157,72 @@ CREATE TABLE IF NOT EXISTS EVIDENCE (
     TYPE            TEXT NOT NULL CHECK (TYPE IN (
                         'transaction', 'computed_fact', 'adverse_media',
                         'corpus_rule', 'policy_verdict', 'stress_test', 'agent_step',
-                        'adverse_media_screen')),
+                        'adverse_media_screen', 'tier_panel', 'inspection', 'regulator_page')),
     SOURCE          TEXT NOT NULL,      -- e.g. 'aggregations.v1:RUN-abc', 'tavily.search:2026-10-05'
     CONTENT_HASH    TEXT NOT NULL,      -- sha256 of CONTENT_JSON
     CONTENT_JSON    TEXT NOT NULL,      -- the fact value (amount, snippet, rule text, verdict)
     PROVENANCE_JSON TEXT,               -- run ID, query, URL, model call — depends on type
     CREATED_AT      TEXT NOT NULL
 );
+
+-- Week 7 watch layer (T12.4): what happened to a recorded decision AFTER it was recorded.
+-- One row per (decision, cause). Append-only and hash-chained like the ledger; a reopen never
+-- edits the decision row, it adds an event that points at it.
+CREATE TABLE IF NOT EXISTS DECISION_EVENTS (
+    SEQ             INTEGER PRIMARY KEY AUTOINCREMENT,
+    EVENT_ID        TEXT NOT NULL UNIQUE,
+    DECISION_ID     TEXT NOT NULL,
+    ALERT_ID        TEXT NOT NULL,
+    CAUSE           TEXT NOT NULL CHECK (CAUSE IN (
+                        'registry_update', 'new_transaction', 'rule_change', 'watch_pass')),
+    CAUSE_JSON      TEXT NOT NULL,
+    CAUSE_SHA256    TEXT NOT NULL,
+    BASE_RUN_ID     TEXT,               -- the calculator run the decision cited
+    RERUN_ID        TEXT,               -- the re-run on the changed inputs (PARENT_RUN_ID = base)
+    OUTCOME         TEXT NOT NULL CHECK (OUTCOME IN ('holds', 'reopened', 'needs_review')),
+    OUTCOME_JSON    TEXT NOT NULL,
+    OUTCOME_SHA256  TEXT NOT NULL,      -- over the deterministic content only (no IDs, no times)
+    CREATED_AT      TEXT NOT NULL,
+    PREV_HASH       TEXT NOT NULL,
+    ROW_HASH        TEXT NOT NULL,
+    UNIQUE (DECISION_ID, CAUSE_SHA256)
+);
+-- Rule-change lookback (T12.12). A proposal is a clause a model said is the rule's current text
+-- at its source, kept only if it appears verbatim in the fetched page. PENDING proposals are never
+-- indexed for retrieval; a promotion is the officer's recorded acceptance. Both append-only.
+CREATE TABLE IF NOT EXISTS RULE_PROPOSALS (
+    PROPOSAL_ID     TEXT PRIMARY KEY,
+    RULE_ID         TEXT NOT NULL,
+    SOURCE_URL      TEXT NOT NULL,
+    PAGE_SHA256     TEXT NOT NULL,
+    PAGE_EVIDENCE_ID TEXT,
+    QUOTE           TEXT,
+    QUOTE_VERIFIED  INTEGER NOT NULL,
+    CHANGED         INTEGER,
+    SUMMARY         TEXT,
+    MODEL_CALL_JSON TEXT,
+    STATUS          TEXT NOT NULL CHECK (STATUS IN ('PENDING', 'REJECTED_UNVERIFIED')),
+    CREATED_AT      TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS RULE_PROMOTIONS (
+    PROPOSAL_ID     TEXT NOT NULL,
+    OFFICER_ID      TEXT NOT NULL,
+    OFFICER_BASIS   TEXT,
+    ACTION          TEXT NOT NULL CHECK (ACTION IN ('promoted', 'dismissed')),
+    CREATED_AT      TEXT NOT NULL
+);
+CREATE TRIGGER IF NOT EXISTS PROPOSALS_NO_UPDATE BEFORE UPDATE ON RULE_PROPOSALS
+BEGIN SELECT RAISE(ABORT, 'RULE_PROPOSALS is append-only: UPDATE rejected'); END;
+CREATE TRIGGER IF NOT EXISTS PROPOSALS_NO_DELETE BEFORE DELETE ON RULE_PROPOSALS
+BEGIN SELECT RAISE(ABORT, 'RULE_PROPOSALS is append-only: DELETE rejected'); END;
+CREATE TRIGGER IF NOT EXISTS PROMOTIONS_NO_UPDATE BEFORE UPDATE ON RULE_PROMOTIONS
+BEGIN SELECT RAISE(ABORT, 'RULE_PROMOTIONS is append-only: UPDATE rejected'); END;
+CREATE TRIGGER IF NOT EXISTS PROMOTIONS_NO_DELETE BEFORE DELETE ON RULE_PROMOTIONS
+BEGIN SELECT RAISE(ABORT, 'RULE_PROMOTIONS is append-only: DELETE rejected'); END;
+CREATE TRIGGER IF NOT EXISTS EVENTS_NO_UPDATE BEFORE UPDATE ON DECISION_EVENTS
+BEGIN SELECT RAISE(ABORT, 'DECISION_EVENTS is append-only: UPDATE rejected'); END;
+CREATE TRIGGER IF NOT EXISTS EVENTS_NO_DELETE BEFORE DELETE ON DECISION_EVENTS
+BEGIN SELECT RAISE(ABORT, 'DECISION_EVENTS is append-only: DELETE rejected'); END;
 """
 
 # Fields that enter the ledger hash, in canonical form. Order-independent (sorted JSON).
@@ -175,6 +236,18 @@ LEDGER_HASHED_FIELDS = (
 def ledger_row_hash(fields: dict, prev_hash: str) -> str:
     """sha256 over the canonical hashed fields plus the previous row's hash."""
     canonical = {k: fields.get(k) for k in LEDGER_HASHED_FIELDS}
+    payload = json.dumps(canonical, sort_keys=True, default=str) + "|" + prev_hash
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+EVENT_HASHED_FIELDS = (
+    "EVENT_ID", "DECISION_ID", "ALERT_ID", "CAUSE", "CAUSE_JSON", "CAUSE_SHA256", "BASE_RUN_ID",
+    "RERUN_ID", "OUTCOME", "OUTCOME_JSON", "OUTCOME_SHA256", "CREATED_AT",
+)
+
+
+def event_row_hash(fields: dict, prev_hash: str) -> str:
+    canonical = {k: fields.get(k) for k in EVENT_HASHED_FIELDS}
     payload = json.dumps(canonical, sort_keys=True, default=str) + "|" + prev_hash
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
@@ -205,7 +278,7 @@ class Store:
                     self._conn.execute(f"ALTER TABLE COMPUTE_RUNS ADD COLUMN {col} TEXT")
             ddl = self._conn.execute(
                 "SELECT sql FROM sqlite_master WHERE type='table' AND name='EVIDENCE'").fetchone()
-            if ddl and "adverse_media_screen" not in (ddl["sql"] or ""):
+            if ddl and any(ty not in (ddl["sql"] or "") for ty in EVIDENCE_TYPES_ADDED):
                 # SQLite cannot alter a CHECK constraint: copy rows into the widened table.
                 self._conn.executescript("""
                     ALTER TABLE EVIDENCE RENAME TO EVIDENCE_OLD;
@@ -399,6 +472,78 @@ class Store:
                 return {"ok": False, "rows": len(rows), "first_break_seq": r["SEQ"],
                         "detail": "PREV_HASH does not match the preceding row (row removed or reordered)"}
             if ledger_row_hash(r, prev) != r["ROW_HASH"]:
+                return {"ok": False, "rows": len(rows), "first_break_seq": r["SEQ"],
+                        "detail": "ROW_HASH does not match row content (row edited)"}
+            prev = r["ROW_HASH"]
+        return {"ok": True, "rows": len(rows), "first_break_seq": None, "detail": ""}
+
+    def latest_decisions(self) -> list[dict]:
+        """The most recent ledger row per alert (the decision currently standing)."""
+        return self.query("""
+            SELECT d.* FROM DECISION_LEDGER d
+            WHERE d.SEQ = (SELECT MAX(SEQ) FROM DECISION_LEDGER x WHERE x.ALERT_ID = d.ALERT_ID)
+            ORDER BY d.SEQ
+        """)
+
+    def get_decision(self, decision_id: str) -> dict | None:
+        rows = self.query("SELECT * FROM DECISION_LEDGER WHERE DECISION_ID = ?", (decision_id,))
+        return rows[0] if rows else None
+
+    def closures_for_customer(self, customer_ref: str, before_seq: int | None = None) -> list[dict]:
+        """NOT_FILE rows for one customer, oldest first (D1: shown as a count with this query)."""
+        sql = ("SELECT SEQ, DECISION_ID, ALERT_ID, DECISION_MADE_AT FROM DECISION_LEDGER "
+               "WHERE CUSTOMER_REF = ? AND DISPOSITION = 'NOT_FILE'")
+        params: list = [customer_ref]
+        if before_seq is not None:
+            sql += " AND SEQ < ?"
+            params.append(before_seq)
+        return self.query(sql + " ORDER BY SEQ", params)
+
+    # ── decision events (T12.4) ──────────────────────────────────────────────
+    def append_event(self, fields: dict) -> dict:
+        """Append one event; if (DECISION_ID, CAUSE_SHA256) is already recorded, return that row
+        instead (a replayed feed item writes nothing)."""
+        row = {k: fields.get(k) for k in EVENT_HASHED_FIELDS}
+        for k in ("CAUSE_JSON", "OUTCOME_JSON"):
+            if not isinstance(row[k], str):
+                row[k] = json.dumps(row[k], sort_keys=True, default=str)
+        with self._lock:
+            hit = self._conn.execute(
+                "SELECT * FROM DECISION_EVENTS WHERE DECISION_ID = ? AND CAUSE_SHA256 = ?",
+                (row["DECISION_ID"], row["CAUSE_SHA256"])).fetchone()
+            if hit:
+                return dict(hit, status="already_recorded")
+            last = self._conn.execute(
+                "SELECT ROW_HASH FROM DECISION_EVENTS ORDER BY SEQ DESC LIMIT 1").fetchone()
+            prev_hash = last["ROW_HASH"] if last else GENESIS_HASH
+            row_hash = event_row_hash(row, prev_hash)
+            cols = list(EVENT_HASHED_FIELDS) + ["PREV_HASH", "ROW_HASH"]
+            self._conn.execute(
+                f"INSERT INTO DECISION_EVENTS ({', '.join(cols)}) "
+                f"VALUES ({', '.join('?' for _ in cols)})",
+                tuple(row[k] for k in EVENT_HASHED_FIELDS) + (prev_hash, row_hash))
+            self._conn.commit()
+        return dict(row, PREV_HASH=prev_hash, ROW_HASH=row_hash, status="recorded")
+
+    def events_for_decision(self, decision_id: str) -> list[dict]:
+        return self.query("SELECT * FROM DECISION_EVENTS WHERE DECISION_ID = ? ORDER BY SEQ",
+                          (decision_id,))
+
+    def events_for_alert(self, alert_id: str) -> list[dict]:
+        return self.query("SELECT * FROM DECISION_EVENTS WHERE ALERT_ID = ? ORDER BY SEQ",
+                          (alert_id,))
+
+    def all_events(self) -> list[dict]:
+        return self.query("SELECT * FROM DECISION_EVENTS ORDER BY SEQ DESC")
+
+    def verify_events_chain(self) -> dict:
+        rows = self.query("SELECT * FROM DECISION_EVENTS ORDER BY SEQ")
+        prev = GENESIS_HASH
+        for r in rows:
+            if r["PREV_HASH"] != prev:
+                return {"ok": False, "rows": len(rows), "first_break_seq": r["SEQ"],
+                        "detail": "PREV_HASH does not match the preceding row (row removed or reordered)"}
+            if event_row_hash(r, prev) != r["ROW_HASH"]:
                 return {"ok": False, "rows": len(rows), "first_break_seq": r["SEQ"],
                         "detail": "ROW_HASH does not match row content (row edited)"}
             prev = r["ROW_HASH"]

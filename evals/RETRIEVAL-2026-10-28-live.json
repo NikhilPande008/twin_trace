@@ -1,0 +1,578 @@
+{
+ "mode": "live",
+ "generated_at": "2026-10-28T18:26:02+00:00",
+ "embedding_model": "Qwen/Qwen3-Embedding-8B",
+ "embedding_calls": [
+  {
+   "model": "Qwen/Qwen3-Embedding-8B",
+   "inputs": 1,
+   "usage": {
+    "prompt_tokens": 17,
+    "total_tokens": 17,
+    "completion_tokens": 0,
+    "prompt_tokens_details": null
+   }
+  },
+  {
+   "model": "Qwen/Qwen3-Embedding-8B",
+   "inputs": 36,
+   "usage": {
+    "prompt_tokens": 5354,
+    "total_tokens": 5354,
+    "completion_tokens": 0,
+    "prompt_tokens_details": null
+   }
+  },
+  {
+   "model": "Qwen/Qwen3-Embedding-8B",
+   "inputs": 1,
+   "usage": {
+    "prompt_tokens": 14,
+    "total_tokens": 14,
+    "completion_tokens": 0,
+    "prompt_tokens_details": null
+   }
+  },
+  {
+   "model": "Qwen/Qwen3-Embedding-8B",
+   "inputs": 1,
+   "usage": {
+    "prompt_tokens": 18,
+    "total_tokens": 18,
+    "completion_tokens": 0,
+    "prompt_tokens_details": null
+   }
+  },
+  {
+   "model": "Qwen/Qwen3-Embedding-8B",
+   "inputs": 1,
+   "usage": {
+    "prompt_tokens": 13,
+    "total_tokens": 13,
+    "completion_tokens": 0,
+    "prompt_tokens_details": null
+   }
+  },
+  {
+   "model": "Qwen/Qwen3-Embedding-8B",
+   "inputs": 1,
+   "usage": {
+    "prompt_tokens": 10,
+    "total_tokens": 10,
+    "completion_tokens": 0,
+    "prompt_tokens_details": null
+   }
+  },
+  {
+   "model": "Qwen/Qwen3-Embedding-8B",
+   "inputs": 1,
+   "usage": {
+    "prompt_tokens": 14,
+    "total_tokens": 14,
+    "completion_tokens": 0,
+    "prompt_tokens_details": null
+   }
+  },
+  {
+   "model": "Qwen/Qwen3-Embedding-8B",
+   "inputs": 1,
+   "usage": {
+    "prompt_tokens": 14,
+    "total_tokens": 14,
+    "completion_tokens": 0,
+    "prompt_tokens_details": null
+   }
+  },
+  {
+   "model": "Qwen/Qwen3-Embedding-8B",
+   "inputs": 1,
+   "usage": {
+    "prompt_tokens": 17,
+    "total_tokens": 17,
+    "completion_tokens": 0,
+    "prompt_tokens_details": null
+   }
+  },
+  {
+   "model": "Qwen/Qwen3-Embedding-8B",
+   "inputs": 1,
+   "usage": {
+    "prompt_tokens": 9,
+    "total_tokens": 9,
+    "completion_tokens": 0,
+    "prompt_tokens_details": null
+   }
+  },
+  {
+   "model": "Qwen/Qwen3-Embedding-8B",
+   "inputs": 1,
+   "usage": {
+    "prompt_tokens": 12,
+    "total_tokens": 12,
+    "completion_tokens": 0,
+    "prompt_tokens_details": null
+   }
+  },
+  {
+   "model": "Qwen/Qwen3-Embedding-8B",
+   "inputs": 1,
+   "usage": {
+    "prompt_tokens": 15,
+    "total_tokens": 15,
+    "completion_tokens": 0,
+    "prompt_tokens_details": null
+   }
+  },
+  {
+   "model": "Qwen/Qwen3-Embedding-8B",
+   "inputs": 1,
+   "usage": {
+    "prompt_tokens": 15,
+    "total_tokens": 15,
+    "completion_tokens": 0,
+    "prompt_tokens_details": null
+   }
+  },
+  {
+   "model": "Qwen/Qwen3-Embedding-8B",
+   "inputs": 1,
+   "usage": {
+    "prompt_tokens": 15,
+    "total_tokens": 15,
+    "completion_tokens": 0,
+    "prompt_tokens_details": null
+   }
+  },
+  {
+   "model": "Qwen/Qwen3-Embedding-8B",
+   "inputs": 1,
+   "usage": {
+    "prompt_tokens": 15,
+    "total_tokens": 15,
+    "completion_tokens": 0,
+    "prompt_tokens_details": null
+   }
+  },
+  {
+   "model": "Qwen/Qwen3-Embedding-8B",
+   "inputs": 1,
+   "usage": {
+    "prompt_tokens": 13,
+    "total_tokens": 13,
+    "completion_tokens": 0,
+    "prompt_tokens_details": null
+   }
+  },
+  {
+   "model": "Qwen/Qwen3-Embedding-8B",
+   "inputs": 1,
+   "usage": {
+    "prompt_tokens": 11,
+    "total_tokens": 11,
+    "completion_tokens": 0,
+    "prompt_tokens_details": null
+   }
+  }
+ ],
+ "labelled": 16,
+ "off_corpus": 4,
+ "bm25": {
+  "labelled": [
+   {
+    "question": "How many days do we have to report a suspicious customer once we suspect them?",
+    "expected": "STR-002",
+    "top3": [
+     "CTR-001",
+     "INS-001",
+     "CTR-002"
+    ],
+    "hit": false,
+    "mode": "bm25"
+   },
+   {
+    "question": "Is there a minimum amount below which suspicion need not be reported?",
+    "expected": "STR-005",
+    "top3": [
+     "STR-005",
+     "STR-001",
+     "POE-005"
+    ],
+    "hit": true,
+    "mode": "bm25"
+   },
+   {
+    "question": "A customer tried to send money but the payment was blocked. Do we still report?",
+    "expected": "STR-003",
+    "top3": [
+     "STR-003",
+     "CCR-001",
+     "INS-001"
+    ],
+    "hit": true,
+    "mode": "bm25"
+   },
+   {
+    "question": "Can the officer tell the customer that we have reported them?",
+    "expected": "SB-003",
+    "top3": [
+     "RS-004",
+     "INS-002",
+     "CTR-001"
+    ],
+    "hit": false,
+    "mode": "bm25"
+   },
+   {
+    "question": "Which portal do suspicious transaction reports go through?",
+    "expected": "STR-006",
+    "top3": [
+     "STR-006",
+     "CTR-003",
+     "POE-008"
+    ],
+    "hit": true,
+    "mode": "bm25"
+   },
+   {
+    "question": "By which date must last month's large cash deposits be reported?",
+    "expected": "CTR-002",
+    "top3": [
+     "CTR-002",
+     "POE-002",
+     "CTR-001"
+    ],
+    "hit": true,
+    "mode": "bm25"
+   },
+   {
+    "question": "Above what cash amount must a report be made regardless of suspicion?",
+    "expected": "CTR-001",
+    "top3": [
+     "STR-001",
+     "CCR-001",
+     "CTR-001"
+    ],
+    "hit": true,
+    "mode": "bm25"
+   },
+   {
+    "question": "If a cash deposit is both large and suspicious, do we file both reports?",
+    "expected": "CTR-003",
+    "top3": [
+     "CTR-003",
+     "CTR-001",
+     "STR-001"
+    ],
+    "hit": true,
+    "mode": "bm25"
+   },
+   {
+    "question": "How long must transaction records be kept?",
+    "expected": "RR-001",
+    "top3": [
+     "RR-001",
+     "SB-001"
+    ],
+    "hit": true,
+    "mode": "bm25"
+   },
+   {
+    "question": "What must the narrative section of a suspicious report contain?",
+    "expected": "RS-004",
+    "top3": [
+     "RS-001",
+     "RS-004",
+     "SB-002"
+    ],
+    "hit": true,
+    "mode": "bm25"
+   },
+   {
+    "question": "We found fake currency notes at the branch counter. What report applies?",
+    "expected": "CCR-001",
+    "top3": [
+     "CCR-001",
+     "RS-003",
+     "STR-005"
+    ],
+    "hit": true,
+    "mode": "bm25"
+   },
+   {
+    "question": "Transactions involving a charity or non-profit: is there a separate report?",
+    "expected": "NTR-001",
+    "top3": [
+     "NTR-001",
+     "CTR-001",
+     "RS-001"
+    ],
+    "hit": true,
+    "mode": "bm25"
+   },
+   {
+    "question": "What will inspectors look at when an alert was closed without a report?",
+    "expected": "INS-001",
+    "top3": [
+     "INS-001",
+     "INS-003",
+     "CTR-002"
+    ],
+    "hit": true,
+    "mode": "bm25"
+   },
+   {
+    "question": "Who is allowed to make the decision to report, and by when?",
+    "expected": "INS-002",
+    "top3": [
+     "STR-001",
+     "INS-002",
+     "INS-001"
+    ],
+    "hit": true,
+    "mode": "bm25"
+   },
+   {
+    "question": "Does the customer's declared salary explain the money coming in?",
+    "expected": "POE-005",
+    "top3": [
+     "POE-002",
+     "STR-004",
+     "SB-001"
+    ],
+    "hit": false,
+    "mode": "bm25"
+   },
+   {
+    "question": "Are the countries involved in the transfers high risk?",
+    "expected": "POE-011",
+    "top3": [
+     "POE-011",
+     "POE-004",
+     "POE-007"
+    ],
+    "hit": true,
+    "mode": "bm25"
+   }
+  ],
+  "off_corpus": [
+   {
+    "question": "What is the VASP licensing fee?",
+    "abstained": true
+   },
+   {
+    "question": "What are the Basel III capital adequacy requirements?",
+    "abstained": true
+   },
+   {
+    "question": "How do I open a demat account?",
+    "abstained": true
+   },
+   {
+    "question": "What is the GST rate on gold jewellery?",
+    "abstained": true
+   }
+  ],
+  "hits_at_3": 13,
+  "abstained": 4
+ },
+ "hybrid": {
+  "labelled": [
+   {
+    "question": "How many days do we have to report a suspicious customer once we suspect them?",
+    "expected": "STR-002",
+    "top3": [
+     "STR-002",
+     "STR-001",
+     "CTR-002"
+    ],
+    "hit": true,
+    "mode": "hybrid"
+   },
+   {
+    "question": "Is there a minimum amount below which suspicion need not be reported?",
+    "expected": "STR-005",
+    "top3": [
+     "STR-005",
+     "STR-001",
+     "POE-005"
+    ],
+    "hit": true,
+    "mode": "hybrid"
+   },
+   {
+    "question": "A customer tried to send money but the payment was blocked. Do we still report?",
+    "expected": "STR-003",
+    "top3": [
+     "STR-003",
+     "STR-001",
+     "STR-004"
+    ],
+    "hit": true,
+    "mode": "hybrid"
+   },
+   {
+    "question": "Can the officer tell the customer that we have reported them?",
+    "expected": "SB-003",
+    "top3": [
+     "RS-004",
+     "INS-002",
+     "SB-003"
+    ],
+    "hit": true,
+    "mode": "hybrid"
+   },
+   {
+    "question": "Which portal do suspicious transaction reports go through?",
+    "expected": "STR-006",
+    "top3": [
+     "STR-006",
+     "RS-003",
+     "CTR-003"
+    ],
+    "hit": true,
+    "mode": "hybrid"
+   },
+   {
+    "question": "By which date must last month's large cash deposits be reported?",
+    "expected": "CTR-002",
+    "top3": [
+     "CTR-002",
+     "CTR-001",
+     "CTR-003"
+    ],
+    "hit": true,
+    "mode": "hybrid"
+   },
+   {
+    "question": "Above what cash amount must a report be made regardless of suspicion?",
+    "expected": "CTR-001",
+    "top3": [
+     "STR-001",
+     "CCR-001",
+     "CTR-001"
+    ],
+    "hit": true,
+    "mode": "hybrid"
+   },
+   {
+    "question": "If a cash deposit is both large and suspicious, do we file both reports?",
+    "expected": "CTR-003",
+    "top3": [
+     "CTR-003",
+     "STR-001",
+     "CTR-001"
+    ],
+    "hit": true,
+    "mode": "hybrid"
+   },
+   {
+    "question": "How long must transaction records be kept?",
+    "expected": "RR-001",
+    "top3": [
+     "RR-001",
+     "SB-001",
+     "RS-003"
+    ],
+    "hit": true,
+    "mode": "hybrid"
+   },
+   {
+    "question": "What must the narrative section of a suspicious report contain?",
+    "expected": "RS-004",
+    "top3": [
+     "RS-001",
+     "RS-004",
+     "SB-002"
+    ],
+    "hit": true,
+    "mode": "hybrid"
+   },
+   {
+    "question": "We found fake currency notes at the branch counter. What report applies?",
+    "expected": "CCR-001",
+    "top3": [
+     "CCR-001",
+     "RS-003",
+     "STR-005"
+    ],
+    "hit": true,
+    "mode": "hybrid"
+   },
+   {
+    "question": "Transactions involving a charity or non-profit: is there a separate report?",
+    "expected": "NTR-001",
+    "top3": [
+     "NTR-001",
+     "RS-003",
+     "RS-001"
+    ],
+    "hit": true,
+    "mode": "hybrid"
+   },
+   {
+    "question": "What will inspectors look at when an alert was closed without a report?",
+    "expected": "INS-001",
+    "top3": [
+     "INS-001",
+     "INS-003",
+     "INS-002"
+    ],
+    "hit": true,
+    "mode": "hybrid"
+   },
+   {
+    "question": "Who is allowed to make the decision to report, and by when?",
+    "expected": "INS-002",
+    "top3": [
+     "INS-002",
+     "STR-002",
+     "STR-001"
+    ],
+    "hit": true,
+    "mode": "hybrid"
+   },
+   {
+    "question": "Does the customer's declared salary explain the money coming in?",
+    "expected": "POE-005",
+    "top3": [
+     "POE-002",
+     "POE-009",
+     "POE-005"
+    ],
+    "hit": true,
+    "mode": "hybrid"
+   },
+   {
+    "question": "Are the countries involved in the transfers high risk?",
+    "expected": "POE-011",
+    "top3": [
+     "POE-011",
+     "POE-004",
+     "POE-007"
+    ],
+    "hit": true,
+    "mode": "hybrid"
+   }
+  ],
+  "off_corpus": [
+   {
+    "question": "What is the VASP licensing fee?",
+    "abstained": true
+   },
+   {
+    "question": "What are the Basel III capital adequacy requirements?",
+    "abstained": true
+   },
+   {
+    "question": "How do I open a demat account?",
+    "abstained": true
+   },
+   {
+    "question": "What is the GST rate on gold jewellery?",
+    "abstained": true
+   }
+  ],
+  "hits_at_3": 16,
+  "abstained": 4
+ }
+}

@@ -117,5 +117,7 @@ def _stress_line(live_reports):
             "not measured.  \n"
             "- **The gate checks figures only.** Wrong-party and invented-context statements "
             "built from real figures pass it and are listed for human review.  \n"
-            "- **One model family, one run each.** Model output varies between runs.  \n"
+            "- **One model family; each live figure above is from one run.** Model output varies "
+            "between runs. Repeat runs of the agent, two per condition, are in "
+            "`evals/AGENT-LEAN-2026-10-28.md` and `evals/AGENT-FRAMING-2026-10-28.md`.  \n"
             "- **No cost figure is shown** because none was measured here.")

@@ -7,6 +7,7 @@ import streamlit as st
 from ...money import format_inr
 from ..cards import _intro, _stakes
 from ..runtime import get_store
+from ..watch_view import reason_chips
 from ..widgets import _esc, _goto, disp_badge, sla_days_left, sla_pill
 
 
@@ -74,8 +75,9 @@ def page_alert_queue():
         and (not search or search in r["ALERT_ID"].lower()
              or search in str(r["CUSTOMER_PROFILE"] or "").lower())
     ]
-    # Undecided first, then by SLA urgency, then larger amounts
-    shown.sort(key=lambda r: (r["WORK_STATUS"] == "REVIEWED", r["SLA_DAYS"], -r["AMOUNT"]))
+    # Undecided first (reopened at the top), then by SLA urgency, then larger amounts
+    shown.sort(key=lambda r: (r["WORK_STATUS"] == "REVIEWED", r["WORK_STATUS"] != "REOPENED",
+                              r["SLA_DAYS"], -r["AMOUNT"]))
 
     st.caption(f"Showing {len(shown)} of {len(rows)} alerts")
     st.divider()
@@ -96,7 +98,10 @@ def page_alert_queue():
                 f'<div class="ddp-queue-meta"><span>Alerted amount: <strong>{format_inr(r["AMOUNT"])}</strong></span>'
                 f'<span>Signal: <code>{_esc(r["SIGNAL_SOURCE"] or "UNKNOWN")}</code></span>'
                 f'<span>Account: {_esc(r["ACCOUNT_TYPE"] or "—")}</span>'
-                f'<span>Status: {_esc(r["WORK_STATUS"])}</span></div></div>',
+                f'<span>Status: {_esc(r["WORK_STATUS"])}</span></div>'
+                + (f'<div style="margin-top:6px">{chips}</div>' if (chips := reason_chips(
+                    get_store(), alert_id)) else "")
+                + '</div>',
                 unsafe_allow_html=True,
             )
         with action_col:

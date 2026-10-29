@@ -9,6 +9,7 @@ import streamlit as st
 from ...compute import reproduce_recorded
 from ...package import build_package, check_uploaded_package
 from ...palette import EVIDENCE_BADGE, EVIDENCE_UNKNOWN, SLA_OK, SLA_SOON, SLA_URGENT
+from ..inspection_view import inspection_view
 from ..runtime import get_store
 from ..widgets import badge, disp_badge
 
@@ -220,3 +221,6 @@ def page_ledger():
             # T3.3 Reconstruct decision
             with st.expander("↩ Reconstruct decision", expanded=False):
                 _reconstruct_view(r, meta or {})
+            # T12.9 Inspection replay
+            with st.expander("Inspection replay", expanded=False):
+                inspection_view(r["DECISION_ID"])

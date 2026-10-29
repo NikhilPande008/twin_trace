@@ -10,11 +10,12 @@ import streamlit as st
 
 from ..gate import DeterministicPolicyGate
 from ..identity import SELF_ASSERTED
+from ..inspection import pre_inspect
 from ..palette import NEUTRAL, SCORE_BAD, SCORE_GOOD, SCORE_MID
 from .case_state import (_add_model_call, _calls_mark, _current_assessment, _current_computed,
                          _current_gos, _ensure_computed, _log_calls_since, _model_calls,
                          _model_label, _trace)
-from .runtime import _load_transactions, get_pipeline, get_skills
+from .runtime import _load_transactions, get_pipeline, get_skills, get_store
 from .officer import current_identity
 from .widgets import IST, _kind, _session_user_id, _set_sticky, _sha, _sticky, badge
 
@@ -310,6 +311,8 @@ def _confirm_decision(selected, alert, pending, narrative, ident, suspicion_ts, 
             f"- Sentences outside deterministic checks: {n_out}  \n"
             f"- Policy flags: " + (", ".join(v["policy"] for v in policy["verdicts"]
                                             if v["violated"]) or "none"))
+        pre = _pre_inspection(selected, alert, action, narrative, assessment, computed, check,
+                              suspicion_ts, ident)
         policy_passed = policy["passed"]
         if not policy_passed:
             st.error("This draft contains policy-blocked language. It cannot be recorded until it is revised.")
@@ -327,7 +330,7 @@ def _confirm_decision(selected, alert, pending, narrative, ident, suspicion_ts, 
             _record_disposition(
                 selected, alert, narrative, action, po_id, suspicion_ts,
                 (str_ref or "PENDING-FINGATEREF") if action == "FILE" else None, assessment,
-                validated_draft_sha256=_sha(narrative), identity=ident)
+                validated_draft_sha256=_sha(narrative), identity=ident, pre_inspection=pre)
         if c2.button("Cancel", key=f"cancel_{selected}"):
             st.session_state.pop(pending_key, None)
             st.rerun()
@@ -374,9 +377,32 @@ def _claims_panel(selected, narrative):
                        + (" …" if len(out) > 4 else ""))
 
 
+def _pre_inspection(selected, alert, action, narrative, assessment, computed, check,
+                    suspicion_ts, ident):
+    """T12.10: the inspector questions this decision would leave unanswered, before recording.
+    A warning, not a block; the gaps are written into the ledger row."""
+    pre = pre_inspect(
+        get_store(), alert_id=selected, disposition=action, rationale=narrative,
+        rules_cited=json.loads(str(alert.get("RULES_CITED") or "[]")),
+        poe_assessment=assessment, compute_run_id=(computed or {}).get("run_id"),
+        suspicion_formed_at=suspicion_ts, decision_maker_id=ident.officer_id or "",
+        decision_maker_basis=ident.basis, evidence_check=dict(
+            passed=check["passed"], amounts_checked=check["fact_coverage"]["amounts_checked"]))
+    icon = {"answered": "✅", "needs_review": "🟠", "unanswered": "⛔", "not_applicable": "·"}
+    with st.expander(f"Pre-inspection check · the record would answer {pre['answered']} of "
+                     f"{pre['asked']} inspector questions", expanded=bool(pre["gaps"])):
+        st.caption("Questions derived from FIU-IND Section 13 orders (domain/enforcement/). "
+                   "Answered only from what would be recorded; unanswered questions do not block "
+                   "recording and are written into the ledger row.")
+        for r in pre["results"]:
+            st.markdown(f"{icon[r['status']]} **{r['id']}** {r['question']}  \n"
+                        f"<small>{r['answer']}</small>", unsafe_allow_html=True)
+    return pre
+
+
 def _record_disposition(alert_id, alert, rationale, disposition,
                         po_id, suspicion_ts, str_ref, poe_assessment,
-                        validated_draft_sha256=None, identity=None):
+                        validated_draft_sha256=None, identity=None, pre_inspection=None):
     rules = json.loads(str(alert.get("RULES_CITED") or "[]"))
     rfis  = json.loads(str(alert.get("RFI_TRIGGERS") or "[]"))
     try:
@@ -403,6 +429,7 @@ def _record_disposition(alert_id, alert, rationale, disposition,
                 agent_run_ref      = (st.session_state.get(f"agent_{alert_id}") or {}).get("trace_id"),
                 decision_maker_basis    = identity.basis if identity else SELF_ASSERTED,
                 decision_maker_identity = (identity.claims or None) if identity else None,
+                pre_inspection     = pre_inspection,
             )
     except ValueError as e:
         st.warning(str(e))
