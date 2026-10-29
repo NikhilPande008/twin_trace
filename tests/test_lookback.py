@@ -88,7 +88,7 @@ def test_promotion_flags_only_decisions_citing_the_rule():
     _record(store, runner, "ALERT-01", "FILE", DEMO_RATIONALES["ALERT-01"][1])     # cites STR-002
     _record(store, runner, "ALERT-16", "NOT_FILE", DEMO_RATIONALES["ALERT-16"][1])  # does not
     post, _ = _post()
-    r = check_rule(store, _skills(store), "STR-002", tavily_key="k", _post=post)
+    r = check_rule(store, _skills(store, changed=True), "STR-002", tavily_key="k", _post=post)
     assert r["affected"] == 1
     out = promote(store, runner, r["PROPOSAL_ID"], "PO-7", "self-asserted")
     assert [e["ALERT_ID"] for e in out["events"]] == ["ALERT-01"]
@@ -124,3 +124,19 @@ def test_review_screen_lists_proposals_offline():
         assert not at.exception, at.exception
         labels = [e.label for e in at.expander]
         assert any(lbl.startswith("STR-002 · PENDING") for lbl in labels), labels
+
+
+def test_unchanged_rule_cannot_be_promoted():
+    store = open_store(":memory:")
+    post, _ = _post()
+    r = check_rule(store, _skills(store, changed=False), "STR-002", tavily_key="k", _post=post)
+    assert r["STATUS"] == "PENDING" and r["CHANGED"] == 0
+    with pytest.raises(ValueError, match="nothing to promote"):
+        promote(store, ComputeRunner(store), r["PROPOSAL_ID"], "PO-7", "self-asserted")
+    assert not store.query("SELECT 1 FROM DECISION_EVENTS")
+
+
+def test_domain_check_reads_the_real_host():
+    assert domain_allowed("https://fiuindia.gov.in:443/files/x.html")
+    assert not domain_allowed("https://fiuindia.gov.in.evil.example/x")
+    assert not domain_allowed("not a url")

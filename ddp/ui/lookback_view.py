@@ -71,6 +71,8 @@ def _proposal_row(p: dict) -> None:
         st.caption(f"“{p.get('QUOTE') or ''}” · {p['SUMMARY']}")
         if p.get("PROMOTED_BY"):
             st.caption(f"Promoted by {p['PROMOTED_BY']} at {p['PROMOTED_AT'][:16]}.")
+        elif p["STATUS"] == "PENDING" and not p["CHANGED"]:
+            st.caption("The source states the same requirement as the corpus: nothing to promote.")
         elif p["STATUS"] == "PENDING":
             ident = current_identity(st.session_state.get("po_id", ""))
             if st.button("Promote (recorded with your officer ID)", key=f"promote_{p['PROPOSAL_ID']}",

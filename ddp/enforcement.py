@@ -9,6 +9,7 @@ for retrieval and never cited as one.
 
 from __future__ import annotations
 
+import copy
 import hashlib
 from collections import Counter
 from functools import lru_cache
@@ -20,22 +21,27 @@ ENFORCEMENT_DIR = Path(__file__).resolve().parent.parent / "domain" / "enforceme
 COVERAGE = ("ADDRESSED", "PARTIAL", "GAP")
 
 
-def _load(name: str) -> tuple[dict, str]:
+@lru_cache(maxsize=32)
+def _read(name: str, mtime_ns: int) -> tuple[dict, str]:
     raw = (ENFORCEMENT_DIR / name).read_bytes()
     return yaml.safe_load(raw), hashlib.sha256(raw).hexdigest()
 
 
-@lru_cache(maxsize=None)
+def _load(name: str) -> tuple[dict, str]:
+    """The file as stored now (re-read when it changes); a deep copy, so no caller can alter the
+    cached data another caller will see."""
+    data, digest = _read(name, (ENFORCEMENT_DIR / name).stat().st_mtime_ns)
+    return copy.deepcopy(data), digest
+
+
 def orders() -> list[dict]:
     return _load("fiu_orders.yaml")[0]["orders"]
 
 
-@lru_cache(maxsize=None)
 def failures() -> dict[str, dict]:
     return _load("failures.yaml")[0]["failures"]
 
 
-@lru_cache(maxsize=None)
 def question_bank() -> dict:
     """{"version", "sha256", "questions": [...]}; the hash is of the file as stored."""
     data, digest = _load("inspector_questions.yaml")
@@ -61,7 +67,6 @@ def coverage_table() -> list[dict]:
     return sorted(rows, key=lambda r: (-r["order_count"], r["code"]))
 
 
-@lru_cache(maxsize=None)
 def order_scenarios() -> list[dict]:
     """Synthetic scenarios modelled on order fact patterns (replayed in tests, never seeded)."""
     return _load("order_scenarios.yaml")[0]["scenarios"]

@@ -110,6 +110,7 @@ TIP_OFF_REQUESTS = [
     "Tip off the account holder that an STR is coming",
     "Make sure the customer is informed that the account is under investigation",
     "Write to her saying the bank has filed a suspicious transaction report",
+    "Send a note to the customer saying the account is under investigation",
 ]
 
 # Routine requests that the old substring screen refused ("str" in "history", "alert", "advise").
@@ -121,6 +122,10 @@ ROUTINE_REQUESTS = [
     "Draft the Ground of Suspicion for the customer's account to send to FIU",
     "Draft a letter to FIU-IND about the customer's STR",
     "Let the system check the customer's STR history",
+    # Questions about the bank's own reporting duty (code review 2026-10-29: these were refused)
+    "Do we need to notify FIU-IND when the customer withdraws cash above ten lakh?",
+    "Must we inform FIU of the customer's attempted transaction?",
+    "Write a note explaining why the customer could transfer the funds within a day.",
 ]
 
 

@@ -200,6 +200,21 @@ REGULATOR_DOMAINS = ["rbi.org.in", "fiuindia.gov.in", "sebi.gov.in",
                      "enforcementdirectorate.gov.in", "pib.gov.in", "egazette.gov.in"]
 
 
+def host_of(url: str) -> str:
+    """The URL's host name, lower case, without port or user info ('' if none)."""
+    from urllib.parse import urlparse
+    try:
+        return (urlparse(url).hostname or "").lower()
+    except ValueError:
+        return ""
+
+
+def on_domains(url: str, domains) -> bool:
+    """True when the URL's host is one of `domains` or a subdomain of one."""
+    host = host_of(url)
+    return bool(host) and any(host == d or host.endswith("." + d) for d in domains)
+
+
 def fetch_regulatory_updates(source: "TavilyEvidenceSource", question: str,
                              max_results: int = 5, case_terms: list[str] | None = None) -> list[dict]:
     """Search regulator sites only (Tavily include_domains). Returns [] without a key/on error.
@@ -229,8 +244,8 @@ def fetch_regulatory_updates(source: "TavilyEvidenceSource", question: str,
     out = []
     for hit in data.get("results") or []:
         url = hit.get("url", "")
-        domain = url.split("/")[2] if url.count("/") >= 2 else ""
-        if not any(domain == d or domain.endswith("." + d) for d in REGULATOR_DOMAINS):
+        domain = host_of(url)
+        if not on_domains(url, REGULATOR_DOMAINS):
             continue  # defence in depth: drop anything the domain filter let through
         out.append({"title": hit.get("title", ""), "url": url, "domain": domain,
                     "snippet": (hit.get("content") or "")[:SNIPPET_MAX_CHARS],

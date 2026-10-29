@@ -34,8 +34,12 @@ _REQ_TELL = (r"(?:tell(?:ing)?|inform(?:ing)?|notif(?:y|ying)|warn(?:ing)?|advis
              r"call(?:ing)?|e-?mail(?:ing)?|messag(?:e|ing)|text(?:ing)?|whatsapp|sms|letter|"
              r"note|write\s+to|writing\s+to|reach(?:ing)?\s+out\s+to|explain(?:ing)?\s+to|"
              r"disclos(?:e|ing)\s+to|tip(?:ping)?\s+off)")
+# The customer must be the direct object of the tell-verb ("inform the customer", "write to
+# her"), not merely mentioned nearby: "notify FIU-IND when the customer withdraws cash" is a
+# question about reporting duties, not a request to tip anyone off (code review 2026-10-29).
 _REQ_ADDRESSES_PARTY = re.compile(
-    r"\b" + _REQ_TELL + r"\b[^.:]{0,20}?\b" + _REQ_PARTY + r"\b"
+    r"\b" + _REQ_TELL + r"\b\s+(?:to\s+)?(?:the\s+|this\s+|that\s+|our\s+|my\s+|a\s+)?"
+    + _REQ_PARTY + r"\b"
     + r"|\blet\s+(?:the\s+)?" + _REQ_PARTY + r"\s+know\b"
     + r"|\bgiv(?:e|ing)\s+(?:the\s+)?" + _REQ_PARTY
     + r"\s+(?:a\s+)?(?:heads[\s-]?up|hint|warning|word)\b"

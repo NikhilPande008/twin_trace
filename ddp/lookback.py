@@ -22,7 +22,7 @@ import re
 import uuid
 from datetime import datetime, timezone
 
-from .evidence.tavily import REGULATOR_DOMAINS
+from .evidence.tavily import REGULATOR_DOMAINS, on_domains
 
 TAVILY_EXTRACT = "https://api.tavily.com/extract"
 LOOKBACK_DOMAINS = tuple(REGULATOR_DOMAINS) + ("indiacode.nic.in",)
@@ -40,8 +40,7 @@ def _norm(text: str) -> str:
 
 
 def domain_allowed(url: str) -> bool:
-    host = url.split("/")[2].lower() if url.count("/") >= 2 else ""
-    return any(host == d or host.endswith("." + d) for d in LOOKBACK_DOMAINS)
+    return on_domains(url, LOOKBACK_DOMAINS)
 
 
 def verify_quote(quote: str, page_text: str) -> tuple[bool, str]:
@@ -157,6 +156,10 @@ def promote(store, runner, proposal_id: str, officer_id: str, officer_basis: str
     rows = store.query("SELECT * FROM RULE_PROPOSALS WHERE PROPOSAL_ID = ?", (proposal_id,))
     if not rows or rows[0]["STATUS"] != "PENDING" or not rows[0]["QUOTE_VERIFIED"]:
         raise ValueError("Only a verified, pending proposal can be promoted.")
+    if not rows[0]["CHANGED"]:
+        # The source states the same requirement: promoting it would send every citing decision
+        # for review over a change that did not happen (code review 2026-10-29).
+        raise ValueError("The source states the same requirement as the corpus; nothing to promote.")
     if not officer_id:
         raise ValueError("An officer ID is required to promote a rule change.")
     if store.query("SELECT 1 FROM RULE_PROMOTIONS WHERE PROPOSAL_ID = ?", (proposal_id,)):

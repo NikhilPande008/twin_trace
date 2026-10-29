@@ -13,12 +13,13 @@ CAUSE_LABEL = {"registry_update": "Registry update", "new_transaction": "New tra
                "rule_change": "Rule changed", "watch_pass": "Watch pass"}
 
 
-def reason_chips(store, alert_id: str) -> str:
-    """HTML chips for the inbox row; '' when nothing has come back."""
+def reason_chips(store, alert_id: str, index: dict | None = None) -> str:
+    """HTML chips for the inbox row; '' when nothing has come back. Pass `index`
+    (watch.reasons_index) when rendering many rows."""
     return "".join(
         '<span class="ddp-chip" style="background:{};color:{}">{}</span>'.format(
             *WATCH_STYLE.get(r["kind"], NEUTRAL), _esc(r["text"]))
-        for r in alert_reasons(store, alert_id))
+        for r in alert_reasons(store, alert_id, index))
 
 
 def what_changed_card(node: dict) -> None:

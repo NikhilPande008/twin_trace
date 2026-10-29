@@ -153,3 +153,11 @@ def test_zero_valued_fact_is_supported_but_zero_needs_the_fact():
     skills = CoPilotSkills(None)
     assert skills.validate_gos_evidence(text, txns, facts)["passed"]
     assert not skills.validate_gos_evidence(text, txns)["passed"]
+
+
+
+def test_naming_the_currency_is_not_an_amount():
+    from ddp.money import extract_amounts
+    assert extract_amounts("The salary is paid in rupees; several lakh moved in total.") == []
+    assert [m.value for m in extract_amounts("about a crore moved")] == [None]   # still a figure
+    assert [m.value for m in extract_amounts("five thousand rupees")] == [None]

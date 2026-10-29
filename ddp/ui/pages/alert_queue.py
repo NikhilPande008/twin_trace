@@ -7,6 +7,7 @@ import streamlit as st
 from ...money import format_inr
 from ..cards import _intro, _stakes
 from ..runtime import get_store
+from ...watch import reasons_index
 from ..watch_view import reason_chips
 from ..widgets import _esc, _goto, disp_badge, sla_days_left, sla_pill
 
@@ -86,6 +87,7 @@ def page_alert_queue():
         st.info("No alerts match these filters.")
         return
 
+    reasons = reasons_index(get_store())          # one pass for every row's chips
     for r in shown:
         alert_id = r["ALERT_ID"]
         urgency = (disp_badge(r.get("LAST_DISPOSITION") or "REVIEWED")
@@ -100,7 +102,7 @@ def page_alert_queue():
                 f'<span>Account: {_esc(r["ACCOUNT_TYPE"] or "—")}</span>'
                 f'<span>Status: {_esc(r["WORK_STATUS"])}</span></div>'
                 + (f'<div style="margin-top:6px">{chips}</div>' if (chips := reason_chips(
-                    get_store(), alert_id)) else "")
+                    get_store(), alert_id, reasons)) else "")
                 + '</div>',
                 unsafe_allow_html=True,
             )

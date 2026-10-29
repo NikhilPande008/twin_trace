@@ -151,3 +151,35 @@ def test_a_reopen_never_touches_the_ledger(env):
     watch.run_feed()
     assert store.query("SELECT DECISION_ID, ROW_HASH FROM DECISION_LEDGER ORDER BY SEQ") == before
     assert store.verify_ledger_chain()["ok"]
+
+
+
+def test_registry_state_is_cumulative(env):
+    """Sister flagged alone holds; a later credit from her pushes the flagged share over the
+    line only if her flag is still applied (code review 2026-10-29)."""
+    store, _, watch, d16, _ = env
+    (first,) = _apply(watch, "REG-0001")
+    assert first["OUTCOME"] == "holds"
+    txn = {"txn_id": "T16-NEW", "date": "2026-11-20", "type": "CREDIT", "amount_inr": 20000.0,
+           "channel": "UPI", "counterparty": "Sister (KYC-linked family)", "is_flagged": False}
+    (ev,) = watch.apply({"cause": "new_transaction", "alert_id": "ALERT-16", "transaction": txn})
+    detail = json.loads(ev["OUTCOME_JSON"])
+    assert ev["OUTCOME"] == "reopened", detail
+    assert detail["earlier_changes"] and "Sister" in detail["earlier_changes"][0]
+
+
+def test_replaying_an_item_runs_no_calculator(env):
+    store, _, watch, _, _ = env
+    _apply(watch, "REG-0002")
+    runs = store.query("SELECT COUNT(*) AS n FROM COMPUTE_RUNS")[0]["n"]
+    _apply(watch, "REG-0002")
+    assert store.query("SELECT COUNT(*) AS n FROM COMPUTE_RUNS")[0]["n"] == runs
+
+
+def test_reasons_index_matches_per_alert_lookup(env):
+    from ddp.watch import alert_reasons, reasons_index
+    store, _, watch, _, _ = env
+    watch.run_feed()
+    ix = reasons_index(store)
+    for a in ("ALERT-01", "ALERT-16", "ALERT-07"):
+        assert alert_reasons(store, a, ix) == alert_reasons(store, a)

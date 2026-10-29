@@ -5,8 +5,9 @@ When something changes after a decision was recorded (a registry flags or withdr
 a new transaction arrives, a cited rule changes), the watch:
 
   1. finds the standing decisions it affects,
-  2. re-runs the SAME calculator of record on the decision's SAVED inputs with the change applied
-     (a COMPUTE_RUNS row with PARENT_RUN_ID = the decision's run; never the current case data),
+  2. re-runs the SAME calculator of record on the decision's SAVED inputs with every change
+     received so far applied in order (registry state is cumulative), as a COMPUTE_RUNS row with
+     PARENT_RUN_ID = the decision's run; never the current case data,
   3. compares the deterministic verdicts before and after, and
   4. appends one DECISION_EVENTS row: holds | reopened | needs_review, naming the fact that moved.
 
@@ -17,6 +18,7 @@ status to REOPENED and the event row says why.
 
 from __future__ import annotations
 
+import copy
 import hashlib
 import json
 import uuid
@@ -27,6 +29,8 @@ from pathlib import Path
 import yaml
 
 from .compute.runner import canonical_json
+from .store import json_list as _json_list
+from .store import json_obj as _json
 from .stress.signals import evaluate_signals, level, verdict
 
 FEED_PATH = Path(__file__).resolve().parent.parent / "domain" / "feeds" / "registry_feed.yaml"
@@ -37,11 +41,18 @@ def _sha(obj) -> str:
     return hashlib.sha256(canonical_json(obj).encode()).hexdigest()
 
 
-@lru_cache(maxsize=None)
-def load_feed() -> dict:
-    data = yaml.safe_load(FEED_PATH.read_bytes())
+@lru_cache(maxsize=8)
+def _read_feed(mtime_ns: int) -> dict:
+    raw = FEED_PATH.read_bytes()
+    data = yaml.safe_load(raw)
     return {"registry": data["registry"], "items": data["items"],
-            "sha256": hashlib.sha256(FEED_PATH.read_bytes()).hexdigest()}
+            "sha256": hashlib.sha256(raw).hexdigest()}
+
+
+def load_feed() -> dict:
+    """The feed as stored now (re-read when the file changes); a copy, so callers cannot alter
+    the cached one."""
+    return copy.deepcopy(_read_feed(FEED_PATH.stat().st_mtime_ns))
 
 
 def registry_event(item: dict, registry: str | None = None) -> dict:
@@ -97,18 +108,26 @@ class DecisionWatch:
         txns = (inputs or {}).get("transactions")
         if txns is None:
             txns = self.store.transactions_for(decision["ALERT_ID"])
-        if not _touches(cause, decision, txns):
+        # Registry state is cumulative: every earlier change to this decision, in order.
+        earlier = [_json(e["CAUSE_JSON"]) for e in self.store.events_for_decision(decision["DECISION_ID"])
+                   if e["CAUSE"] in ("registry_update", "new_transaction")]
+        current = _apply_changes(txns, earlier)
+        if not _touches(cause, decision, current):
             return None
+        # A change already applied to this decision writes nothing, not even a compute run.
+        done = self.store.get_event(decision["DECISION_ID"], _sha(_cause_core(cause)))
+        if done is not None:
+            return done
         if run is None:
             return self._record(decision, cause, None, None, "needs_review", {
                 "reason": "the decision cites no saved calculator run, so it cannot be re-checked "
                           "deterministically; review it by hand",
                 "trigger": _trigger_label(cause)})
 
-        changed = _apply_change(txns, cause)
+        changed = _apply_changes(txns, earlier + [cause])
         rerun = self.runner.run(decision["ALERT_ID"], changed, inputs.get("params") or {},
                                 parent_run_id=run["RUN_ID"],
-                                hypothesis=[{"watch_cause": _cause_core(cause)}])
+                                hypothesis=[{"watch_cause": _cause_core(c)} for c in earlier + [cause]])
         before_sigs = evaluate_signals(json.loads(run["OUTPUT_JSON"]).get("facts", []))
         after_sigs = evaluate_signals(rerun["facts"])
         v0, v1 = verdict(before_sigs), verdict(after_sigs)
@@ -124,6 +143,7 @@ class DecisionWatch:
         named = self._named_at_decision(decision, cause)
         detail = {
             "disposition": disp, "verdict_before": v0, "verdict_after": v1,
+            "earlier_changes": [_trigger_label(c) for c in earlier],
             "fired_before": [s.signal_id for s in before_sigs if s.fired],
             "fired_after": [s.signal_id for s in after_sigs if s.fired],
             "trigger": _trigger_label(cause), "named_at_decision": named,
@@ -185,26 +205,6 @@ class DecisionWatch:
 
 
 # ── helpers ──────────────────────────────────────────────────────────────────
-def _json(v) -> dict:
-    if isinstance(v, dict):
-        return v
-    try:
-        out = json.loads(v or "{}")
-        return out if isinstance(out, dict) else {}
-    except (TypeError, ValueError):
-        return {}
-
-
-def _json_list(v) -> list:
-    if isinstance(v, list):
-        return v
-    try:
-        out = json.loads(v or "[]")
-        return out if isinstance(out, list) else []
-    except (TypeError, ValueError):
-        return []
-
-
 def _cause_core(cause: dict) -> dict:
     """The identity of a change: what changed, not when it was processed."""
     keys = {"registry_update": ("cause", "item_id", "action", "counterparty", "registry"),
@@ -222,12 +222,18 @@ def _touches(cause: dict, decision: dict, txns: list[dict]) -> bool:
     return False
 
 
-def _apply_change(txns: list[dict], cause: dict) -> list[dict]:
-    if cause["cause"] == "new_transaction":
-        return [dict(t) for t in txns] + [dict(cause["transaction"])]
-    flag = cause["action"] == "flag"
-    return [dict(t, is_flagged=flag) if t.get("counterparty") == cause["counterparty"] else dict(t)
-            for t in txns]
+def _apply_changes(txns: list[dict], causes: list[dict]) -> list[dict]:
+    """The case as it stands after `causes`, in order. Registry state is per counterparty and the
+    latest change wins; it applies to every transaction with that counterparty, including ones
+    that arrived later."""
+    out, flags = [dict(t) for t in txns], {}
+    for c in causes:
+        if c["cause"] == "new_transaction":
+            out.append(dict(c["transaction"]))
+        elif c["cause"] == "registry_update":
+            flags[c["counterparty"]] = c["action"] == "flag"
+    return [dict(t, is_flagged=flags[t.get("counterparty")]) if t.get("counterparty") in flags
+            else t for t in out]
 
 
 def _trigger_label(cause: dict) -> str:
@@ -259,33 +265,51 @@ def _reason(outcome, disp, v0, v1, cause, named) -> str:
 OPEN_OUTCOMES = ("reopened", "needs_review")
 
 
-def alert_reasons(store, alert_id: str) -> list[dict]:
+def reasons_index(store) -> dict:
+    """Everything alert_reasons reads, fetched once (one query per table, not per alert row)."""
+    from collections import defaultdict
+    events = defaultdict(list)
+    for e in store.query("SELECT * FROM DECISION_EVENTS WHERE CAUSE != 'watch_pass' ORDER BY SEQ"):
+        events[e["DECISION_ID"]].append(e)
+    panels = {}
+    for ev in store.query("SELECT * FROM EVIDENCE WHERE TYPE = 'tier_panel' ORDER BY CREATED_AT"):
+        panels[ev["ALERT_ID"]] = ev                      # latest wins
+    closures = defaultdict(list)
+    for c in store.query("SELECT ALERT_ID, CUSTOMER_REF FROM DECISION_LEDGER "
+                         "WHERE DISPOSITION = 'NOT_FILE' ORDER BY SEQ"):
+        closures[c["CUSTOMER_REF"]].append(c["ALERT_ID"])
+    alerts = {a["ALERT_ID"]: a.get("CUSTOMER_REF") for a in
+              store.query("SELECT ALERT_ID, CUSTOMER_REF FROM ALERTS")}
+    return {"standing": {d["ALERT_ID"]: d for d in store.latest_decisions()},
+            "events": events, "panels": panels, "closures": closures, "alerts": alerts}
+
+
+def alert_reasons(store, alert_id: str, index: dict | None = None) -> list[dict]:
     """Why an alert is back in front of the officer: the latest open watch outcome on its
-    standing decision, and earlier closures on the same customer (a ledger count, D1)."""
+    standing decision, a contested tier panel, and earlier closures on the same customer (a
+    ledger count, D1). Pass `index` (reasons_index) when rendering many alerts."""
+    ix = index or reasons_index(store)
     out = []
-    standing = [d for d in store.latest_decisions() if d["ALERT_ID"] == alert_id]
-    if standing:
-        d = standing[0]
-        events = [e for e in store.events_for_decision(d["DECISION_ID"]) if e["CAUSE"] != "watch_pass"]
-        open_ = [e for e in events if e["OUTCOME"] in OPEN_OUTCOMES]
+    d = ix["standing"].get(alert_id)
+    if d is not None:
+        open_ = [e for e in ix["events"].get(d["DECISION_ID"], []) if e["OUTCOME"] in OPEN_OUTCOMES]
         if open_:
             e = open_[-1]
             detail = _json(e["OUTCOME_JSON"])
             label = "Reopened" if e["OUTCOME"] == "reopened" else "Needs review"
             out.append({"kind": e["OUTCOME"], "text": f"{label}: {detail.get('trigger', e['CAUSE'])}",
                         "event_id": e["EVENT_ID"]})
-    panels = store.evidence_for_alert(alert_id, "tier_panel")
-    if panels and _json(panels[-1]["CONTENT_JSON"]).get("contested"):
+    panel = ix["panels"].get(alert_id)
+    if panel and _json(panel["CONTENT_JSON"]).get("contested"):
         # Which way the models lean is not shown here (anti-anchoring); it is in the AI section.
         out.append({"kind": "contested", "text": "Contested: needs your judgement",
-                    "evidence_id": panels[-1]["EVIDENCE_ID"]})
-    alert = store.get_alert(alert_id) or {}
-    cust = (standing[0]["CUSTOMER_REF"] if standing else None) or alert.get("CUSTOMER_REF")
+                    "evidence_id": panel["EVIDENCE_ID"]})
+    cust = (d["CUSTOMER_REF"] if d is not None else None) or ix["alerts"].get(alert_id)
     if cust:
-        closures = [c for c in store.closures_for_customer(cust) if c["ALERT_ID"] != alert_id]
-        if closures:
+        others = [a for a in ix["closures"].get(cust, []) if a != alert_id]
+        if others:
             out.append({"kind": "repeat_closure",
-                        "text": f"{len(closures)} earlier closure(s) on this customer",
+                        "text": f"{len(others)} earlier closure(s) on this customer",
                         "query": "DECISION_LEDGER where CUSTOMER_REF matches and DISPOSITION = "
                                  "NOT_FILE, other alerts"})
     return out

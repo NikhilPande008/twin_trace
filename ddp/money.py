@@ -37,6 +37,13 @@ _MARKER_RE = re.compile(_PRE, re.IGNORECASE)
 _FX = r"\b(?:USD|EUR|GBP|AED|SGD|AUD|CAD|CHF|JPY|CNY|HKD)\b|US\$|\$|€|£|¥"
 _FOREIGN_RE = re.compile(rf"(?:{_FX})\s*\d[\d,.]*|\b\d[\d,.]*\s*(?:{_FX})", re.IGNORECASE)
 _WORDS_RE = re.compile(r"\b(?:lakhs?|lacs?|crores?|rupees?)\b", re.IGNORECASE)
+# A unit word is an amount in words only when a number word sits just before it ("three lakh",
+# "five thousand rupees"); "paid in rupees" or "several lakh" states no figure (code review
+# 2026-10-29: the gate rejected supported narratives that merely named the currency).
+_NUMBER_WORD_RE = re.compile(
+    r"\b(?:one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|"
+    r"fifteen|sixteen|seventeen|eighteen|nineteen|twenty|thirty|forty|fifty|sixty|seventy|"
+    r"eighty|ninety|hundred|thousand|lakhs?|lacs?|crores?|half|quarter|dozen)\b", re.IGNORECASE)
 
 _MULTIPLIER = {"k": 10**3, "thousand": 10**3, "l": 10**5, "lakh": 10**5, "lakhs": 10**5,
                "lac": 10**5, "lacs": 10**5, "cr": 10**7, "crore": 10**7, "crores": 10**7}
@@ -89,6 +96,9 @@ def extract_amounts(text: str) -> list[Mention]:
             spans.append((m.start(), m.start() + len(snippet)))
             out.append(Mention(snippet, m.start(), None, "currency marker without a figure"))
     for m in _WORDS_RE.finditer(text or ""):
+        before = text[max(0, m.start() - 40):m.start()]
+        if not (_NUMBER_WORD_RE.search(before) or re.search(r"\ban?\s+$", before, re.IGNORECASE)):
+            continue        # "paid in rupees", "several lakh": no figure stated; "a crore" is one
         if not any(a <= m.start() < b for a, b in spans):
             # One mention per sentence: "three lakh ninety-five thousand rupees" is one amount.
             a = max(text.rfind(".", 0, m.start()) + 1, m.start() - 40)

@@ -9,7 +9,7 @@ import streamlit as st
 from .. import platform_trace as PT
 from ..bootstrap import build_panel
 from ..palette import NEUTRAL, RECOMMENDATION_COLORS, SUCCESS, ERROR, WARNING
-from .runtime import _load_transactions, get_store
+from .runtime import _load_transactions, get_skills, get_store
 from .widgets import _esc, _kind, badge
 
 TIER_LABEL = {"triage": "Nano", "reasoning": "Super", "disposition": "Ultra"}
@@ -34,7 +34,7 @@ def panel_section(selected: str, alert: dict) -> None:
                "on Nebius Token Factory. Whether they agree is computed from their answers, not "
                "asked of a model.")
     store = get_store()
-    panel = build_panel(store)
+    panel = build_panel(store, session_llm=getattr(get_skills(), "_llm", None))
     if st.button("Run the tier panel (3 models)", key=f"panel_btn_{selected}",
                  disabled=panel is None):
         case = {"customer_kyc": alert["CUSTOMER_PROFILE"],

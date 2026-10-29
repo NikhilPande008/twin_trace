@@ -184,3 +184,24 @@ def test_inspection_replay_renders_on_the_ledger_page_offline():
         assert not at.exception, at.exception
         text = " ".join(m.value for m in at.markdown)
         assert "The record answers" in text and "IQ-01" in text
+
+
+
+def test_tampered_ledger_row_citation_is_rejected(store):
+    from ddp.inspection import verify_citation
+    did = _full(store)
+    assert verify_citation(f"ledger:{did}", record_rows(store, did), "ALERT-16") is None
+    store._exec("DROP TRIGGER LEDGER_NO_UPDATE")                 # simulate an edited file
+    store._exec("UPDATE DECISION_LEDGER SET RATIONALE_TEXT = 'edited' WHERE DECISION_ID = ?", (did,))
+    assert verify_citation(f"ledger:{did}", record_rows(store, did), "ALERT-16") == \
+        "stored content does not match its recorded hash"
+
+
+def test_pending_answers_cite_pending_not_none(store):
+    r = pre_inspect(store, alert_id="ALERT-16", disposition="NOT_FILE",
+                    rationale=DEMO_RATIONALES["ALERT-16"][1], rules_cited=[], poe_assessment=POE,
+                    compute_run_id=None, suspicion_formed_at="2026-10-01",
+                    decision_maker_id="PO-7", decision_maker_basis="self-asserted",
+                    evidence_check={"passed": True, "amounts_checked": 0})
+    refs = [x for res in r["results"] for x in res["rows"]]
+    assert "ledger:pending" in refs and "ledger:None" not in refs

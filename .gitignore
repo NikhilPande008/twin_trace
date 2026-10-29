@@ -59,6 +59,11 @@ htmlcov/
 !/docs/IMPACT.md
 !/docs/CLAIMS_REGISTER.md
 
-# ── External datasets: downloaded by the human, never committed ──────────────
+# ── Local data: never committed ──────────────────────────────────────────────
+# data/ holds the SQLite database (rebuilt by scripts.seed_db) and external datasets such as the
 # IBM/ETH synthetic AML transactions (Kaggle, CDLA-Sharing 1.0) for scripts/run_scale_test.py.
-/data/external/
+/data/
+# Downloads and archives (dataset zips, exported bundles)
+*.zip
+*.tar.gz
+*.parquet

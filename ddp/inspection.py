@@ -26,6 +26,7 @@ import json
 import re
 
 from .compute.runner import reproduce_recorded
+from .store import event_row_hash, json_list, json_obj, ledger_row_hash
 from .enforcement import question_bank
 
 STATUSES = ("answered", "needs_review", "unanswered", "not_applicable")
@@ -34,14 +35,13 @@ INSPECTOR_TIER = "reasoning"        # the Ground of Suspicion is drafted on "dis
 
 
 def _j(v, default):
-    if v is None:
-        return default
-    if isinstance(v, (dict, list)):
-        return v
-    try:
-        return json.loads(v)
-    except (TypeError, ValueError):
-        return default
+    """Decode a JSON column to the type of `default` (dict or list)."""
+    return json_list(v) if isinstance(default, list) else json_obj(v)
+
+
+def _ref(decision: dict) -> str:
+    """Row reference for the decision; a pending (not yet recorded) one has no ID yet."""
+    return f"ledger:{decision.get('DECISION_ID') or 'pending'}"
 
 
 def _ans(status, answer, rows=()):
@@ -71,7 +71,7 @@ def context_for_decision(store, decision: dict, *, pending: bool = False) -> dic
 def rationale_recorded(c):
     text = c["decision"].get("RATIONALE_TEXT") or ""
     words = len(text.split())
-    ref = [f"ledger:{c['decision'].get('DECISION_ID', 'pending')}"]
+    ref = [_ref(c['decision'])]
     if words >= MIN_RATIONALE_WORDS:
         return _ans("answered", f"Recorded reasoning, {words} words.", ref)
     if words:
@@ -111,7 +111,7 @@ def figures_traceable(c):
                     f"transactions and calculator run {run['RUN_ID']}.", [f"run:{run['RUN_ID']}"])
     if check.get("passed"):
         return _ans("answered", f"{check.get('amounts_checked', 0)} amount(s) checked; each is a "
-                    "transaction amount.", [f"ledger:{c['decision'].get('DECISION_ID', 'pending')}"])
+                    "transaction amount.", [_ref(c['decision'])])
     return _ans("unanswered", "No passed evidence check is recorded for the reasoning's amounts.")
 
 
@@ -132,7 +132,7 @@ def calculation_reproduces(c):
 def timeline_recorded(c):
     d = c["decision"]
     formed, left = d.get("SUSPICION_FORMED_AT"), d.get("SLA_DAYS_REMAINING")
-    ref = [f"ledger:{d.get('DECISION_ID', 'pending')}"]
+    ref = [_ref(d)]
     if not formed:
         return _ans("unanswered", "When suspicion was formed is not recorded.")
     if left is not None and int(left) < 0:
@@ -160,7 +160,7 @@ def decision_maker_recorded(c):
     d, meta = c["decision"], c["meta"]
     who = d.get("DECISION_MAKER_ID")
     basis = meta.get("decision_maker_id_basis") or ""
-    ref = [f"ledger:{d.get('DECISION_ID', 'pending')}"]
+    ref = [_ref(d)]
     if not who:
         return _ans("unanswered", "No decision-maker recorded.")
     if basis.startswith("oidc"):
@@ -174,7 +174,7 @@ def factors_assessed(c):
     if not poe:
         return _ans("unanswered", "No factor assessment recorded.")
     insufficient = sum(1 for v in poe.values() if v == "insufficient_data")
-    ref = [f"ledger:{c['decision'].get('DECISION_ID', 'pending')}"]
+    ref = [_ref(c['decision'])]
     if insufficient == len(poe):
         return _ans("unanswered", f"All {len(poe)} factors recorded as insufficient data.", ref)
     return _ans("answered", f"{len(poe)} factors recorded; {insufficient} insufficient data.", ref)
@@ -282,7 +282,8 @@ def record_rows(store, decision_id: str) -> dict[str, dict]:
                                           "DISPOSITION", "RATIONALE_TEXT", "RULES_CITED",
                                           "SUSPICION_FORMED_AT", "DECISION_MAKER_ID",
                                           "POE_FACTORS_ASSESSED")},
-                                      "hash": d["ROW_HASH"]}}
+                                      "hash": d["ROW_HASH"],
+                                      "intact": ledger_row_hash(d, d["PREV_HASH"]) == d["ROW_HASH"]}}
     for e in ctx["evidence"]:
         if e["TYPE"] in ("stress_test", "adverse_media_screen", "computed_fact", "tier_panel"):
             rows[f"evidence:{e['EVIDENCE_ID']}"] = {
@@ -297,7 +298,8 @@ def record_rows(store, decision_id: str) -> dict[str, dict]:
     for e in ctx["events"]:
         rows[f"event:{e['EVENT_ID']}"] = {"kind": "event", "alert_id": e["ALERT_ID"],
                                           "content": _j(e["OUTCOME_JSON"], {}),
-                                          "hash": e["ROW_HASH"]}
+                                          "hash": e["ROW_HASH"],
+                                          "intact": event_row_hash(e, e["PREV_HASH"]) == e["ROW_HASH"]}
     return rows
 
 
@@ -310,6 +312,8 @@ def verify_citation(row_id: str, rows: dict[str, dict], alert_id: str) -> str | 
         return "belongs to another alert"
     raw = row.get("raw")
     if raw is not None and hashlib.sha256(raw.encode()).hexdigest() != row["hash"]:
+        return "stored content does not match its recorded hash"
+    if row.get("intact") is False:          # ledger and event rows: recomputed chain hash
         return "stored content does not match its recorded hash"
     return None
 

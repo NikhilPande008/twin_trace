@@ -1,7 +1,6 @@
 .env
 .git
 data/
-evals/*.json
 __pycache__/
 .pytest_cache/
 .venv/

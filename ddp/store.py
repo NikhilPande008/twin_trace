@@ -525,6 +525,11 @@ class Store:
             self._conn.commit()
         return dict(row, PREV_HASH=prev_hash, ROW_HASH=row_hash, status="recorded")
 
+    def get_event(self, decision_id: str, cause_sha256: str) -> dict | None:
+        rows = self.query("SELECT * FROM DECISION_EVENTS WHERE DECISION_ID = ? AND CAUSE_SHA256 = ?",
+                          (decision_id, cause_sha256))
+        return dict(rows[0], status="already_recorded") if rows else None
+
     def events_for_decision(self, decision_id: str) -> list[dict]:
         return self.query("SELECT * FROM DECISION_EVENTS WHERE DECISION_ID = ? ORDER BY SEQ",
                           (decision_id,))
@@ -679,7 +684,8 @@ def _scalar(v: Any) -> Any:
     return v
 
 
-def _json_list(v: Any) -> list:
+def json_list(v: Any) -> list:
+    """A JSON-text or list column as a list; anything else is []."""
     if v is None:
         return []
     if isinstance(v, list):
@@ -689,3 +695,17 @@ def _json_list(v: Any) -> list:
         return out if isinstance(out, list) else []
     except Exception:
         return []
+
+
+def json_obj(v: Any) -> dict:
+    """A JSON-text or dict column as a dict; anything else is {}."""
+    if isinstance(v, dict):
+        return v
+    try:
+        out = json.loads(v or "{}")
+        return out if isinstance(out, dict) else {}
+    except Exception:
+        return {}
+
+
+_json_list = json_list   # older call sites

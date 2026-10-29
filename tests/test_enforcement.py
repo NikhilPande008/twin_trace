@@ -50,3 +50,10 @@ def test_enforcement_files_are_not_in_the_regulatory_corpus():
     from ddp.bootstrap import open_store
     store = open_store(":memory:")
     assert not store.query("SELECT 1 FROM REGULATORY_CORPUS WHERE RULE_ID LIKE 'FIU-%'")
+
+
+
+def test_loaded_data_cannot_be_altered_by_a_caller():
+    question_bank()["questions"].clear()
+    orders()[0]["findings"].clear()
+    assert question_bank()["questions"] and orders()[0]["findings"]

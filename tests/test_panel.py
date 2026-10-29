@@ -138,3 +138,18 @@ def test_recorded_panel_renders_in_the_ai_section_offline():
         assert not at.exception, at.exception
         text = " ".join(m.value for m in at.markdown)
         assert "CONTESTED" in text and "Models split on" in text
+
+
+
+def test_demo_panel_spends_the_session_budget(monkeypatch):
+    from ddp.bootstrap import build_panel
+    from ddp.config import Settings
+    from ddp.llm import CallBudget
+    monkeypatch.setenv("NEBIUS_API_KEY", "k")
+    monkeypatch.setenv("DDP_DEMO_MODE", "1")
+    s, store = Settings(), open_store(":memory:")
+    assert build_panel(store, s) is None                      # no session budget: no panel
+    budget = CallBudget(FunctionLLM(lambda p: _reply(5)), 2)
+    panel = build_panel(store, s, session_llm=budget)
+    assert panel.make_skills()._llm is budget and panel.make_skills()._llm is budget
+    assert panel.parallel is False

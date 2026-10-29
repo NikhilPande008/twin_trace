@@ -381,14 +381,24 @@ def _pre_inspection(selected, alert, action, narrative, assessment, computed, ch
                     suspicion_ts, ident):
     """T12.10: the inspector questions this decision would leave unanswered, before recording.
     A warning, not a block; the gaps are written into the ledger row."""
-    pre = pre_inspect(
-        get_store(), alert_id=selected, disposition=action, rationale=narrative,
-        rules_cited=get_skills().usable_rule_ids(
-            json.loads(str(alert.get("RULES_CITED") or "[]")))[0],
-        poe_assessment=assessment, compute_run_id=(computed or {}).get("run_id"),
-        suspicion_formed_at=suspicion_ts, decision_maker_id=ident.officer_id or "",
-        decision_maker_basis=ident.basis, evidence_check=dict(
-            passed=check["passed"], amounts_checked=check["fact_coverage"]["amounts_checked"]))
+    run_id = (computed or {}).get("run_id")
+    # Cached per input: IQ-04 re-executes the calculator, which must not happen on every rerun.
+    cache_key = ("_pre_inspection", selected, action, _sha(narrative), run_id, suspicion_ts,
+                 ident.officer_id, ident.basis, _sha(json.dumps(assessment or [], sort_keys=True)),
+                 check["passed"], check["fact_coverage"]["amounts_checked"])
+    cached = st.session_state.get("_pre_inspection_cache")
+    if cached and cached[0] == cache_key:
+        pre = cached[1]
+    else:
+        pre = pre_inspect(
+            get_store(), alert_id=selected, disposition=action, rationale=narrative,
+            rules_cited=get_skills().usable_rule_ids(
+                json.loads(str(alert.get("RULES_CITED") or "[]")))[0],
+            poe_assessment=assessment, compute_run_id=run_id,
+            suspicion_formed_at=suspicion_ts, decision_maker_id=ident.officer_id or "",
+            decision_maker_basis=ident.basis, evidence_check=dict(
+                passed=check["passed"], amounts_checked=check["fact_coverage"]["amounts_checked"]))
+        st.session_state["_pre_inspection_cache"] = (cache_key, pre)
     icon = {"answered": "✅", "needs_review": "🟠", "unanswered": "⛔", "not_applicable": "·"}
     with st.expander(f"Pre-inspection check · the record would answer {pre['answered']} of "
                      f"{pre['asked']} inspector questions", expanded=bool(pre["gaps"])):
