@@ -21,11 +21,11 @@ rules:
     applies_to:
       - all_reporting_entities
     primary_source:
-      document: "FIU-IND inspection guidance (general); industry AML governance practice"
-      url: "https://fiuindia.gov.in"
-      url_verified: false
-      section: "Inspection criteria — STR non-filing (composite)"
-      accessed_date: null
+      document: "FIU-IND Section 13 compliance orders (context: UBI 13/2024, Axis 09/2024, HSBC 19/2022)"
+      url: "https://fiuindia.gov.in/files/Compliance_Orders/orders.html"
+      url_verified: true
+      section: "Compliance orders"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: ASSUMED
     my_synthesis: >
@@ -36,12 +36,15 @@ rules:
       applied their mind to each alert. The product UI must label this as
       "internal governance requirement" not "FIU-IND mandate" until DG-13 is resolved.
     last_verified: null
-    snapshot_date: "2026-09-17"
+    snapshot_date: "2026-10-29"
     gap_notes: >
       DG-13: Obtain a specific FIU-IND inspection report or circular that states this
-      requirement explicitly. The principle is widely recognised in AML practice
-      but a primary FIU-IND citation would significantly strengthen the product's
-      defensibility claim. Until then, label as "internal governance best practice."
+      requirement explicitly. The principle is widely recognised in AML practice but a
+      primary FIU-IND citation would significantly strengthen the product's defensibility
+      claim. Until then, label as "internal governance best practice." 2026-10-29 source
+      review (primary sources fetched and read; approved by the human): orders penalise
+      improper or cursory closure; no circular stating a documentation requirement found
+      (DG-13).
     related_rules:
       - INS-002
       - INS-003
@@ -58,11 +61,11 @@ rules:
     applies_to:
       - all_reporting_entities
     primary_source:
-      document: "PMLA 2002 s.12 (statutory basis); FIU-IND inspection guidelines"
-      url: "https://www.indiacode.nic.in/handle/123456789/2205"
-      url_verified: false
-      section: "s.12 and PO designation requirements"
-      accessed_date: null
+      document: "PML (Maintenance of Records) Rules, 2005 — Rule 2(1)(f), Rule 7(1), Rule 8(2)"
+      url: "https://fiuindia.gov.in/files/AML_Legislation/notification.html"
+      url_verified: true
+      section: "Rules 2(1)(f), 7(1), 8(2)"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: PROVEN
     my_synthesis: >
@@ -70,12 +73,15 @@ rules:
       delegated officer), (b) the timestamp of the suspicion-formation event, and
       (c) the timestamp of the filing or not-file decision. These three fields
       together demonstrate authorised-staff-within-SLA compliance to an inspector.
-    last_verified: null
-    snapshot_date: "2026-09-11"
+    last_verified: "2026-10-29"
+    snapshot_date: "2026-10-29"
     gap_notes: >
-      Verify: does FIU-IND specify a maximum delegation level below the PO?
-      Confirm the exact SLA definition — is it 7 working days from alert creation,
-      from transaction date, or from the PO's personal awareness? See DG-08.
+      Verify: does FIU-IND specify a maximum delegation level below the PO? Confirm the
+      exact SLA definition — is it 7 working days from alert creation, from transaction
+      date, or from the PO's personal awareness? See DG-08. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): PO is 'an officer at the
+      management level' (Rule 2(1)(f)); the RE communicates the PO's name to the Director
+      (Rule 7(1)).
     related_rules:
       - STR-002
       - INS-001
@@ -131,11 +137,11 @@ rules:
     applies_to:
       - all_reporting_entities
     primary_source:
-      document: "FIU-IND quality feedback to Reporting Entities; FIU-IND annual report"
-      url: "https://fiuindia.gov.in"
-      url_verified: false
-      section: "STR quality — templated narratives"
-      accessed_date: null
+      document: "FIU-IND Reporting Format – Introduction, Version 1.14 (2024) — Ground of Suspicion format"
+      url: "https://fiuindia.gov.in/pdfs/quicklinks/Reporting_Format.pdf"
+      url_verified: true
+      section: "GoS format"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: NEEDS-VERIFICATION
     my_synthesis: >
@@ -144,12 +150,14 @@ rules:
       all reports, inspectors flag it. The product generates specific, evidence-cited
       narratives as the antidote to this compliance gap.
     last_verified: null
-    snapshot_date: "2026-09-11"
+    snapshot_date: "2026-10-29"
     gap_notes: >
-      HIGH PRIORITY — DG-09. Locate the specific FIU-IND annual report, inspection
-      finding, or circular that uses this exact language about templated STRs.
-      A verbatim quote from a FIU-IND publication would be the strongest possible
-      product justification. Check FIU-IND Annual Reports 2022–2025.
+      HIGH PRIORITY — DG-09. Locate the specific FIU-IND annual report, inspection finding,
+      or circular that uses this exact language about templated STRs. A verbatim quote from
+      a FIU-IND publication would be the strongest possible product justification. Check
+      FIU-IND Annual Reports 2022–2025. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): no source for penalising
+      templated narratives found (DG-09); v1.14 has a standardised GoS format.
     related_rules:
       - RS-004
       - INS-001

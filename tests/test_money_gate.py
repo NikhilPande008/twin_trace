@@ -62,6 +62,32 @@ def test_invented_total_fails_in_every_form(text):
     assert res["passed"] is False, text
 
 
+@pytest.mark.parametrize("text, value", [
+    ("3.95L", 395000), ("3.95 L", 395000), ("395k", 395000), ("1.2Cr", 12000000),
+])
+def test_bare_shorthand_is_read(text, value):
+    assert [m.value for m in extract_amounts(f"Funds of {text} moved.")] == [Decimal(value)]
+
+
+@pytest.mark.parametrize("text, reason", [
+    ("three lakh ninety-five thousand rupees", "in words"), ("five thousand rupees", "in words"),
+    ("USD 4,750", "other than rupees"), ("$4,750", "other than rupees"),
+    ("4,750 USD", "other than rupees"), ("€300", "other than rupees"),
+])
+def test_words_and_other_currencies_are_reported_not_skipped(text, reason):
+    ms = extract_amounts(f"Funds of {text} moved.")
+    assert len(ms) == 1 and ms[0].value is None and reason in ms[0].reason, ms
+
+
+@pytest.mark.parametrize("text", ["3.95L", "395k", "three lakh ninety-five thousand rupees",
+                                  "USD 4,750", "₹3,95,000"])
+def test_invented_total_fails_in_shorthand_words_and_other_currencies(text):
+    """These forms used to pass the gate (found 2026-10-28); only the ₹ form was blocked."""
+    skills, txns, facts = _alert01()
+    res = skills.validate_gos_evidence(f"Funds totalling {text} moved to handle C.", txns, facts)
+    assert res["passed"] is False, text
+
+
 @pytest.mark.parametrize("text", ["₹3-4 lakh", "₹ thirty lakh"])
 def test_unreadable_amount_fails_the_gate(text):
     skills, txns, facts = _alert01()
@@ -127,3 +153,11 @@ def test_zero_valued_fact_is_supported_but_zero_needs_the_fact():
     skills = CoPilotSkills(None)
     assert skills.validate_gos_evidence(text, txns, facts)["passed"]
     assert not skills.validate_gos_evidence(text, txns)["passed"]
+
+
+
+def test_naming_the_currency_is_not_an_amount():
+    from ddp.money import extract_amounts
+    assert extract_amounts("The salary is paid in rupees; several lakh moved in total.") == []
+    assert [m.value for m in extract_amounts("about a crore moved")] == [None]   # still a figure
+    assert [m.value for m in extract_amounts("five thousand rupees")] == [None]

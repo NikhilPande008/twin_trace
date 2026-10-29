@@ -1,0 +1,64 @@
+# Inspector question bank (T12.3). Questions an FIU-IND inspection could put to a recorded alert
+# decision, derived from the failures FIU-IND has penalised (failures.yaml, fiu_orders.yaml).
+#
+# These are this project's questions, not an FIU-IND checklist. `check` names the deterministic
+# test in ddp/inspection.py that decides whether the RECORD alone answers the question; an answer
+# always points at the rows it rests on (ledger row, evidence row, compute run, corpus rule).
+# The file is hashed when loaded; the hash is stored with every inspection result.
+version: 1
+questions:
+  - id: IQ-01
+    text: "Why was this alert closed or filed? Show the reasoning recorded at the time."
+    codes: [CLOSURE-QUALITY]
+    sources: ["FIU-13/2024-UBI", "FIU-09/2024-AXIS", "FIU-19/2022-HSBC"]
+    check: rationale_recorded
+  - id: IQ-02
+    text: "Which facts does the decision rest on, and what would have changed it?"
+    codes: [CLOSURE-QUALITY]
+    sources: ["FIU-09/2024-AXIS", "FIU-19/2022-HSBC"]
+    check: decision_basis_recorded
+  - id: IQ-03
+    text: "Is every amount in the reasoning traceable to a transaction or a recorded calculation?"
+    codes: [DATA-ACCURACY]
+    sources: ["FIU-08/2019-PNB", "FIU-19/2022-HSBC", "FIU-09/2024-AXIS"]
+    check: figures_traceable
+  - id: IQ-04
+    text: "Can the calculation behind those amounts be re-run and give the same result?"
+    codes: [DATA-ACCURACY]
+    sources: ["FIU-08/2019-PNB", "FIU-09/2024-AXIS"]
+    check: calculation_reproduces
+  - id: IQ-05
+    text: "When was suspicion formed, and was the decision made within the reporting timeline?"
+    codes: [CLOSURE-TIMELINESS, STR-NOT-FILED]
+    sources: ["FIU-09/2024-AXIS", "FIU-07/2024-PPBL", "FIU-08/2019-PNB"]
+    check: timeline_recorded
+  - id: IQ-06
+    text: "Which regulatory provisions was the decision assessed against?"
+    codes: [CLOSURE-QUALITY]
+    sources: ["FIU-19/2022-HSBC"]
+    check: rules_cited_in_corpus
+  - id: IQ-07
+    text: "Who made the decision, and how was their identity established?"
+    codes: [MECHANISM]
+    sources: ["FIU-09/2024-AXIS"]
+    check: decision_maker_recorded
+  - id: IQ-08
+    text: "Were the suspicion-evaluation factors assessed and recorded?"
+    codes: [CLOSURE-QUALITY]
+    sources: ["FIU-09/2024-AXIS", "FIU-13/2024-UBI"]
+    check: factors_assessed
+  - id: IQ-09
+    text: "Was outside information checked, and did that check actually run?"
+    codes: [CDD-ONGOING]
+    sources: ["FIU-13/2024-UBI", "FIU-19/2022-HSBC"]
+    check: external_screen_ran
+  - id: IQ-10
+    text: "How many earlier alerts on this customer were closed, and does this decision account for them?"
+    codes: [REPEAT-CLOSURE]
+    sources: ["FIU-13/2024-UBI"]
+    check: earlier_closures
+  - id: IQ-11
+    text: "Has anything the decision rests on changed since, and was the decision re-checked?"
+    codes: [CLOSURE-QUALITY, MECHANISM]
+    sources: ["FIU-19/2022-HSBC", "FIU-13/2024-UBI"]
+    check: rechecked_since

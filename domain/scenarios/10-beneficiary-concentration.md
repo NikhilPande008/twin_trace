@@ -39,6 +39,8 @@ All five accounts received regular small UPI credits (amounts ₹5,000–₹25,0
 
 **Ingested signals:** [HANDLE-Z] appears in I4C Suspect Registry as flagged in connection with a "cyber fraud — investment scam" scheme, registration date 3 weeks before the first debit to [HANDLE-Z] from any of these accounts.
 
+**Case record in the seed (`ddp/seed_data.py`, 2026-10-28):** 21 UPI debits to HANDLE-Z (marked flagged), split per account as in the table, and 17 small UPI credits from unknown handles (₹5,000–₹25,000), ₹2,64,000 in all, so that credits equal the alert amount. ASSUMED: individual amounts and dates (6 Jul – 3 Sep 2026).
+
 ---
 
 ### 2. Reasoning Chain
@@ -94,11 +96,11 @@ Statutory basis:
 
 (Template for one account; specific facts differ per account — the common elements are the beneficiary concentration and I4C flag.)
 
-Account ACCT-10-3, held by CUST-10-C (retired government clerk, ₹15,000/month pension), was identified through cross-account analysis as one of five accounts at this RE transferring funds to a common UPI handle ([HANDLE-Z]) within a 60-day period. ACCT-10-3 made 5 UPI transfers totalling ₹67,000 to [HANDLE-Z] during this period. [HANDLE-Z] appears in the I4C Suspect Registry as associated with a cyber fraud investment scam, registered 3 weeks before the first transfer from ACCT-10-3.
+Account ACCT-10-3, held by CUST-10-C (retired government clerk, monthly pension), was identified through cross-account analysis as one of five accounts at this RE transferring funds to a common UPI handle ([HANDLE-Z]) within a 60-day period. ACCT-10-3 made 5 UPI transfers to [HANDLE-Z] during this period. [HANDLE-Z] appears in the I4C Suspect Registry as associated with a cyber fraud investment scam, registered 3 weeks before the first transfer from ACCT-10-3.
 
-CUST-10-C's account shows no prior transaction with [HANDLE-Z] or with counterparties of this character (pension + household debits was the 4-year baseline). ₹67,000 represents 4.4× the monthly pension income; no source for the credit inflows (multiple small UPI credits from unknown handles) has been explained.
+CUST-10-C's account shows no prior transaction with [HANDLE-Z] or with counterparties of this character (pension + household debits was the 4-year baseline). These transfers total 4.4× the monthly pension income; no source for the credit inflows (multiple small UPI credits from unknown handles) has been explained.
 
-Cross-account analysis reveals that four additional accounts at this RE — held by individuals with no documented relationship to CUST-10-C — transferred an aggregate ₹1,97,000 to the same [HANDLE-Z] in the same period, for a total of ₹2,64,000 across all five accounts. This beneficiary-concentration pattern (RFI-007) indicates aggregation of funds from dispersed mule accounts to a single criminal endpoint.
+Cross-account analysis reveals that four additional accounts at this RE — held by individuals with no documented relationship to CUST-10-C — transferred funds to the same [HANDLE-Z] in the same period, for a total of ₹2,64,000 across all five accounts. This beneficiary-concentration pattern (RFI-007) indicates aggregation of funds from dispersed mule accounts to a single criminal endpoint.
 
 Suspicion is formed under PMLA 2002 s.12(1)(b) on the basis of: (a) beneficiary concentration across 5 unrelated accounts to a single I4C-flagged handle (RFI-007, RFI-005); (b) credit-then-debit pass-through element per account (RFI-001); (c) income inconsistency (POE Factor 4); (d) beneficiary is a registered fraud suspect (POE Factor 6); and (e) unnecessary structural complexity — 5 unrelated accounts, single destination (POE Factor 9). Reference is made to companion STRs filed for ACCT-10-1, 2, 4, and 5.
 

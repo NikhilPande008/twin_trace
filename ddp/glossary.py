@@ -31,3 +31,31 @@ GLOSSARY = [
     ("SLA", "The 7-working-day window for filing, counted from when suspicion is formed."),
     ("KYC", "Know Your Customer: the identity and profile information the bank holds."),
 ]
+
+# Inline tooltips (T12.14): the short form a reader meets in running text -> its definition.
+TOOLTIPS = {
+    "Principal Officer": GLOSSARY[0][1],
+    "PO": GLOSSARY[0][1],
+    "FIU-IND": GLOSSARY[1][1],
+    "PMLA": GLOSSARY[2][1],
+    "STR": GLOSSARY[3][1],
+    "Ground of Suspicion": GLOSSARY[4][1],
+    "GoS": GLOSSARY[4][1],
+    "Tipping-off": GLOSSARY[5][1],
+    "I4C": GLOSSARY[6][1],
+    "KYC": GLOSSARY[13][1],
+    "SLA": GLOSSARY[12][1],
+}
+
+
+def with_tooltips(escaped_text: str) -> str:
+    """Wrap the first occurrence of each known term in an <abbr> with its definition. Takes text
+    that is ALREADY HTML-escaped and contains no tags."""
+    import html
+    import re
+    out = escaped_text
+    for term in sorted(TOOLTIPS, key=len, reverse=True):
+        pat = re.compile(rf"(?<![\w>-]){re.escape(term)}(?![\w-])")
+        title = html.escape(TOOLTIPS[term], quote=True)
+        out = pat.sub(lambda m: f'<abbr title="{title}">{m.group(0)}</abbr>', out, count=1)
+    return out

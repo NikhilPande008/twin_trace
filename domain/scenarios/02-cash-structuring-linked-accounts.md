@@ -36,6 +36,8 @@ All three accounts receive daily cash deposits over counter for 15 consecutive d
 
 **Note:** No single account crosses the ₹10 lakh CTR threshold in this calendar month. Aggregate across three accounts: ₹4,20,000 — also below ₹10 lakh. However the structuring pattern (sub-threshold, daily, multiple linked accounts, same-day aggregation) is the alert basis.
 
+**Case record in the seed (`ddp/seed_data.py`, 2026-10-28):** 45 daily cash credits (15 days × three accounts) and three NEFT debits on T+16 to ACCT-02-TARGET of ₹1,42,000, ₹1,42,000 and ₹1,34,500 (₹4,18,500). ASSUMED: the per-account split of the T+16 transfer (each account kept a small balance). Dates: deposits 4–18 Aug 2026.
+
 ---
 
 ### 2. Reasoning Chain
@@ -105,7 +107,7 @@ Statutory basis:
 
 Three savings accounts (ACCT-02-A, ACCT-02-B, ACCT-02-C) held at three different branches of this RE — by CUST-02A (daily labourer, ₹10,000/month declared income), CUST-02B (housewife, no declared income), and CUST-02C (student, no declared income) — were identified as linked: all three KYC records disclose the same residential address, though accounts were opened at separate branches over a 45-day window without any branch being aware of the others.
 
-Over 15 consecutive days (T+1 to T+15), all three accounts received daily cash deposits over counter of ₹9,000–₹9,500. No single daily deposit exceeded ₹10,000; the monthly cash total per account was ₹1,35,000–₹1,42,500. On day T+16, all three accounts simultaneously transferred their full balances by NEFT to a single current account (ACCT-02-TARGET) at a different RE, with aggregate funds transferred of approximately ₹4,18,500.
+Over 15 consecutive days (T+1 to T+15), all three accounts received daily cash deposits over counter of ₹9,000–₹9,500. No single daily deposit exceeded ₹9,500; each account received fifteen deposits, ₹4,20,000 across the three accounts. On day T+16, all three accounts simultaneously transferred their full balances by NEFT to a single current account (ACCT-02-TARGET) at a different RE, with aggregate funds transferred of approximately ₹4,18,500.
 
 No declared income source or legitimate business purpose accounts for the cash deposits: CUST-02A's declared income of ₹10,000/month is 7% of the 15-day cash deposit; CUST-02B and CUST-02C have no declared income. The multi-account, multi-branch structure with identical daily deposit amounts and a same-day aggregation event on day 16 is consistent with structuring to avoid transaction monitoring thresholds (RFI-002, corpus) and is unnecessarily complex for any legitimate purpose (POE Factor 9).
 

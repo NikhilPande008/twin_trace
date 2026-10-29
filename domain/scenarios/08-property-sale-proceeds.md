@@ -14,7 +14,7 @@ rules_cited: [STR-001, POE-003, POE-005, POE-006, INS-001]
 **Baseline (months 1–36):** Regular salary credits ₹1,78,000–₹1,90,000/month. SIP investments (₹50,000/month, NEFT to AMC). EMI debit for home loan (₹65,000/month). Household expenses. Occasional large debits for travel or electronics (₹30K–₹1.5L range). Clean, predictable mid-income professional pattern.
 
 **Alert month (month 37):**
-- Day T+1: Credit of ₹75,00,000 (₹75 lakh) via RTGS from "DSK Law Associates — Client Account" (law firm)
+- Day T+1: Credit of ₹75,00,000 (₹75 lakh) via RTGS from "LF-08 Law Associates — Client Account" (law firm)
 - No prior large credits in 36-month history
 - Alert triggered: automated flag on RTGS > ₹50L to savings account
 
@@ -27,6 +27,8 @@ CUST-08 visits the branch with a relationship manager appointment, anticipating 
 4. Capital gains computation sheet (CA-prepared): long-term capital gain declared; Section 54 exemption application noted (reinvestment intent)
 
 **Linked accounts:** The outstanding home loan on the sold property was with a different product (home loan account) at the same RE. The home loan was closed on T−5 from the sale proceeds (₹68L direct disbursement from buyer to this RE's home loan account, separate RTGS — this does not appear in the savings account).
+
+**Case record in the seed (`ddp/seed_data.py`, 2026-10-28):** the ₹75,00,000 RTGS, then a SIP debit (₹50,000) and a credit-card payment (₹38,000). Salary credits are not in the case record. The law firm is renamed LF-08 Law Associates (synthetic). ASSUMED: the two debits. FOR DOMAIN REVIEW: TDS at 1% of ₹75L would be ₹75,000, not the ₹7.5L in item 2.
 
 ---
 
@@ -71,15 +73,15 @@ Documentation assessment:
 
 ### 4. Draft Closure Rationale
 
-Alert triggered by automated RTGS monitoring (credit > ₹50L). STR evaluation conducted by the undersigned PO.
+Alert triggered by automated monitoring of large RTGS credits to savings accounts. STR evaluation conducted by the undersigned PO.
 
-The ₹75,00,000 credit on [T+1] from DSK Law Associates (Client Account) represents the net sale consideration for a residential flat in Koramangala, Bengaluru, sold by CUST-08 under a registered sale deed dated [T−14] (sub-registrar document no. [X]). Documentation verified:
+The ₹75,00,000 credit on [T+1] from LF-08 Law Associates (Client Account) represents the net sale consideration for a residential flat in Koramangala, Bengaluru, sold by CUST-08 under a registered sale deed dated [T−14] (sub-registrar document no. [X]). Documentation verified:
 
-(a) **Registered sale deed:** Gross sale price ₹82,00,000; document registered at [sub-registrar's office]; stamp and registration number confirmed.
+(a) **Registered sale deed:** Gross sale price as stated in the deed; document registered at [sub-registrar's office]; stamp and registration number confirmed.
 
-(b) **Form 16B (buyer TDS certificate):** TDS of ₹7,50,000 (approx. 1% on ₹75L net consideration) deducted and deposited by the buyer. Government-issued; independently verifiable through TRACES.
+(b) **Form 16B (buyer TDS certificate):** TDS on the sale consideration deducted and deposited by the buyer. Government-issued; independently verifiable through TRACES.
 
-(c) **Home loan closure:** CUST-08's outstanding home loan with this RE (account [X]) was closed from the sale proceeds on [T−5]; closure letter on file. The ₹75L credit represents the net proceeds after the direct home-loan repayment of ₹68L (which did not pass through the savings account).
+(c) **Home loan closure:** CUST-08's outstanding home loan with this RE (account [X]) was closed from the sale proceeds on [T−5]; closure letter on file. The ₹75L credit represents the net proceeds after the direct home-loan repayment (which did not pass through the savings account).
 
 (d) **Capital gains computation:** CA-prepared; long-term capital gain declared; Section 54 reinvestment exemption noted. ITR amendment intended.
 

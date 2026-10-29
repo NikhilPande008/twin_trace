@@ -4,6 +4,7 @@ One-command evaluation over the 16 seeded alerts, written to evals/REPORT-<date>
     python -m scripts.run_live_eval --mock        # offline: exercises the harness, no model
     python -m scripts.run_live_eval               # live: needs NEBIUS_API_KEY (Token Factory)
     python -m scripts.run_live_eval --alerts ALERT-01,ALERT-16 --skip-agent
+    python -m scripts.run_live_eval --deterministic   # section 1 only: no model, no key
 
 Sections
   1. Calculator + stress test (deterministic, both modes): signal verdict per alert vs the gold
@@ -14,12 +15,15 @@ Sections
      latency.
 
 In --mock mode sections 2 and 3 run against a scripted model so the harness itself is tested;
-the report is stamped MOCK and its numbers say nothing about Nemotron.
+the report is stamped MOCK and its numbers say nothing about Nemotron. --deterministic runs
+section 1 alone (no model call) and writes REPORT-<date>-deterministic.*, which is evidence
+for section 1 only. Every report records the seed's SHA-256 (ddp.evidence_view.seed_fingerprint).
 """
 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 import time
@@ -29,10 +33,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from ddp.agent import Investigator  # noqa: E402
+from ddp.agent import SYSTEM as AGENT_SYSTEM, Investigator  # noqa: E402
 from ddp.bootstrap import compute_params, open_store  # noqa: E402
 from ddp.compute import ComputeRunner, backend_from_name  # noqa: E402
 from ddp.config import get_settings  # noqa: E402
+from ddp.evidence_view import seed_fingerprint  # noqa: E402
 from ddp.llm import TokenFactoryClient  # noqa: E402
 from ddp.skills import CoPilotSkills  # noqa: E402
 from ddp.stress import StressTester  # noqa: E402
@@ -87,6 +92,8 @@ def _turn(calls):
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--mock", action="store_true")
+    ap.add_argument("--deterministic", action="store_true",
+                    help="calculator and stress test only: no model call, no key needed")
     ap.add_argument("--alerts", default="")
     ap.add_argument("--skip-agent", action="store_true")
     ap.add_argument("--skip-assessment", action="store_true")
@@ -96,12 +103,14 @@ def main(argv=None) -> int:
     args = ap.parse_args(argv)
 
     settings = get_settings()
-    if not args.mock and not settings.llm_configured:
+    if args.deterministic:
+        args.skip_assessment = args.skip_agent = True
+    if not args.mock and not args.deterministic and not settings.llm_configured:
         print("NEBIUS_API_KEY not set. Use --mock to exercise the harness offline.")
         return 2
     store = open_store(":memory:")
     runner = ComputeRunner(store, backend_from_name(settings.compute_backend))
-    llm = MockLLM() if args.mock else TokenFactoryClient(settings)
+    llm = MockLLM() if args.mock or args.deterministic else TokenFactoryClient(settings)
     skills = CoPilotSkills(store, llm=llm)
     tester = StressTester(runner, store)
     evidence_source = None
@@ -155,12 +164,16 @@ def main(argv=None) -> int:
         rows.append(row)
         print(json.dumps(row, default=str))
 
-    mode = "mock" if args.mock else "live"
+    mode = "mock" if args.mock else ("deterministic" if args.deterministic else "live")
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     stamp = started.strftime("%Y-%m-%d")
     (out / f"REPORT-{stamp}-{mode}.json").write_text(json.dumps(
-        {"mode": mode, "started_utc": started.isoformat(), "models": settings.models,
+        {"mode": mode, "started_utc": started.isoformat(), "seed_sha256": seed_fingerprint(),
+         "agent_prompt_sha256": hashlib.sha256(AGENT_SYSTEM.encode()).hexdigest(),
+         "stress_engine_sha256": hashlib.sha256(
+             (ROOT / "ddp" / "stress" / "engine.py").read_bytes()).hexdigest(),
+         "models": settings.models if mode != "deterministic" else {},
          "tavily": tavily_state,
          "base_url": settings.base_url, "compute_backend": settings.compute_backend,
          "rows": rows}, indent=1, default=str))
@@ -178,9 +191,15 @@ def render(rows, mode, started, settings, tavily_state="not injected") -> str:
     if mode == "mock":
         lines += ["> **MOCK RUN.** Model calls were scripted to test the harness. Sections 2–3 "
                   "say nothing about Nemotron. Do not quote these numbers.", ""]
+    if mode == "deterministic":
+        lines += ["> **DETERMINISTIC RUN.** Calculator and stress test only; no model was called.",
+                  ""]
     lines += [f"- Alerts: {n} (all synthetic) · compute backend: `{settings.compute_backend}`",
-              f"- Models: `{json.dumps(settings.models)}`",
-              f"- Tavily adapter in the agent: **{tavily_state}**", "",
+              f"- Seed SHA-256: `{seed_fingerprint()}`"]
+    if mode != "deterministic":
+        lines += [f"- Models: `{json.dumps(settings.models)}`",
+                  f"- Tavily adapter in the agent: **{tavily_state}**"]
+    lines += ["",
               "## 1. Calculator and stress test (deterministic)", "",
               f"Gold FILE alerts whose calculator signals are HIGH: **{hi_file} of {gold_file}**. "
               "The rest rest on evidence the calculator does not see (PEP status, narrative, "
@@ -213,7 +232,8 @@ def render(rows, mode, started, settings, tavily_state="not injected") -> str:
         lines += [f"| {r['alert_id']} | {r['gold']} | {r['agent']} | {r.get('agent_disp') or '—'} "
                   f"| {r['agent_steps']} | {r['agent_rejections']} | {r['agent_tokens']} | "
                   f"{r['agent_s']} |" for r in rows]
-    lines += ["", "Reproduce: `python -m scripts.run_live_eval" + (" --mock" if mode == "mock" else "")
+    flag = {"mock": " --mock", "deterministic": " --deterministic"}.get(mode, "")
+    lines += ["", "Reproduce: `python -m scripts.run_live_eval" + flag
               + "`. Raw rows in the matching .json file.", ""]
     return "\n".join(lines)
 

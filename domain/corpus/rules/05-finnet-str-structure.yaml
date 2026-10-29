@@ -16,20 +16,24 @@ rules:
     applies_to:
       - all_reporting_entities
     primary_source:
-      document: "FINnet Reporting Format Guide / FINGate 2.0 — STR schema"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "STR — mandatory structure"
-      accessed_date: null
+      document: "FIU-IND Reporting Format – Introduction, Version 1.14 (2024); FINGate 2.0 Reports manual v1.6"
+      url: "https://fiuindia.gov.in/pdfs/quicklinks/Reporting_Format.pdf"
+      url_verified: true
+      section: "Reporting format introduction"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: PROVEN
     my_synthesis: >
       The 3-part structure is the fundamental schema. The product targets Part (c):
       the Ground of Suspicion. Parts (a) and (b) feed the context for generating
       a defensible, non-templated Part (c) narrative.
-    last_verified: null
-    snapshot_date: "2026-09-11"
-    gap_notes: "Confirm FINGate 2.0 retains exactly this 3-part structure. Verify exact field names in the current portal."
+    last_verified: "2026-10-29"
+    snapshot_date: "2026-10-29"
+    gap_notes: >
+      Confirm FINGate 2.0 retains exactly this 3-part structure. Verify exact field names in
+      the current portal. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): v1.14 states STRs have three
+      parts: KYC profile, transaction details and ground of suspicion.
     related_rules:
       - RS-002
       - RS-003
@@ -44,11 +48,11 @@ rules:
     applies_to:
       - all_reporting_entities
     primary_source:
-      document: "FINnet Reporting Format Guide / FINGate 2.0"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "STR Part (a) — KYC Profile fields"
-      accessed_date: null
+      document: "FIU-IND Reporting Format – Introduction, Version 1.14 (2024) — §2.2.1 KYC formats"
+      url: "https://fiuindia.gov.in/pdfs/quicklinks/Reporting_Format.pdf"
+      url_verified: true
+      section: "§2.2.1 KYC formats"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: ASSUMED
     my_synthesis: >
@@ -57,8 +61,12 @@ rules:
       customer risk, income level). Inconsistencies between the KYC profile and the
       transaction details are the primary source of suspicion narratives.
     last_verified: null
-    snapshot_date: "2026-09-11"
-    gap_notes: "Obtain exact FINGate 2.0 field list for KYC Part. PAN/Aadhaar linkage requirements may have changed post-PMLA 2023 amendment."
+    snapshot_date: "2026-10-29"
+    gap_notes: >
+      Obtain exact FINGate 2.0 field list for KYC Part. PAN/Aadhaar linkage requirements may
+      have changed post-PMLA 2023 amendment. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): KYC format sections found; the
+      field list was not compared line by line.
     related_rules:
       - RS-001
       - POE-001
@@ -73,11 +81,11 @@ rules:
     applies_to:
       - all_reporting_entities
     primary_source:
-      document: "FINnet Reporting Format Guide / FINGate 2.0"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "STR Part (b) — Transaction Detail fields"
-      accessed_date: null
+      document: "FIU-IND Reporting Format – Introduction, Version 1.14 (2024) — §2.2.2 Transaction formats"
+      url: "https://fiuindia.gov.in/pdfs/quicklinks/Reporting_Format.pdf"
+      url_verified: true
+      section: "§2.2.2 Transaction formats"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: ASSUMED
     my_synthesis: >
@@ -86,8 +94,12 @@ rules:
       amounts, counterparties. Generic narratives that don't reference specific
       transactions from Part (b) are a FIU-IND quality failure.
     last_verified: null
-    snapshot_date: "2026-09-11"
-    gap_notes: "Verify exact field list for Part (b) in current FINGate 2.0. Check if UPI / IMPS / RTGS channel codes have been added."
+    snapshot_date: "2026-10-29"
+    gap_notes: >
+      Verify exact field list for Part (b) in current FINGate 2.0. Check if UPI / IMPS /
+      RTGS channel codes have been added. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): transaction format sections
+      found; the field list was not compared line by line.
     related_rules:
       - RS-001
       - RS-004
@@ -103,11 +115,11 @@ rules:
     applies_to:
       - all_reporting_entities
     primary_source:
-      document: "FINnet Reporting Format Guide v2.2; FIU-IND quality feedback circulars"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "STR Part (c) — Ground of Suspicion"
-      accessed_date: null
+      document: "FIU-IND Reporting Format – Introduction, Version 1.14 (2024) — Ground of Suspicion format (Table 23, GS1)"
+      url: "https://fiuindia.gov.in/pdfs/quicklinks/Reporting_Format.pdf"
+      url_verified: true
+      section: "GoS format, Table 23"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: PROVEN
     my_synthesis: >
@@ -116,12 +128,15 @@ rules:
       red-flag indicator(s) triggered, and why alternative explanations were
       rejected. FIU-IND specifically penalises templated narratives in inspection
       findings.
-    last_verified: null
-    snapshot_date: "2026-09-11"
+    last_verified: "2026-10-29"
+    snapshot_date: "2026-10-29"
     gap_notes: >
-      Verify the exact FIU-IND language around templated narratives. Obtain a sample
-      FIU-IND quality feedback circular to cite in the product UI. This is the
-      highest-value primary source to locate.
+      Verify the exact FIU-IND language around templated narratives. Obtain a sample FIU-IND
+      quality feedback circular to cite in the product UI. This is the highest-value primary
+      source to locate. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): v1.14: the GoS is mandatory
+      only for STRs and has a standardised format; the 'quality feedback circulars' part is
+      unverified.
     related_rules:
       - RS-001
       - INS-004
@@ -150,11 +165,11 @@ rules:
       entity_types: [banking_companies, financial_institutions, NBFCs]
       excludes: [virtual_asset_service_providers, international_jurisdictions]
     primary_source:
-      document: "FIU-IND Reporting Format Guide v2.2 (composite); PMLA 2002; RBI KYC Master Direction"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "PO evaluation framework — compiled from multiple sources"
-      accessed_date: null
+      document: "Product-compiled framework (DG-19) from PMLA 2002, the PML Rules and the RBI KYC MD; not an FIU-IND list"
+      url: "https://fiuindia.gov.in/pdfs/quicklinks/Reporting_Format.pdf"
+      url_verified: true
+      section: "GoS format (context only)"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: ASSUMED
     my_synthesis: >
@@ -166,13 +181,13 @@ rules:
       "structured assessment framework (product-compiled; primary-source
       confirmation pending)" and must NOT state this is a mandated FIU-IND list.
     last_verified: null
-    snapshot_date: "2026-09-17"
+    snapshot_date: "2026-10-29"
     gap_notes: >
-      DG-19 (new): Verify whether FIU-IND RFG v2.2 enumerates exactly these 11
-      factors verbatim as a canonical suspicion-assessment list, or whether the
-      product's 11-factor framework is a synthesis from multiple guidance documents.
-      Until confirmed, the product must label this as a product-compiled framework,
-      not a mandated FIU-IND standard.
+      DG-19 (new): Verify whether FIU-IND RFG v2.2 enumerates exactly these 11 factors
+      verbatim as a canonical suspicion-assessment list, or whether the product's 11-factor
+      framework is a synthesis from multiple guidance documents. Until confirmed, the
+      product must label this as a product-compiled framework, not a mandated FIU-IND
+      standard. 2026-10-29 source review (primary sources fetched and read; approved by the human): no 11-factor list found in the Reporting Format Guide v2.2 or v1.14.
     related_rules:
       - POE-002
       - POE-003
@@ -195,11 +210,11 @@ rules:
     applies_to:
       - all_reporting_entities
     primary_source:
-      document: "FIU-IND Reporting Format Guide v2.2"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "PO evaluation factor 1"
-      accessed_date: null
+      document: "Product-compiled framework (DG-19); not an FIU-IND list. Context: FIU-IND Reporting Format – Introduction, Version 1.14 (2024) GoS format"
+      url: "https://fiuindia.gov.in/pdfs/quicklinks/Reporting_Format.pdf"
+      url_verified: true
+      section: "GoS format (context only)"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: ASSUMED
     my_synthesis: >
@@ -208,8 +223,12 @@ rules:
       matches large turnover passes. The KYC occupation field directly feeds
       this evaluation.
     last_verified: null
-    snapshot_date: "2026-09-11"
-    gap_notes: "Verify exact factor name and description from FIU-IND RFG v2.2."
+    snapshot_date: "2026-10-29"
+    gap_notes: >
+      Verify exact factor name and description from FIU-IND RFG v2.2. 2026-10-29 source
+      review (primary sources fetched and read; approved by the human): no factor list found in
+      the Reporting Format Guide v2.2 or v1.14; the earlier 'Reporting Format Guide v2.2'
+      attribution is withdrawn.
     related_rules:
       - POE-001
       - RS-002
@@ -223,19 +242,23 @@ rules:
     applies_to:
       - all_reporting_entities
     primary_source:
-      document: "FIU-IND Reporting Format Guide v2.2"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "PO evaluation factor 2"
-      accessed_date: null
+      document: "Product-compiled framework (DG-19); not an FIU-IND list. Context: FIU-IND Reporting Format – Introduction, Version 1.14 (2024) GoS format"
+      url: "https://fiuindia.gov.in/pdfs/quicklinks/Reporting_Format.pdf"
+      url_verified: true
+      section: "GoS format (context only)"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: ASSUMED
     my_synthesis: >
       Dormant account → sudden activity (RFI-003) is a classic failure of this factor.
       Historical baseline is the reference; the deviation is the suspicion signal.
     last_verified: null
-    snapshot_date: "2026-09-11"
-    gap_notes: "Verify exact factor name from FIU-IND RFG v2.2."
+    snapshot_date: "2026-10-29"
+    gap_notes: >
+      Verify exact factor name from FIU-IND RFG v2.2. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): no factor list found in the
+      Reporting Format Guide v2.2 or v1.14; the earlier 'Reporting Format Guide v2.2'
+      attribution is withdrawn.
     related_rules:
       - POE-001
       - RFI-003
@@ -249,11 +272,11 @@ rules:
     applies_to:
       - all_reporting_entities
     primary_source:
-      document: "FIU-IND Reporting Format Guide v2.2; RBI Master Direction on KYC"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "PO evaluation factor 3"
-      accessed_date: null
+      document: "Product-compiled framework (DG-19); not an FIU-IND list. Context: FIU-IND Reporting Format – Introduction, Version 1.14 (2024) GoS format"
+      url: "https://fiuindia.gov.in/pdfs/quicklinks/Reporting_Format.pdf"
+      url_verified: true
+      section: "GoS format (context only)"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: ASSUMED
     my_synthesis: >
@@ -262,8 +285,13 @@ rules:
       a High-risk pattern, the ground of suspicion should reference the mismatch
       between the assigned category and the observed behaviour.
     last_verified: null
-    snapshot_date: "2026-09-11"
-    gap_notes: "Verify exact factor name and confirm risk-category taxonomy (H/M/L) in current FIU-IND/RBI guidance."
+    snapshot_date: "2026-10-29"
+    gap_notes: >
+      Verify exact factor name and confirm risk-category taxonomy (H/M/L) in current
+      FIU-IND/RBI guidance. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): no factor list found in the
+      Reporting Format Guide v2.2 or v1.14; the earlier 'Reporting Format Guide v2.2'
+      attribution is withdrawn.
     related_rules:
       - POE-001
       - RS-002
@@ -277,11 +305,11 @@ rules:
     applies_to:
       - all_reporting_entities
     primary_source:
-      document: "FIU-IND Reporting Format Guide v2.2"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "PO evaluation factor 4"
-      accessed_date: null
+      document: "Product-compiled framework (DG-19); not an FIU-IND list. Context: FIU-IND Reporting Format – Introduction, Version 1.14 (2024) GoS format"
+      url: "https://fiuindia.gov.in/pdfs/quicklinks/Reporting_Format.pdf"
+      url_verified: true
+      section: "GoS format (context only)"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: ASSUMED
     my_synthesis: >
@@ -290,8 +318,12 @@ rules:
       Income level feeds directly into the "why is this amount inconsistent?" part
       of the Ground of Suspicion.
     last_verified: null
-    snapshot_date: "2026-09-11"
-    gap_notes: "Verify exact factor name from FIU-IND RFG v2.2."
+    snapshot_date: "2026-10-29"
+    gap_notes: >
+      Verify exact factor name from FIU-IND RFG v2.2. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): no factor list found in the
+      Reporting Format Guide v2.2 or v1.14; the earlier 'Reporting Format Guide v2.2'
+      attribution is withdrawn.
     related_rules:
       - POE-001
 
@@ -304,11 +336,11 @@ rules:
     applies_to:
       - all_reporting_entities
     primary_source:
-      document: "FIU-IND Reporting Format Guide v2.2"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "PO evaluation factor 5"
-      accessed_date: null
+      document: "Product-compiled framework (DG-19); not an FIU-IND list. Context: FIU-IND Reporting Format – Introduction, Version 1.14 (2024) GoS format"
+      url: "https://fiuindia.gov.in/pdfs/quicklinks/Reporting_Format.pdf"
+      url_verified: true
+      section: "GoS format (context only)"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: ASSUMED
     my_synthesis: >
@@ -316,8 +348,12 @@ rules:
       (income level: passes) may still fail this factor if the source of a specific
       large credit cannot be explained.
     last_verified: null
-    snapshot_date: "2026-09-11"
-    gap_notes: "Verify exact factor name from FIU-IND RFG v2.2."
+    snapshot_date: "2026-10-29"
+    gap_notes: >
+      Verify exact factor name from FIU-IND RFG v2.2. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): no factor list found in the
+      Reporting Format Guide v2.2 or v1.14; the earlier 'Reporting Format Guide v2.2'
+      attribution is withdrawn.
     related_rules:
       - POE-001
 
@@ -330,11 +366,11 @@ rules:
     applies_to:
       - all_reporting_entities
     primary_source:
-      document: "FIU-IND Reporting Format Guide v2.2"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "PO evaluation factor 6"
-      accessed_date: null
+      document: "Product-compiled framework (DG-19); not an FIU-IND list. Context: FIU-IND Reporting Format – Introduction, Version 1.14 (2024) GoS format"
+      url: "https://fiuindia.gov.in/pdfs/quicklinks/Reporting_Format.pdf"
+      url_verified: true
+      section: "GoS format (context only)"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: ASSUMED
     my_synthesis: >
@@ -342,8 +378,12 @@ rules:
       If all outgoing transfers from multiple unrelated accounts flow to the same
       beneficiary, that must be addressed in the Ground of Suspicion.
     last_verified: null
-    snapshot_date: "2026-09-11"
-    gap_notes: "Verify exact factor name from FIU-IND RFG v2.2."
+    snapshot_date: "2026-10-29"
+    gap_notes: >
+      Verify exact factor name from FIU-IND RFG v2.2. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): no factor list found in the
+      Reporting Format Guide v2.2 or v1.14; the earlier 'Reporting Format Guide v2.2'
+      attribution is withdrawn.
     related_rules:
       - POE-001
       - RFI-007
@@ -357,19 +397,23 @@ rules:
     applies_to:
       - all_reporting_entities
     primary_source:
-      document: "FIU-IND Reporting Format Guide v2.2"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "PO evaluation factor 7"
-      accessed_date: null
+      document: "Product-compiled framework (DG-19); not an FIU-IND list. Context: FIU-IND Reporting Format – Introduction, Version 1.14 (2024) GoS format"
+      url: "https://fiuindia.gov.in/pdfs/quicklinks/Reporting_Format.pdf"
+      url_verified: true
+      section: "GoS format (context only)"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: ASSUMED
     my_synthesis: >
       The pass-through pattern (RFI-001) is both a frequency and a velocity concern.
       Multiple credits and near-total debits in rapid succession is a frequency anomaly.
     last_verified: null
-    snapshot_date: "2026-09-11"
-    gap_notes: "Verify exact factor name from FIU-IND RFG v2.2."
+    snapshot_date: "2026-10-29"
+    gap_notes: >
+      Verify exact factor name from FIU-IND RFG v2.2. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): no factor list found in the
+      Reporting Format Guide v2.2 or v1.14; the earlier 'Reporting Format Guide v2.2'
+      attribution is withdrawn.
     related_rules:
       - POE-001
       - RFI-001
@@ -383,11 +427,11 @@ rules:
     applies_to:
       - all_reporting_entities
     primary_source:
-      document: "FIU-IND Reporting Format Guide v2.2"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "PO evaluation factor 8"
-      accessed_date: null
+      document: "Product-compiled framework (DG-19); not an FIU-IND list. Context: FIU-IND Reporting Format – Introduction, Version 1.14 (2024) GoS format"
+      url: "https://fiuindia.gov.in/pdfs/quicklinks/Reporting_Format.pdf"
+      url_verified: true
+      section: "GoS format (context only)"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: ASSUMED
     my_synthesis: >
@@ -396,8 +440,12 @@ rules:
       transaction by a large exporter may be unremarkable; the same amount in a
       dormant savings account is a red flag.
     last_verified: null
-    snapshot_date: "2026-09-11"
-    gap_notes: "Verify exact factor name from FIU-IND RFG v2.2."
+    snapshot_date: "2026-10-29"
+    gap_notes: >
+      Verify exact factor name from FIU-IND RFG v2.2. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): no factor list found in the
+      Reporting Format Guide v2.2 or v1.14; the earlier 'Reporting Format Guide v2.2'
+      attribution is withdrawn.
     related_rules:
       - POE-001
 
@@ -411,11 +459,11 @@ rules:
     applies_to:
       - all_reporting_entities
     primary_source:
-      document: "FIU-IND Reporting Format Guide v2.2"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "PO evaluation factor 9"
-      accessed_date: null
+      document: "Product-compiled framework (DG-19); not an FIU-IND list. Context: FIU-IND Reporting Format – Introduction, Version 1.14 (2024) GoS format"
+      url: "https://fiuindia.gov.in/pdfs/quicklinks/Reporting_Format.pdf"
+      url_verified: true
+      section: "GoS format (context only)"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: ASSUMED
     my_synthesis: >
@@ -424,8 +472,12 @@ rules:
       hops, this factor is triggered. The ground of suspicion should articulate
       why the complexity serves no legitimate commercial purpose.
     last_verified: null
-    snapshot_date: "2026-09-11"
-    gap_notes: "Verify exact factor name from FIU-IND RFG v2.2."
+    snapshot_date: "2026-10-29"
+    gap_notes: >
+      Verify exact factor name from FIU-IND RFG v2.2. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): no factor list found in the
+      Reporting Format Guide v2.2 or v1.14; the earlier 'Reporting Format Guide v2.2'
+      attribution is withdrawn.
     related_rules:
       - POE-001
       - RFI-007
@@ -440,11 +492,11 @@ rules:
     applies_to:
       - all_reporting_entities
     primary_source:
-      document: "FIU-IND Reporting Format Guide v2.2; FATF public statement"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "PO evaluation factor 10"
-      accessed_date: null
+      document: "Product-compiled framework (DG-19); not an FIU-IND list. Context: FIU-IND Reporting Format – Introduction, Version 1.14 (2024) GoS format"
+      url: "https://fiuindia.gov.in/pdfs/quicklinks/Reporting_Format.pdf"
+      url_verified: true
+      section: "GoS format (context only)"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: ASSUMED
     my_synthesis: >
@@ -453,11 +505,12 @@ rules:
       RBI may also publish its own list. The product should maintain a current
       jurisdiction risk list linked to FATF updates.
     last_verified: null
-    snapshot_date: "2026-09-11"
+    snapshot_date: "2026-10-29"
     gap_notes: >
-      Verify FATF list currency (updated three times a year). Verify whether RBI
-      maintains a separate India-specific jurisdiction risk list. Verify exact factor
-      name from FIU-IND RFG v2.2.
+      Verify FATF list currency (updated three times a year). Verify whether RBI maintains a
+      separate India-specific jurisdiction risk list. Verify exact factor name from FIU-IND
+      RFG v2.2. 2026-10-29 source review (primary sources fetched and read; approved by the human): no factor list found in the Reporting Format Guide v2.2 or v1.14; the
+      earlier 'Reporting Format Guide v2.2' attribution is withdrawn.
     related_rules:
       - POE-001
       - RFI-008
@@ -471,11 +524,11 @@ rules:
     applies_to:
       - all_reporting_entities
     primary_source:
-      document: "FIU-IND Reporting Format Guide v2.2; RBI Master Direction on KYC"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "PO evaluation factor 11"
-      accessed_date: null
+      document: "Product-compiled framework (DG-19); not an FIU-IND list. Context: FIU-IND Reporting Format – Introduction, Version 1.14 (2024) GoS format"
+      url: "https://fiuindia.gov.in/pdfs/quicklinks/Reporting_Format.pdf"
+      url_verified: true
+      section: "GoS format (context only)"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: ASSUMED
     my_synthesis: >
@@ -484,8 +537,13 @@ rules:
       that refusal is itself a red flag. The product should flag KYC gaps as a
       separate compliance signal alongside disposition decisions.
     last_verified: null
-    snapshot_date: "2026-09-11"
-    gap_notes: "Verify exact factor name from FIU-IND RFG v2.2. Confirm 'KYC availability' vs 'KYC completeness' terminology."
+    snapshot_date: "2026-10-29"
+    gap_notes: >
+      Verify exact factor name from FIU-IND RFG v2.2. Confirm 'KYC availability' vs 'KYC
+      completeness' terminology. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): no factor list found in the
+      Reporting Format Guide v2.2 or v1.14; the earlier 'Reporting Format Guide v2.2'
+      attribution is withdrawn.
     related_rules:
       - POE-001
       - RS-002

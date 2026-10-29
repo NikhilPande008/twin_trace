@@ -32,6 +32,8 @@ Total inward remittances over 2 months: ₹30,90,000 (₹30.9 lakh). This is aga
 
 **No response from the customer. KYC is effectively stale and unverifiable.**
 
+**Case record in the seed (`ddp/seed_data.py`, 2026-10-28):** the four inward SWIFT credits (July–August 2026) and two electricity auto-debits (₹2,400). Pension and rent credits are not in the case record. ASSUMED: the auto-debits and all dates.
+
 ---
 
 ### 2. Reasoning Chain

@@ -1,0 +1,90 @@
+{
+ "mode": "live",
+ "started_utc": "2026-10-28T13:56:24.314732+00:00",
+ "dataset": "HOLDOUT-v1.json",
+ "dataset_sha256": "e7aaad6ae4d9b05ec35ffbd671d65ec49668b54b3c22e506ed33290d9d781a88",
+ "agent_prompt_sha256": "da5a3d5672978f4d1b8b4eef6e755205de667a1a78a4b1bda8562033b8186049",
+ "git_rev": "0bac93c+uncommitted",
+ "models": {
+  "triage": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+  "reasoning": "nvidia/nemotron-3-super-120b-a12b",
+  "disposition": "nvidia/Nemotron-3-Ultra-550b-a55b"
+ },
+ "summary": {
+  "cases": 6,
+  "submitted": 6,
+  "clear_agree": 4,
+  "clear_cases": 4,
+  "contested": 2,
+  "contested_filed": 2,
+  "contested_dispositions": {
+   "FILE": 2,
+   "NOT_FILE": 0,
+   "NEEDS_MORE_INFO": 0,
+   "null": 0
+  },
+  "rejections": 3
+ },
+ "rows": [
+  {
+   "case": "H-01",
+   "expected": "FILE",
+   "agent": "submitted",
+   "agent_disp": "FILE",
+   "agent_steps": 6,
+   "agent_rejections": 1,
+   "agent_tokens": 16554,
+   "agent_s": 30.373
+  },
+  {
+   "case": "H-02",
+   "expected": "NOT_FILE",
+   "agent": "submitted",
+   "agent_disp": "NOT_FILE",
+   "agent_steps": 5,
+   "agent_rejections": 0,
+   "agent_tokens": 11132,
+   "agent_s": 15.286
+  },
+  {
+   "case": "H-03",
+   "expected": "CONTESTED",
+   "agent": "submitted",
+   "agent_disp": "FILE",
+   "agent_steps": 5,
+   "agent_rejections": 0,
+   "agent_tokens": 10539,
+   "agent_s": 13.106
+  },
+  {
+   "case": "H-04",
+   "expected": "FILE",
+   "agent": "submitted",
+   "agent_disp": "FILE",
+   "agent_steps": 7,
+   "agent_rejections": 2,
+   "agent_tokens": 25394,
+   "agent_s": 25.292
+  },
+  {
+   "case": "H-05",
+   "expected": "CONTESTED",
+   "agent": "submitted",
+   "agent_disp": "FILE",
+   "agent_steps": 5,
+   "agent_rejections": 0,
+   "agent_tokens": 11481,
+   "agent_s": 11.062
+  },
+  {
+   "case": "H-06",
+   "expected": "NOT_FILE",
+   "agent": "submitted",
+   "agent_disp": "NOT_FILE",
+   "agent_steps": 5,
+   "agent_rejections": 0,
+   "agent_tokens": 11552,
+   "agent_s": 11.512
+  }
+ ]
+}

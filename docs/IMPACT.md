@@ -18,6 +18,46 @@ not found). Nothing here is a measured result of this product; those are in
 Not used: other mule-account and prevented-loss figures found in explainers differ from the above and
 were not reconciled, so they are left out.
 
+## 1b. What FIU-IND has penalised banks for (SOURCED, read 2026-10-28)
+
+Seven Section 13 PMLA orders against banks and payments banks were read page by page on
+2026-10-28. Each published summary carries FIU-IND's own disclaimer that it is representational
+and is not a precedent. The findings are coded in
+[`domain/enforcement/fiu_orders.yaml`](../domain/enforcement/fiu_orders.yaml), and the failure
+taxonomy with what Twin Trace does about each failure is in
+[`failures.yaml`](../domain/enforcement/failures.yaml). Orders read:
+Union Bank of India 13/2024 and 01/2025, Axis Bank 09/2024, Paytm Payments Bank 07/2024, Fino
+Payments Bank 01/2024, HSBC 19/2022 and Punjab National Bank 8/2019.
+
+| Failure (coded from the orders) | Orders citing it, of 7 | Twin Trace |
+|---|---|---|
+| No effective internal mechanism to detect and report suspicious transactions | 6 | PARTIAL: alert generation is upstream; the ledger records how each alert was handled |
+| Suspicious transactions not reported, or late or inaccurate | 6 | PARTIAL: defensible drafts; the officer decides and files |
+| Ongoing or enhanced due diligence not done | 5 | GAP |
+| **Alerts closed improperly, cursorily or without application of mind** | **3** (UBI 2024, Axis 2024, HSBC 2022) | **ADDRESSED**: a rationale is required, figures are gated, the stress test names the facts a closure rests on, and closures are re-checked when those facts change |
+| Incorrect or disorganised figures or data supplied to FIU-IND | 3 (PNB 2019, HSBC 2022, Axis 2024) | ADDRESSED: calculator of record, decision package export |
+| Threshold reports missing or wrong | 2 | GAP |
+| Many alerts on one account, each closed cursorily | 1 (UBI 2024, a direction) | ADDRESSED: earlier closures on the same customer are counted and shown |
+| Alerts not closed within a reasonable period | 1 (Axis 2024) | PARTIAL: SLA clock from suspicion formed |
+
+What this establishes and what it does not:
+
+- **SOURCED:** FIU-IND has penalised banks for how alerts were closed, not only for reports that
+  were never filed. The Axis order cites failure to close alerts "based on application of mind",
+  the UBI order observes alerts "closed with minimal justification", and the HSBC order charges
+  improper closure of alerts under PMLR 7(3).
+- **Honest scope:** the failures cited most often (the internal mechanism, unreported transactions,
+  due diligence) are mostly upstream of Twin Trace. The product addresses the closure and figures
+  failures directly; it does not address most of what was penalised.
+- **NOT ESTABLISHED:** how common any failure is across Indian banks. Seven orders support no
+  rate. This also does not settle gap DG-13 (a primary citation that a not-filed rationale must be
+  documented): the orders penalise improper closure, but no circular stating the documentation
+  requirement was found.
+
+The [inspector question bank](../domain/enforcement/inspector_questions.yaml) turns these
+failures into questions a recorded decision must answer from its own record. Each question carries
+the orders it comes from.
+
 ## 2. Why that matters for this product (REASONING)
 
 - Every alert that reaches a Principal Officer needs a decision that can be explained later. At the

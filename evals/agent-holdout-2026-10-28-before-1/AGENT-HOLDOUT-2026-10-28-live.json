@@ -1,0 +1,90 @@
+{
+ "mode": "live",
+ "started_utc": "2026-10-28T13:38:42.626692+00:00",
+ "dataset": "HOLDOUT-v1.json",
+ "dataset_sha256": "e7aaad6ae4d9b05ec35ffbd671d65ec49668b54b3c22e506ed33290d9d781a88",
+ "agent_prompt_sha256": "9e7cba49cc89295f07626c59f8063bdd7650f4aa88962fe29131d133cc6bac17",
+ "git_rev": "0bac93c",
+ "models": {
+  "triage": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+  "reasoning": "nvidia/nemotron-3-super-120b-a12b",
+  "disposition": "nvidia/Nemotron-3-Ultra-550b-a55b"
+ },
+ "summary": {
+  "cases": 6,
+  "submitted": 6,
+  "clear_agree": 4,
+  "clear_cases": 4,
+  "contested": 2,
+  "contested_filed": 2,
+  "contested_dispositions": {
+   "FILE": 2,
+   "NOT_FILE": 0,
+   "NEEDS_MORE_INFO": 0,
+   "null": 0
+  },
+  "rejections": 4
+ },
+ "rows": [
+  {
+   "case": "H-01",
+   "expected": "FILE",
+   "agent": "submitted",
+   "agent_disp": "FILE",
+   "agent_steps": 5,
+   "agent_rejections": 0,
+   "agent_tokens": 11283,
+   "agent_s": 9.403
+  },
+  {
+   "case": "H-02",
+   "expected": "NOT_FILE",
+   "agent": "submitted",
+   "agent_disp": "NOT_FILE",
+   "agent_steps": 5,
+   "agent_rejections": 0,
+   "agent_tokens": 10483,
+   "agent_s": 10.171
+  },
+  {
+   "case": "H-03",
+   "expected": "CONTESTED",
+   "agent": "submitted",
+   "agent_disp": "FILE",
+   "agent_steps": 5,
+   "agent_rejections": 0,
+   "agent_tokens": 9537,
+   "agent_s": 9.006
+  },
+  {
+   "case": "H-04",
+   "expected": "FILE",
+   "agent": "submitted",
+   "agent_disp": "FILE",
+   "agent_steps": 8,
+   "agent_rejections": 3,
+   "agent_tokens": 31146,
+   "agent_s": 32.567
+  },
+  {
+   "case": "H-05",
+   "expected": "CONTESTED",
+   "agent": "submitted",
+   "agent_disp": "FILE",
+   "agent_steps": 6,
+   "agent_rejections": 1,
+   "agent_tokens": 14139,
+   "agent_s": 16.764
+  },
+  {
+   "case": "H-06",
+   "expected": "NOT_FILE",
+   "agent": "submitted",
+   "agent_disp": "NOT_FILE",
+   "agent_steps": 5,
+   "agent_rejections": 0,
+   "agent_tokens": 10482,
+   "agent_s": 10.238
+  }
+ ]
+}

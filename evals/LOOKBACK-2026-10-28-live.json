@@ -1,0 +1,45 @@
+{
+ "generated_at": "2026-10-28T18:29:42+00:00",
+ "model": "nvidia/nemotron-3-super-120b-a12b",
+ "rows": [
+  {
+   "status": "ok",
+   "detail": null,
+   "RULE_ID": "SB-004",
+   "SOURCE_URL": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=11566",
+   "PAGE_SHA256": "cea5ed0ccfc89a36a75e0987992169ba684d9b809b107eee487e5443070447c3",
+   "QUOTE": "",
+   "QUOTE_VERIFIED": 0,
+   "CHANGED": null,
+   "SUMMARY": "Rejected: the model found no passage stating this rule on the page. Model said: The source page does not contain a sentence stating that the RBI Master Direction establishes KYC obligations, defines PEPs, beneficial ownership, and enhanced due diligence requirements.",
+   "STATUS": "REJECTED_UNVERIFIED",
+   "rule": "SB-004"
+  },
+  {
+   "status": "ok",
+   "detail": null,
+   "RULE_ID": "STR-002",
+   "SOURCE_URL": "https://fiuindia.gov.in/files/Downloads/Downloads.html",
+   "PAGE_SHA256": "c87ec30e46199694b50d47bbe6e5478205bbe3a453582792a58af92ecc6d4cf8",
+   "QUOTE": "",
+   "QUOTE_VERIFIED": 0,
+   "CHANGED": null,
+   "SUMMARY": "Rejected: the model found no passage stating this rule on the page. Model said: The source page contains only navigation links and downloadable file listings, with no textual statement of the STR filing deadline.",
+   "STATUS": "REJECTED_UNVERIFIED",
+   "rule": "STR-002"
+  },
+  {
+   "status": "empty",
+   "detail": "no extractable text",
+   "RULE_ID": null,
+   "SOURCE_URL": null,
+   "PAGE_SHA256": null,
+   "QUOTE": null,
+   "QUOTE_VERIFIED": null,
+   "CHANGED": null,
+   "SUMMARY": null,
+   "STATUS": null,
+   "rule": "INS-002"
+  }
+ ]
+}

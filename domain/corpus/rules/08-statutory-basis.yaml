@@ -15,24 +15,26 @@ rules:
     applies_to:
       - all_reporting_entities
     primary_source:
-      document: "Prevention of Money-Laundering Act, 2002 (as amended)"
-      url: "https://www.indiacode.nic.in/handle/123456789/2205"
-      url_verified: false
+      document: "Prevention of Money-Laundering Act, 2002"
+      url: "https://fiuindia.gov.in/files/AML_Legislation/pmla_2002.html"
+      url_verified: true
       section: "Act 15 of 2003"
-      accessed_date: null
+      accessed_date: "2026-10-29"
     effective_date: null  # in-force date NEEDS-VERIFICATION — see gap DG-11
     evidence_level: PROVEN
     my_synthesis: >
       PMLA is the parent statute. All product citations should trace back to PMLA
       provisions where possible. Secondary sources (FIU-IND circulars, RBI Master
       Directions) are delegated instruments under PMLA authority.
-    last_verified: null
-    snapshot_date: "2026-09-11"
+    last_verified: "2026-10-29"
+    snapshot_date: "2026-10-29"
     gap_notes: >
-      Verify exact in-force date of PMLA 2002. Confirm which version of the India
-      Code URL corresponds to the current consolidated version (post-2023 amendments).
-      The 2023 PMLA amendment expanded the definition of "proceeds of crime" and
-      the list of Reporting Entities — verify exact changes.
+      Verify exact in-force date of PMLA 2002. Confirm which version of the India Code URL
+      corresponds to the current consolidated version (post-2023 amendments). The 2023 PMLA
+      amendment expanded the definition of "proceeds of crime" and the list of Reporting
+      Entities — verify exact changes. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): URL moved to FIU-IND's copy of
+      the Act (indiacode timed out).
     related_rules:
       - STR-001
       - SB-002
@@ -49,54 +51,61 @@ rules:
       - all_reporting_entities
     primary_source:
       document: "Prevention of Money-Laundering Act, 2002 — Section 12(1)(b)"
-      url: "https://www.indiacode.nic.in/handle/123456789/2205"
-      url_verified: false
+      url: "https://fiuindia.gov.in/files/AML_Legislation/pmla_2002.html"
+      url_verified: true
       section: "Section 12(1)(b)"
-      accessed_date: null
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: PROVEN
     my_synthesis: >
       This is the STR statutory basis. All product STR-related output should cite
       "PMLA 2002 s.12(1)(b)" as the authority for the filing obligation.
-    last_verified: null
-    snapshot_date: "2026-09-11"
-    gap_notes: "Verify s.12(1)(b) text unchanged in current consolidated PMLA. Check 2023 amendment impact."
+    last_verified: "2026-10-29"
+    snapshot_date: "2026-10-29"
+    gap_notes: >
+      Verify s.12(1)(b) text unchanged in current consolidated PMLA. Check 2023 amendment
+      impact. 2026-10-29 source review (primary sources fetched and read; approved by the human): text found: information on transactions 'whether attempted or executed'.
     related_rules:
       - STR-001
       - SB-001
 
   - id: SB-003
     rule: >
-      PMLA 2002, Section 12A prohibits tipping-off: a Reporting Entity and its officers
-      must not disclose to the person concerned, or to any other person, that an STR
-      has been filed or is being contemplated in respect of that person. The prohibition
-      extends to disclosure by any officer of the RE. The PMLA Prevention of
-      Money-Laundering Rules, 2005, Rule 8(6) further provides that the RE shall
-      take measures to ensure STR information is not disclosed.
+      PML (Maintenance of Records) Rules, 2005, Rule 8(6): every Reporting Entity, its
+      Directors, officers and all employees shall ensure that the fact of maintenance of
+      records and of furnishing information to the Director (FIU-IND) is kept confidential.
+      PMLA 2002 s.12(2) keeps information maintained, furnished or verified confidential,
+      and the RBI KYC Master Direction repeats the duty and bars restricting an account
+      merely because an STR was filed. Together these prohibit tipping-off: no disclosure to
+      the customer or any other person that an STR has been or may be filed.
     category: STATUTORY_BASIS
-    subcategory: PMLA_S12A_TIPPING_OFF
+    subcategory: PML_R8_6_CONFIDENTIALITY
     applies_to:
       - all_reporting_entities
     primary_source:
-      document: "Prevention of Money-Laundering Act, 2002 — Section 12A; PML Rules 2005 Rule 8(6)"
-      url: "https://www.indiacode.nic.in/handle/123456789/2205"
-      url_verified: false
-      section: "Section 12A; Rule 8(6) of PML Rules 2005"
-      accessed_date: null
+      document: "PML (Maintenance of Records) Rules, 2005 — Rule 8(6); Prevention of Money-Laundering Act, 2002 — Section 12(2); RBI KYC Master Direction"
+      url: "https://fiuindia.gov.in/files/AML_Legislation/notification.html"
+      url_verified: true
+      section: "Rule 8(6); Section 12(2)"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: PROVEN
     my_synthesis: >
-      The tipping-off prohibition is not merely operational guidance — it is a
-      statutory provision (s.12A) reinforced by delegated rules (Rule 8(6)). Violating
-      it exposes individual officers to criminal liability. Product access controls
-      must be designed to prevent accidental disclosure. The STR workflow must not
-      surface the filing status (FILE/NOT_FILE) to anyone other than authorised staff.
-    last_verified: null
-    snapshot_date: "2026-09-17"
+      The tipping-off prohibition rests on the confidentiality duty in Rule 8(6) of the PML
+      Rules and s.12(2) of the Act, applied to banks by the RBI KYC Master Direction. Breach
+      of a reporting entity's obligations is dealt with under PMLA s.13. Product access
+      controls must prevent accidental disclosure; the STR workflow must not surface the
+      filing status to anyone other than authorised staff.
+    last_verified: "2026-10-29"
+    snapshot_date: "2026-10-29"
     gap_notes: >
       Verify exact subsection numbering: some consolidated PMLA versions place the
       tipping-off prohibition under s.12(2) as well as s.12A. Confirm which subsections
-      apply post-2023 amendment. Verify Rule 8(6) text of PML Rules 2005.
+      apply post-2023 amendment. Verify Rule 8(6) text of PML Rules 2005. 2026-10-29 source
+      review (primary sources fetched and read; approved by the human): corrected. The earlier
+      text cited PMLA s.12A, which is 'Access to information' in the published Act, not a
+      tipping-off provision; no text making tipping-off a criminal offence under PMLA was
+      found. Resolves DOMAIN.md DG-22.
     related_rules:
       - STR-004
       - SB-001
@@ -127,11 +136,11 @@ rules:
         regulators and are outside the scope of this corpus entry. A query for an IFSC
         or securities firm should not retrieve this rule as the primary authority.
     primary_source:
-      document: "RBI Master Direction on KYC — DBR.AML.BC.No.81/14.01.001/2015-16 (as updated)"
+      document: "RBI Master Direction – Know Your Customer (KYC) Direction, 2016 (updated as on 14 Aug 2025)"
       url: "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=11566"
-      url_verified: false
+      url_verified: true
       section: "Full document"
-      accessed_date: null
+      accessed_date: "2026-10-29"
     effective_date: "2016-02-25"
     evidence_level: ASSUMED
     my_synthesis: >
@@ -141,14 +150,15 @@ rules:
       should reference the current version; it is updated periodically by RBI circular.
       When surfacing this rule for a non-banking entity, add a disclaimer that the
       applicable KYC norms depend on the entity's sectoral regulator.
-    last_verified: null
-    snapshot_date: "2026-09-17"
+    last_verified: "2026-10-29"
+    snapshot_date: "2026-10-29"
     gap_notes: >
-      Verify that the RBI URL (id=11566) still resolves to the current KYC Master
-      Direction. Verify the latest amendment date of the Master Direction — it was
-      last significantly amended in 2023. Confirm whether SEBI/IRDAI/PFRDA have
-      issued harmonised KYC norms that would extend parts of this direction to
-      non-banking entities.
+      Verify that the RBI URL (id=11566) still resolves to the current KYC Master Direction.
+      Verify the latest amendment date of the Master Direction — it was last significantly
+      amended in 2023. Confirm whether SEBI/IRDAI/PFRDA have issued harmonised KYC norms
+      that would extend parts of this direction to non-banking entities. 2026-10-29 source
+      review (primary sources fetched and read; approved by the human): page confirms the title
+      and the 14 Aug 2025 update.
     related_rules:
       - POE-004
       - POE-012

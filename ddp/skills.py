@@ -5,7 +5,8 @@ Computed facts from ddp.compute are accepted as evidence by the hard gate and ar
 the only aggregate figures the GoS drafter is allowed to use.
 
 What did NOT change (and must not drift): the 11 POE factors, the anti-templating
-checklist and its basis caveat, the tipping-off screen, the evidence-sufficiency
+checklist and its basis caveat, the tipping-off screen's refusal (its matching was tightened
+on 2026-10-28: whole words, and the recording gate's list of what must not be disclosed), the evidence-sufficiency
 thresholds, and the counter-evidence review.
 """
 
@@ -19,13 +20,47 @@ from datetime import datetime, timezone
 from decimal import Decimal
 
 from .claims import claim_map
-from .gate import BLOCKING_AT_RECORDING, GATE_VERSION, DeterministicPolicyGate
+from .gate import _PARTY, _SECRET, BLOCKING_AT_RECORDING, GATE_VERSION, DeterministicPolicyGate
+from .identity import SELF_ASSERTED
 from .money import extract_amounts, format_inr
-from .retrieval import CorpusIndex
+from .retrieval import CorpusIndex, HybridIndex
+
+# Building blocks for screen_request (tipping-off in a request, before any model call).
+# What must not be disclosed reuses the recording gate's _SECRET, so the two cannot drift;
+# the extra cues are ones a request to the customer carries but a GoS does not.
+_REQ_PARTY = (r"(?:" + _PARTY + r"s?|account[\s-]?owners?|depositors?|him|her|them|"
+              r"(?:mr|mrs|ms|shri|smt)\.?\s+\w+)")
+_REQ_TELL = (r"(?:tell(?:ing)?|inform(?:ing)?|notif(?:y|ying)|warn(?:ing)?|advis(?:e|ing)|"
+             r"call(?:ing)?|e-?mail(?:ing)?|messag(?:e|ing)|text(?:ing)?|whatsapp|sms|letter|"
+             r"note|write\s+to|writing\s+to|reach(?:ing)?\s+out\s+to|explain(?:ing)?\s+to|"
+             r"disclos(?:e|ing)\s+to|tip(?:ping)?\s+off)")
+# The customer must be the direct object of the tell-verb ("inform the customer", "write to
+# her"), not merely mentioned nearby: "notify FIU-IND when the customer withdraws cash" is a
+# question about reporting duties, not a request to tip anyone off (code review 2026-10-29).
+_REQ_ADDRESSES_PARTY = re.compile(
+    r"\b" + _REQ_TELL + r"\b\s+(?:to\s+)?(?:the\s+|this\s+|that\s+|our\s+|my\s+|a\s+)?"
+    + _REQ_PARTY + r"\b"
+    + r"|\blet\s+(?:the\s+)?" + _REQ_PARTY + r"\s+know\b"
+    + r"|\bgiv(?:e|ing)\s+(?:the\s+)?" + _REQ_PARTY
+    + r"\s+(?:a\s+)?(?:heads[\s-]?up|hint|warning|word)\b"
+    + r"|\b" + _REQ_PARTY + r"\b[^.]{0,30}?\b(?:is|are|be|been|gets?)\s+"
+      r"(?:informed|told|notified|warned|made\s+aware|tipped\s+off)\b",
+    re.IGNORECASE,
+)
+_REQ_SECRET = re.compile(
+    r"\b(?:" + _SECRET
+    + r"|compliance(?:\s+team)?\s+(?:is|are)\s+(?:looking|reviewing|investigating|watching|monitoring)"
+      r"|freez(?:e|es|ing)|frozen"
+      r"|(?:move|moving|withdraw|withdrawing|transfer|take\s+out)\s+(?:his\s+|her\s+|their\s+|the\s+)?"
+      r"(?:money|funds|balance)"
+      r"|report(?:ed|ing)\s+(?:him|her|them|the\s+(?:customer|client|account))"
+      r"|we\s+(?:are|'re|have)\s+(?:filing|filed|reporting|reported))\b",
+    re.IGNORECASE,
+)
 
 PROMPT_VERSION = "v2.0-nebius"
 SKILL_VERSION = "v2.0-nebius"
-CORPUS_VERSION = "2026-09-17"
+CORPUS_VERSION = "2026-10-29"
 
 # The 11 POE evaluation factors (corpus IDs + names)
 POE_FACTORS = [
@@ -65,13 +100,16 @@ CHECKLIST_ITEMS = [
 class CoPilotSkills:
     """Disposition workflow skills over a Store and an LLM."""
 
-    def __init__(self, store=None, llm=None, complete_fn=None):
+    def __init__(self, store=None, llm=None, complete_fn=None, embedder=None):
         """
         store:       ddp.store.Store (required for lookup / recording; optional for pure checks)
         llm:         object with .complete(prompt, tier=...) and .last_call (ddp.llm)
         complete_fn: convenience for tests — fn(prompt) -> str, wrapped as an LLM
+        embedder:    optional ddp.embeddings.TokenFactoryEmbedder; with it, regulatory lookup
+                     is hybrid (BM25 + embeddings), with the same deterministic abstention
         """
         self._store = store
+        self._embedder = embedder
         if complete_fn is not None:
             from .llm import FunctionLLM
             llm = FunctionLLM(complete_fn)
@@ -202,9 +240,20 @@ class CoPilotSkills:
         obj, fails = self._complete_structured(prompt, tier, schema_name, max_tokens=max_tokens)
         return obj[WRAPPER_KEY[schema_name]], fails
 
+    def usable_rule_ids(self, rule_ids: list[str]) -> tuple[list[str], int]:
+        """(rule IDs that are PROVEN/ASSUMED in the corpus, how many were dropped). A decision may
+        cite only usable rules: NEEDS-VERIFICATION or unknown IDs never enter the ledger."""
+        if not rule_ids or self._store is None:
+            return list(rule_ids or []), 0
+        usable = {r["RULE_ID"] for r in self._store.corpus_rows()}
+        kept = [r for r in rule_ids if r in usable]
+        return kept, len(rule_ids) - len(kept)
+
     def _corpus_index(self) -> CorpusIndex:
         if self._index is None:
-            self._index = CorpusIndex(self._store.corpus_rows() if self._store else [])
+            rows = self._store.corpus_rows() if self._store else []
+            self._index = (HybridIndex(rows, self._embedder) if self._embedder is not None
+                           else CorpusIndex(rows))
         return self._index
 
     @staticmethod
@@ -229,29 +278,26 @@ class CoPilotSkills:
         Deterministic safety screen for a free-text user request BEFORE any drafting.
 
         Refuses tipping-off requests — asking the system to tell/inform/notify the
-        customer that a report, filing, or suspicion exists. Tipping-off is a criminal
-        offence under PMLA 2002 s.12A (corpus SB-003); the system must refuse, not draft.
+        customer that a report, filing, or suspicion exists. Tipping-off breaches the duty to keep
+        the fact of reporting confidential (PML Rules 2005, Rule 8(6); corpus SB-003); the system
+        must refuse, not draft.
+
+        Refused when the request both (1) addresses the customer — a tell-verb aimed at them,
+        or "the customer is informed" — and (2) names what must not be disclosed: a report,
+        the FIU, an investigation (the recording gate's list), or a request-only cue such as
+        a freeze or moving the money out. Whole words only, so "history" is not "STR" and
+        asking the customer for documents is allowed.
 
         Returns {allowed: bool, category: str, reason: str}.
         """
-        t = (request_text or "").lower()
-        subject_customer = any(s in t for s in (
-            "customer", "account holder", "client", "account owner", "the depositor",
-        ))
-        action_notify = any(a in t for a in (
-            "tell", "inform", "notify", "warn", "let them know", "let the customer know",
-            "alert", "message", "reach out", "call", "email", "disclose to", "advise",
-        ))
-        about_report = any(r in t for r in (
-            "str", "suspicious transaction report", "report", "filing", "we are filing",
-            "we're filing", "suspicion", "flagged", "investigation", "being reported",
-        ))
-        if subject_customer and action_notify and about_report:
+        t = request_text or ""
+        if _REQ_ADDRESSES_PARTY.search(t) and _REQ_SECRET.search(t):
             return {
                 "allowed": False,
                 "category": "tipping_off",
                 "reason": ("Refused: informing the customer that a report or suspicion exists is "
-                           "tipping-off — a criminal offence under PMLA 2002 s.12A (corpus SB-003). "
+                           "tipping-off, which the duty to keep reporting confidential prohibits (PML Rules "
+                           "2005, Rule 8(6); corpus SB-003). "
                            "The system cannot draft or send any such communication."),
             }
         return {"allowed": True, "category": "ok", "reason": ""}
@@ -268,7 +314,9 @@ class CoPilotSkills:
             List of {rule_id, rule_text, evidence_level, source_document,
                      source_url, snapshot_date, my_synthesis, category, score}
         """
-        hits = self._corpus_index().search(question, limit=limit)
+        index = self._corpus_index()
+        hits = index.search(question, limit=limit)
+        mode = getattr(index, "last_mode", "bm25")
         return [
             {
                 "rule_id":         r.get("RULE_ID"),
@@ -280,13 +328,14 @@ class CoPilotSkills:
                 "snapshot_date":   str(r.get("SNAPSHOT_DATE") or ""),
                 "category":        r.get("CATEGORY"),
                 "score":           round(score, 3),
+                "retrieval":       mode,
             }
             for score, r in hits
         ]
 
     # ── SKILL 2: suspicion_evaluator ─────────────────────────────────────────
 
-    def suspicion_evaluator(self, case_context: dict) -> list[dict]:
+    def suspicion_evaluator(self, case_context: dict, tier: str = "reasoning") -> list[dict]:
         """
         Evaluate an alert against all 11 PO suspicion factors (POE-002 to POE-012).
 
@@ -297,6 +346,8 @@ class CoPilotSkills:
                 signal_tags:    list  — e.g. ["I4C_FLAG", "PASS_THROUGH"],
                 alert_narrative: str  — alert queue description (optional)
             }
+
+            tier: model tier; "reasoning" in the product, any tier for the tier panel (T12.7).
 
         Returns:
             List of {factor_id, factor_name, assessment, evidence, rules_cited}
@@ -345,7 +396,7 @@ Be specific — cite actual amounts and dates from the transaction data. Do NOT 
 language. If data is insufficient for a factor, say so. Output ONLY the JSON object."""
 
         try:
-            assessments, parse_failures = self._complete_json_array(prompt, "reasoning", "poe_assessment")
+            assessments, parse_failures = self._complete_json_array(prompt, tier, "poe_assessment")
             if parse_failures and self.last_model_call:
                 self.last_model_call["parse_failures"] = parse_failures
             # Citation existence: a factor citing a transaction that is not in this case is not
@@ -508,6 +559,9 @@ Output ONLY the narrative text, no preamble or JSON."""
         model_calls:           list[dict] | None = None,
         validated_draft_sha256: str | None = None,
         agent_run_ref:         str | None = None,
+        decision_maker_basis:  str = SELF_ASSERTED,
+        pre_inspection:        dict | None = None,
+        decision_maker_identity: dict | None = None,
     ) -> dict:
         """
         Record a FILE or NOT-FILE decision in the append-only DECISION_LEDGER.
@@ -521,6 +575,9 @@ Output ONLY the narrative text, no preamble or JSON."""
             rfi_triggers:        List of RFI IDs triggered.
             poe_assessment:      Output from suspicion_evaluator.
             decision_maker_id:   PO identifier.
+            decision_maker_basis: how the ID was established (ddp.identity: self-asserted or
+                                 OIDC sign-in); hashed into the ledger row via METADATA_JSON.
+            decision_maker_identity: OIDC issuer and subject hash, when signed in.
             suspicion_formed_at: ISO timestamp when suspicion arose (SLA clock start).
                                  Defaults to now if not provided.
             str_reference:       FINGate STR reference (required when disposition=FILE).
@@ -590,6 +647,9 @@ Output ONLY the narrative text, no preamble or JSON."""
             [alert_id, disposition, draft_sha256, decision_maker_id, suspicion_given,
              str_reference], default=str).encode()).hexdigest()
 
+        # NEEDS-VERIFICATION rules never appear in any output (CLAUDE.md §3), the ledger included:
+        # cited IDs are filtered to PROVEN/ASSUMED; only the count of dropped IDs is kept.
+        rules_cited, rules_dropped = self.usable_rule_ids(list(rules_cited or []))
         provenance = {
             "ai_recommendation": ai_recommendation,
             "override_reason":   override_reason,
@@ -609,8 +669,15 @@ Output ONLY the narrative text, no preamble or JSON."""
                 "policy_advisory":   [v["policy"] for v in policy["verdicts"] if v["violated"]],
                 "validated_at":      now,
             },
-            "decision_maker_id_basis": "self-asserted (no authentication in this build)",
+            "decision_maker_id_basis": decision_maker_basis,
+            **({"decision_maker_identity": decision_maker_identity}
+               if decision_maker_identity else {}),
             "agent_run_ref":     agent_run_ref,
+            **({"rules_cited_dropped_unverified": rules_dropped} if rules_dropped else {}),
+            # T12.10: what the pre-inspection check found unanswered when the officer recorded
+            **({"pre_inspection": {k: pre_inspection.get(k) for k in
+                                   ("bank_sha256", "answered", "asked", "gaps")}}
+               if pre_inspection else {}),
             "idempotency_key":   idempotency_key,
         }
 

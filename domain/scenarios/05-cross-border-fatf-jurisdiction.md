@@ -29,6 +29,8 @@ rules_cited: [STR-001, STR-002, CBTR-001, RFI-008, POE-001, POE-002, POE-011, SB
 
 **CBTR obligation:** Both transfers exceed the indicative CBTR threshold (DG-01 — threshold NEEDS-VERIFICATION at ₹5L). Each transfer (~₹37.5L and ~₹26.7L) far exceeds any plausible threshold. CBTR must be filed; STR must also be filed (the transactions warrant both — corpus: CTR-003 by analogy).
 
+**Case record in the seed (`ddp/seed_data.py`, 2026-10-28):** four inward SWIFT client receipts (USA, UK, Singapore, Australia: ₹18,40,000, ₹15,60,000, ₹16,80,000, ₹13,40,000), one hosting payment (₹5,10,000) and the two transfers to Regal Trading FZCO (₹37,50,000 on 4 Aug, ₹26,70,000 on 25 Aug 2026). ASSUMED: the client receipts and the hosting payment, taken from the baseline description so that the month's credits equal the alert amount. Regal Trading FZCO is not marked flagged: the risk is the correspondent routing, not a registry listing.
+
 ---
 
 ### 2. Reasoning Chain
@@ -75,7 +77,7 @@ Statutory basis:
 
 ### 3. Draft Ground of Suspicion
 
-Techvision Export Solutions Pvt Ltd (CUST-05), an IT services exporter with a 24-month history of inward remittances from USA, UK, Singapore, and Australia, made two outward SWIFT transfers on [T+1] and [T+22] — USD 45,000 (≈₹37.5L) and USD 32,000 (≈₹26.7L) respectively — to Regal Trading FZCO, Sharjah, UAE, citing "software development subcontracting." The first transfer was routed through a correspondent bank with known links to DPRK financial networks (FATF High-Risk Jurisdiction — Black List, Call for Action). The SWIFT monitoring system flagged the correspondent chain.
+Techvision Export Solutions Pvt Ltd (CUST-05), an IT services exporter with a 24-month history of inward remittances from USA, UK, Singapore, and Australia, made two outward SWIFT transfers on [T+1] and [T+22] — ₹37,50,000 and ₹26,70,000 respectively (USD-denominated) — to Regal Trading FZCO, Sharjah, UAE, citing "software development subcontracting." The first transfer was routed through a correspondent bank with known links to DPRK financial networks (FATF High-Risk Jurisdiction — Black List, Call for Action). The SWIFT monitoring system flagged the correspondent chain.
 
 Regal Trading FZCO is a UAE free-zone company with no prior relationship documented in CUST-05's account history. The stated purpose of "software development subcontracting" is inconsistent with CUST-05's business model: the company receives inward remittances for IT services (it is a net exporter of services) and has no documented history of procuring subcontracted services abroad. The only documentation produced is a one-page invoice with no contract reference, no deliverable specification, and no prior payment history.
 

@@ -1,0 +1,878 @@
+{
+ "mode": "live",
+ "generated_at": "2026-10-28T18:26:06+00:00",
+ "seed_sha256": "969dda38cba7eb328e68403b06231272dd272188adec54a62f0110fec6e5e74e",
+ "bank_sha256": "b5f7ce988b3a6f81431e70baefa5a2f5099be37014dfe4c945e1ba0300cf4f44",
+ "inspector_model": "nvidia/nemotron-3-super-120b-a12b",
+ "alerts": 16,
+ "per_question": {
+  "IQ-01": {
+   "twin_trace": 16,
+   "cursory": 0
+  },
+  "IQ-02": {
+   "twin_trace": 16,
+   "cursory": 0
+  },
+  "IQ-03": {
+   "twin_trace": 14,
+   "cursory": 0
+  },
+  "IQ-04": {
+   "twin_trace": 16,
+   "cursory": 0
+  },
+  "IQ-05": {
+   "twin_trace": 16,
+   "cursory": 16
+  },
+  "IQ-06": {
+   "twin_trace": 2,
+   "cursory": 0
+  },
+  "IQ-07": {
+   "twin_trace": 0,
+   "cursory": 0
+  },
+  "IQ-08": {
+   "twin_trace": 0,
+   "cursory": 0
+  },
+  "IQ-09": {
+   "twin_trace": 0,
+   "cursory": 0
+  },
+  "IQ-10": {
+   "twin_trace": 16,
+   "cursory": 16
+  },
+  "IQ-11": {
+   "twin_trace": 0,
+   "cursory": 0
+  }
+ },
+ "rows": [
+  {
+   "alert_id": "ALERT-01",
+   "twin_trace": {
+    "answered": 6,
+    "asked": 11,
+    "status": {
+     "IQ-01": "answered",
+     "IQ-02": "answered",
+     "IQ-03": "answered",
+     "IQ-04": "answered",
+     "IQ-05": "answered",
+     "IQ-06": "needs_review",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cursory": {
+    "answered": 2,
+    "asked": 10,
+    "status": {
+     "IQ-01": "needs_review",
+     "IQ-02": "unanswered",
+     "IQ-03": "not_applicable",
+     "IQ-04": "unanswered",
+     "IQ-05": "answered",
+     "IQ-06": "unanswered",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cross_examination": {
+    "status": "ok",
+    "reason": null,
+    "findings": 5,
+    "answered_with_valid_citations": 2,
+    "not_answered": 3,
+    "rejected": 0,
+    "questions": [
+     "What specific AML training or certification does the decision maker PO-001 possess?",
+     "Was the alert disposition reviewed and approved by a supervisor or a second-line AML reviewer before filing?",
+     "Does the decision record include a reference to the SAR/STR filed with FIU\u2011IND (e.g., acknowledgement number or filing timestamp)?"
+    ],
+    "model": "nvidia/nemotron-3-super-120b-a12b"
+   }
+  },
+  {
+   "alert_id": "ALERT-02",
+   "twin_trace": {
+    "answered": 6,
+    "asked": 11,
+    "status": {
+     "IQ-01": "answered",
+     "IQ-02": "answered",
+     "IQ-03": "answered",
+     "IQ-04": "answered",
+     "IQ-05": "answered",
+     "IQ-06": "needs_review",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cursory": {
+    "answered": 2,
+    "asked": 10,
+    "status": {
+     "IQ-01": "needs_review",
+     "IQ-02": "unanswered",
+     "IQ-03": "not_applicable",
+     "IQ-04": "unanswered",
+     "IQ-05": "answered",
+     "IQ-06": "unanswered",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cross_examination": {
+    "status": "ok",
+    "reason": null,
+    "findings": 5,
+    "answered_with_valid_citations": 0,
+    "not_answered": 5,
+    "rejected": 0,
+    "questions": [
+     "What specific internal policy or SOP governed the decision to file this alert?",
+     "Was the decision reviewed or approved by a supervisor or AML committee?",
+     "What is the exact date and time when the decision to file was made?",
+     "Are there any documented considerations of alternative dispositions (e.g., monitor, investigate) and why they were rejected?",
+     "How was the decision maker's identity (PO-001) verified against HR records or access logs?"
+    ],
+    "model": "nvidia/nemotron-3-super-120b-a12b"
+   }
+  },
+  {
+   "alert_id": "ALERT-03",
+   "twin_trace": {
+    "answered": 6,
+    "asked": 11,
+    "status": {
+     "IQ-01": "answered",
+     "IQ-02": "answered",
+     "IQ-03": "answered",
+     "IQ-04": "answered",
+     "IQ-05": "answered",
+     "IQ-06": "needs_review",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cursory": {
+    "answered": 2,
+    "asked": 10,
+    "status": {
+     "IQ-01": "needs_review",
+     "IQ-02": "unanswered",
+     "IQ-03": "not_applicable",
+     "IQ-04": "unanswered",
+     "IQ-05": "answered",
+     "IQ-06": "unanswered",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cross_examination": {
+    "status": "ok",
+    "reason": null,
+    "findings": 5,
+    "answered_with_valid_citations": 2,
+    "not_answered": 3,
+    "rejected": 0,
+    "questions": [
+     "Who made the decision, and how was their identity established?",
+     "Was outside information (e.g., sale deed, TDS certificate) verified and recorded as part of the decision?",
+     "Has any fact underlying the decision changed since it was made, and was the decision re\u2011reviewed?"
+    ],
+    "model": "nvidia/nemotron-3-super-120b-a12b"
+   }
+  },
+  {
+   "alert_id": "ALERT-04",
+   "twin_trace": {
+    "answered": 6,
+    "asked": 11,
+    "status": {
+     "IQ-01": "answered",
+     "IQ-02": "answered",
+     "IQ-03": "answered",
+     "IQ-04": "answered",
+     "IQ-05": "answered",
+     "IQ-06": "needs_review",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cursory": {
+    "answered": 2,
+    "asked": 10,
+    "status": {
+     "IQ-01": "needs_review",
+     "IQ-02": "unanswered",
+     "IQ-03": "not_applicable",
+     "IQ-04": "unanswered",
+     "IQ-05": "answered",
+     "IQ-06": "unanswered",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cross_examination": {
+    "status": "ok",
+    "reason": null,
+    "findings": 5,
+    "answered_with_valid_citations": 2,
+    "not_answered": 3,
+    "rejected": 0,
+    "questions": [
+     "Was outside information checked, and did that check actually run?",
+     "Has anything the decision rests on changed since, and was the decision re\u2011checked?",
+     "Who made the decision, and how was their identity established?"
+    ],
+    "model": "nvidia/nemotron-3-super-120b-a12b"
+   }
+  },
+  {
+   "alert_id": "ALERT-05",
+   "twin_trace": {
+    "answered": 6,
+    "asked": 11,
+    "status": {
+     "IQ-01": "answered",
+     "IQ-02": "answered",
+     "IQ-03": "answered",
+     "IQ-04": "answered",
+     "IQ-05": "answered",
+     "IQ-06": "needs_review",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cursory": {
+    "answered": 2,
+    "asked": 10,
+    "status": {
+     "IQ-01": "needs_review",
+     "IQ-02": "unanswered",
+     "IQ-03": "not_applicable",
+     "IQ-04": "unanswered",
+     "IQ-05": "answered",
+     "IQ-06": "unanswered",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cross_examination": {
+    "status": "ok",
+    "reason": null,
+    "findings": 5,
+    "answered_with_valid_citations": 2,
+    "not_answered": 3,
+    "rejected": 0,
+    "questions": [
+     "Who made the decision, and how was their identity established?",
+     "Was outside information checked, and did that check actually run?",
+     "Has anything the decision rests on changed since, and was the decision re-checked?"
+    ],
+    "model": "nvidia/nemotron-3-super-120b-a12b"
+   }
+  },
+  {
+   "alert_id": "ALERT-06",
+   "twin_trace": {
+    "answered": 6,
+    "asked": 11,
+    "status": {
+     "IQ-01": "answered",
+     "IQ-02": "answered",
+     "IQ-03": "answered",
+     "IQ-04": "answered",
+     "IQ-05": "answered",
+     "IQ-06": "needs_review",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cursory": {
+    "answered": 2,
+    "asked": 10,
+    "status": {
+     "IQ-01": "needs_review",
+     "IQ-02": "unanswered",
+     "IQ-03": "not_applicable",
+     "IQ-04": "unanswered",
+     "IQ-05": "answered",
+     "IQ-06": "unanswered",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cross_examination": {
+    "status": "ok",
+    "reason": null,
+    "findings": 5,
+    "answered_with_valid_citations": 0,
+    "not_answered": 5,
+    "rejected": 0,
+    "questions": [
+     "How was the identity of the decision maker (PO-001) established and verified?",
+     "Which specific predicate offense evaluation (POE) factors were considered and recorded in the decision?",
+     "Was any external corroborating information (e.g., disaster event records, beneficiary verification) checked to support the conclusion that no relief activity occurred?",
+     "Have any of the factual premises (e.g., trust registration status, donor PAN requirements) changed since the alert, prompting a review of the decision?",
+     "Does the rationale explicitly link the cited rules (STR-001, CTR-001, NTR-001, RFI-010, POE-002, POE-006, POE-007, POE-008) to the specific sections of PMLA 2002 or RBI Master Directions that they represent?"
+    ],
+    "model": "nvidia/nemotron-3-super-120b-a12b"
+   }
+  },
+  {
+   "alert_id": "ALERT-07",
+   "twin_trace": {
+    "answered": 7,
+    "asked": 11,
+    "status": {
+     "IQ-01": "answered",
+     "IQ-02": "answered",
+     "IQ-03": "answered",
+     "IQ-04": "answered",
+     "IQ-05": "answered",
+     "IQ-06": "answered",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cursory": {
+    "answered": 2,
+    "asked": 10,
+    "status": {
+     "IQ-01": "needs_review",
+     "IQ-02": "unanswered",
+     "IQ-03": "not_applicable",
+     "IQ-04": "unanswered",
+     "IQ-05": "answered",
+     "IQ-06": "unanswered",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cross_examination": {
+    "status": "ok",
+    "reason": null,
+    "findings": 5,
+    "answered_with_valid_citations": 2,
+    "not_answered": 3,
+    "rejected": 0,
+    "questions": [
+     "Did the decision explicitly address the structuring signal (S-CASH-STRUCTURING) that fired true, and explain why it was not considered suspicious?",
+     "Are the rules cited (STR-001, CTR-001, etc.) currently applicable and versioned as of the decision date?",
+     "Was there any independent review or sign-off by a senior compliance officer beyond the PO who made the decision?"
+    ],
+    "model": "nvidia/nemotron-3-super-120b-a12b"
+   }
+  },
+  {
+   "alert_id": "ALERT-08",
+   "twin_trace": {
+    "answered": 7,
+    "asked": 11,
+    "status": {
+     "IQ-01": "answered",
+     "IQ-02": "answered",
+     "IQ-03": "answered",
+     "IQ-04": "answered",
+     "IQ-05": "answered",
+     "IQ-06": "answered",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cursory": {
+    "answered": 2,
+    "asked": 10,
+    "status": {
+     "IQ-01": "needs_review",
+     "IQ-02": "unanswered",
+     "IQ-03": "not_applicable",
+     "IQ-04": "unanswered",
+     "IQ-05": "answered",
+     "IQ-06": "unanswered",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cross_examination": {
+    "status": "ok",
+    "reason": null,
+    "findings": 5,
+    "answered_with_valid_citations": 1,
+    "not_answered": 4,
+    "rejected": 0,
+    "questions": [
+     "How was the decision maker's identity (PO-001) established and recorded?",
+     "Which specific suspicion\u2011evaluation factors were assessed and recorded for this alert?",
+     "Was any external information (e.g., public records, sanctions, adverse media) checked as part of the evaluation, and was that check actually performed?",
+     "After the decision, have any relevant facts changed (new transactions, updated documentation) and was the decision re\u2011checked?"
+    ],
+    "model": "nvidia/nemotron-3-super-120b-a12b"
+   }
+  },
+  {
+   "alert_id": "ALERT-09",
+   "twin_trace": {
+    "answered": 6,
+    "asked": 11,
+    "status": {
+     "IQ-01": "answered",
+     "IQ-02": "answered",
+     "IQ-03": "answered",
+     "IQ-04": "answered",
+     "IQ-05": "answered",
+     "IQ-06": "needs_review",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cursory": {
+    "answered": 2,
+    "asked": 10,
+    "status": {
+     "IQ-01": "needs_review",
+     "IQ-02": "unanswered",
+     "IQ-03": "not_applicable",
+     "IQ-04": "unanswered",
+     "IQ-05": "answered",
+     "IQ-06": "unanswered",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cross_examination": {
+    "status": "ok",
+    "reason": null,
+    "findings": 5,
+    "answered_with_valid_citations": 1,
+    "not_answered": 4,
+    "rejected": 0,
+    "questions": [
+     "How was the decision maker's identity (PO-001) established and verified?",
+     "Were the suspicion\u2011evaluation factors (e.g., POE factors, RFI indicators) assessed and recorded in a structured manner?",
+     "Was any external information (e.g., adverse media, sanctions lists, third\u2011party checks) consulted during the investigation, and was that check performed?",
+     "Has any new information emerged since the decision that would affect the assessment, and was the decision revisited?"
+    ],
+    "model": "nvidia/nemotron-3-super-120b-a12b"
+   }
+  },
+  {
+   "alert_id": "ALERT-10",
+   "twin_trace": {
+    "answered": 6,
+    "asked": 11,
+    "status": {
+     "IQ-01": "answered",
+     "IQ-02": "answered",
+     "IQ-03": "answered",
+     "IQ-04": "answered",
+     "IQ-05": "answered",
+     "IQ-06": "needs_review",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cursory": {
+    "answered": 2,
+    "asked": 10,
+    "status": {
+     "IQ-01": "needs_review",
+     "IQ-02": "unanswered",
+     "IQ-03": "not_applicable",
+     "IQ-04": "unanswered",
+     "IQ-05": "answered",
+     "IQ-06": "unanswered",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cross_examination": {
+    "status": "ok",
+    "reason": null,
+    "findings": 5,
+    "answered_with_valid_citations": 1,
+    "not_answered": 4,
+    "rejected": 0,
+    "questions": [
+     "Who made the decision, and how was their identity established?",
+     "Were the suspicion-evaluation factors assessed and recorded?",
+     "Was outside information checked, and did that check actually run?",
+     "Has anything the decision rests on changed since, and was the decision re-checked?"
+    ],
+    "model": "nvidia/nemotron-3-super-120b-a12b"
+   }
+  },
+  {
+   "alert_id": "ALERT-11",
+   "twin_trace": {
+    "answered": 6,
+    "asked": 11,
+    "status": {
+     "IQ-01": "answered",
+     "IQ-02": "answered",
+     "IQ-03": "answered",
+     "IQ-04": "answered",
+     "IQ-05": "answered",
+     "IQ-06": "needs_review",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cursory": {
+    "answered": 2,
+    "asked": 10,
+    "status": {
+     "IQ-01": "needs_review",
+     "IQ-02": "unanswered",
+     "IQ-03": "not_applicable",
+     "IQ-04": "unanswered",
+     "IQ-05": "answered",
+     "IQ-06": "unanswered",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cross_examination": {
+    "status": "ok",
+    "reason": null,
+    "findings": 5,
+    "answered_with_valid_citations": 2,
+    "not_answered": 3,
+    "rejected": 0,
+    "questions": [
+     "Who made the decision, and how was their identity established?",
+     "Was outside information checked, and did that check actually run?",
+     "Has anything the decision rests on changed since, and was the decision re\u2011checked?"
+    ],
+    "model": "nvidia/nemotron-3-super-120b-a12b"
+   }
+  },
+  {
+   "alert_id": "ALERT-12",
+   "twin_trace": {
+    "answered": 6,
+    "asked": 11,
+    "status": {
+     "IQ-01": "answered",
+     "IQ-02": "answered",
+     "IQ-03": "answered",
+     "IQ-04": "answered",
+     "IQ-05": "answered",
+     "IQ-06": "needs_review",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cursory": {
+    "answered": 2,
+    "asked": 10,
+    "status": {
+     "IQ-01": "needs_review",
+     "IQ-02": "unanswered",
+     "IQ-03": "not_applicable",
+     "IQ-04": "unanswered",
+     "IQ-05": "answered",
+     "IQ-06": "unanswered",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cross_examination": {
+    "status": "ok",
+    "reason": null,
+    "findings": 5,
+    "answered_with_valid_citations": 1,
+    "not_answered": 4,
+    "rejected": 0,
+    "questions": [
+     "Who made the decision, and how was their identity established?",
+     "Were the suspicion-evaluation factors assessed and recorded?",
+     "Was outside information checked, and did that check actually run?",
+     "Has anything the decision rests on changed since, and was the decision re-checked?"
+    ],
+    "model": "nvidia/nemotron-3-super-120b-a12b"
+   }
+  },
+  {
+   "alert_id": "ALERT-13",
+   "twin_trace": {
+    "answered": 6,
+    "asked": 11,
+    "status": {
+     "IQ-01": "answered",
+     "IQ-02": "answered",
+     "IQ-03": "answered",
+     "IQ-04": "answered",
+     "IQ-05": "answered",
+     "IQ-06": "needs_review",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cursory": {
+    "answered": 2,
+    "asked": 10,
+    "status": {
+     "IQ-01": "needs_review",
+     "IQ-02": "unanswered",
+     "IQ-03": "not_applicable",
+     "IQ-04": "unanswered",
+     "IQ-05": "answered",
+     "IQ-06": "unanswered",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cross_examination": {
+    "status": "ok",
+    "reason": null,
+    "findings": 5,
+    "answered_with_valid_citations": 1,
+    "not_answered": 4,
+    "rejected": 0,
+    "questions": [
+     "How was the identity of the decision maker (PO-001) verified, and what credentials or system logs confirm that this individual performed the assessment?",
+     "Which specific POE (Predicate Offense Evaluation) factors were considered and recorded in the assessment, and what evidence supports each factor?",
+     "Was any external information (e.g., customer profile updates, adverse media, sanctions lists) consulted as part of the decision, and can the check be reproduced?",
+     "Has any new information emerged since the decision (e.g., updated transaction patterns, customer declarations) that would affect the grounds of suspicion, and was the decision revisited?"
+    ],
+    "model": "nvidia/nemotron-3-super-120b-a12b"
+   }
+  },
+  {
+   "alert_id": "ALERT-14",
+   "twin_trace": {
+    "answered": 5,
+    "asked": 10,
+    "status": {
+     "IQ-01": "answered",
+     "IQ-02": "answered",
+     "IQ-03": "not_applicable",
+     "IQ-04": "answered",
+     "IQ-05": "answered",
+     "IQ-06": "needs_review",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cursory": {
+    "answered": 2,
+    "asked": 10,
+    "status": {
+     "IQ-01": "needs_review",
+     "IQ-02": "unanswered",
+     "IQ-03": "not_applicable",
+     "IQ-04": "unanswered",
+     "IQ-05": "answered",
+     "IQ-06": "unanswered",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cross_examination": {
+    "status": "ok",
+    "reason": null,
+    "findings": 5,
+    "answered_with_valid_citations": 0,
+    "not_answered": 5,
+    "rejected": 0,
+    "questions": [
+     "Did the bank obtain and document a direct confirmation from CUST-14 (or nominee) verifying the relationship to V Patel and the purpose of the remittances?",
+     "Was the decision maker PO-001 authorized to close/file alerts without additional supervisory review per the bank's AML policy?",
+     "Was there any independent validation (e.g., branch visit, nominee contact, courier) performed and recorded to support the claim that CUST-14 was reached through alternative means?",
+     "Was the decision to FILE rather than submit a SAR reviewed and approved by a secondary AML officer or committee?",
+     "Have any changes occurred in the customer's risk profile or transaction pattern after the decision date that would warrant a re\u2011evaluation?"
+    ],
+    "model": "nvidia/nemotron-3-super-120b-a12b"
+   }
+  },
+  {
+   "alert_id": "ALERT-15",
+   "twin_trace": {
+    "answered": 6,
+    "asked": 11,
+    "status": {
+     "IQ-01": "answered",
+     "IQ-02": "answered",
+     "IQ-03": "answered",
+     "IQ-04": "answered",
+     "IQ-05": "answered",
+     "IQ-06": "needs_review",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cursory": {
+    "answered": 2,
+    "asked": 10,
+    "status": {
+     "IQ-01": "needs_review",
+     "IQ-02": "unanswered",
+     "IQ-03": "not_applicable",
+     "IQ-04": "unanswered",
+     "IQ-05": "answered",
+     "IQ-06": "unanswered",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cross_examination": {
+    "status": "ok",
+    "reason": null,
+    "findings": 5,
+    "answered_with_valid_citations": 4,
+    "not_answered": 1,
+    "rejected": 0,
+    "questions": [
+     "Who made the decision, and how was their identity established?"
+    ],
+    "model": "nvidia/nemotron-3-super-120b-a12b"
+   }
+  },
+  {
+   "alert_id": "ALERT-16",
+   "twin_trace": {
+    "answered": 5,
+    "asked": 10,
+    "status": {
+     "IQ-01": "answered",
+     "IQ-02": "answered",
+     "IQ-03": "not_applicable",
+     "IQ-04": "answered",
+     "IQ-05": "answered",
+     "IQ-06": "needs_review",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cursory": {
+    "answered": 2,
+    "asked": 10,
+    "status": {
+     "IQ-01": "needs_review",
+     "IQ-02": "unanswered",
+     "IQ-03": "not_applicable",
+     "IQ-04": "unanswered",
+     "IQ-05": "answered",
+     "IQ-06": "unanswered",
+     "IQ-07": "needs_review",
+     "IQ-08": "unanswered",
+     "IQ-09": "unanswered",
+     "IQ-10": "answered",
+     "IQ-11": "unanswered"
+    }
+   },
+   "cross_examination": {
+    "status": "ok",
+    "reason": null,
+    "findings": 4,
+    "answered_with_valid_citations": 4,
+    "not_answered": 0,
+    "rejected": 0,
+    "questions": [],
+    "model": "nvidia/nemotron-3-super-120b-a12b"
+   }
+  }
+ ],
+ "wall_seconds": 193.3
+}

@@ -22,6 +22,8 @@ rules_cited: [STR-001, RFI-003, POE-003, POE-005, POE-006, POE-012, INS-001, INS
 
 **Ingested signals:** None from external databases. Alert is internal/branch-initiated.
 
+**Case record in the seed (`ddp/seed_data.py`, 2026-10-28):** a pension credit (₹20,000) and the LIC standing-instruction debit (₹8,000) earlier in the month, then the ₹85,00,000 RTGS. The ₹84L cash withdrawal was requested but not paid, so it is not a transaction. ASSUMED: the dates of the pension and LIC rows; the pension amount within the stated range.
+
 ---
 
 ### 2. Reasoning Chain
@@ -76,7 +78,7 @@ POE Factor 12 — KYC availability (POE-012)
 
 If within 5 working days of the alert, CUST-03 provides a registered sale deed (with sub-registrar stamp and registration number), TDS certificate (Form 16B showing deduction at source on property sale), and buyer confirmation that Greenfield Developers Pvt Ltd was the purchasing party, the following closure rationale would apply:
 
-The ₹85L credit from Greenfield Developers Pvt Ltd represents confirmed proceeds from the registered sale of [property description] by CUST-03. The sale deed is registered at [sub-registrar's office], registration no. [X], dated [date]. TDS at the applicable rate was deducted by the buyer. The cash withdrawal request of ₹84L was fulfilled after documentation was verified and the branch manager obtained the RE's compliance officer's sign-off.
+The ₹85L credit from Greenfield Developers Pvt Ltd represents confirmed proceeds from the registered sale of [property description] by CUST-03. The sale deed is registered at [sub-registrar's office], registration no. [X], dated [date]. TDS at the applicable rate was deducted by the buyer. The cash withdrawal request (for nearly the full credit) was fulfilled after documentation was verified and the branch manager obtained the RE's compliance officer's sign-off.
 
 The dormancy anomaly (RFI-003) is explained by the property sale being a one-time event; the customer's 30-month pension-only baseline is consistent with a retired individual with limited financial activity. No other red-flag indicators apply. Alert closed; documentation retained per PMLA s.12(1)(c) [corpus: RR-001].
 

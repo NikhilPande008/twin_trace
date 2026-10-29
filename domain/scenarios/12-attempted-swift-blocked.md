@@ -29,6 +29,8 @@ rules_cited: [STR-001, STR-002, STR-003, RFI-008, POE-001, POE-002, POE-011, SB-
 
 **STR obligation under STR-003:** Both transactions were attempted but not completed. The attempted-transaction rule (corpus: STR-003) applies: STR is required even though no funds were transferred.
 
+**Case record in the seed (`ddp/seed_data.py`, 2026-10-28):** the two SWIFT attempts were blocked and are not in the case record, which holds executed CREDIT/DEBIT rows only. It holds the account's domestic business flows in the three weeks before T+1: three RTGS receipts from electronics retailers (₹6,80,000, ₹9,40,000, ₹8,85,000; ₹25,05,000, the alert amount) and two supplier payments. ASSUMED: all five rows. FOR DOMAIN REVIEW: this scenario does not define the alert amount (₹25,05,000).
+
 ---
 
 ### 2. Reasoning Chain
@@ -83,11 +85,11 @@ Statutory basis:
 
 ### 3. Draft Ground of Suspicion
 
-Account holder CUST-12, a declared importer of electronic goods (GST-registered, declared income ₹4,50,000/year), attempted two outward SWIFT transfers on [T+1] and [T+4] — both for USD 18,000 (≈₹15L) to Zhao Trading Co., Shenzhen, China — stating "advance payment for import of electronic goods." Both attempts were blocked by this RE's compliance system: the first because the named correspondent bank [Bank A, Shenzhen] appears on the RE's internal correspondent risk register; the second because the same beneficiary was flagged.
+Account holder CUST-12, a declared importer of electronic goods (GST-registered, declared income ₹4,50,000/year), attempted two outward SWIFT transfers on [T+1] and [T+4] — each for the same USD-denominated amount, to Zhao Trading Co., Shenzhen, China — stating "advance payment for import of electronic goods." Both attempts were blocked by this RE's compliance system: the first because the named correspondent bank [Bank A, Shenzhen] appears on the RE's internal correspondent risk register; the second because the same beneficiary was flagged.
 
 Neither transaction was completed. Both constitute attempted transactions reportable under PMLA 2002 s.12(1)(b) and the FIU-IND requirement to file STRs for attempted transactions (corpus: STR-003).
 
-The following circumstances form the basis for suspicion: (a) the first block was communicated to CUST-12; (b) four days later, CUST-12 re-attempted the identical transfer to the same blocked beneficiary using an alternative correspondent routing via Hong Kong, demonstrating awareness of the first block and a deliberate attempt to circumvent the compliance control; (c) USD 18,000 (₹15L) represents 3.3× CUST-12's declared annual income of ₹4.5L, with no prior international wire transfer history in 18 months; (d) Zhao Trading Co. is not a known counterparty in CUST-12's transaction history.
+The following circumstances form the basis for suspicion: (a) the first block was communicated to CUST-12; (b) four days later, CUST-12 re-attempted the identical transfer to the same blocked beneficiary using an alternative correspondent routing via Hong Kong, demonstrating awareness of the first block and a deliberate attempt to circumvent the compliance control; (c) each attempted transfer was 3.3× CUST-12's declared annual income of ₹4.5L, with no prior international wire transfer history in 18 months; (d) Zhao Trading Co. is not a known counterparty in CUST-12's transaction history.
 
 The re-routing behaviour on T+4 — specifically, the use of a different correspondent bank to reach the same blocked beneficiary — is inconsistent with a legitimate import payment where an administrative block would normally prompt a phone call to the bank, not an alternate-route re-attempt. This behaviour materially strengthens the suspicion that the transfer was intended for a purpose that warranted circumventing the compliance block.
 

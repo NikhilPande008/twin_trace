@@ -74,6 +74,34 @@ SCHEMAS: dict[str, dict] = {
             "reopen_triggers": {"type": "array", "items": {"type": "string"}},
         },
     },
+    "clause_proposal": {
+        "type": "object",
+        "required": ["changed", "quote", "summary"],
+        "properties": {
+            "changed": {"type": "boolean"},
+            "quote": {"type": "string"},
+            "summary": {"type": "string"},
+        },
+    },
+    "inspector_findings": {
+        "type": "object",
+        "required": ["findings"],
+        "properties": {
+            "findings": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "required": ["question", "answered", "cited_rows", "note"],
+                    "properties": {
+                        "question": {"type": "string"},
+                        "answered": {"type": "boolean"},
+                        "cited_rows": {"type": "array", "items": {"type": "string"}},
+                        "note": {"type": "string"},
+                    },
+                },
+            }
+        },
+    },
 }
 
 WRAPPER_KEY = {"poe_assessment": "factors", "quality_check": "items"}

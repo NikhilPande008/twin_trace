@@ -18,11 +18,11 @@ rules:
       - banking_companies
       - financial_institutions
     primary_source:
-      document: "FIU-IND Reporting Format Guide v2.2"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "CTR — Filing threshold"
-      accessed_date: null
+      document: "PML (Maintenance of Records) Rules, 2005 — Rule 3(1)(A)-(B)"
+      url: "https://fiuindia.gov.in/files/AML_Legislation/notification.html"
+      url_verified: true
+      section: "Rule 3(1)(A)-(B)"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: PROVEN
     my_synthesis: >
@@ -32,12 +32,14 @@ rules:
       triggers both the CTR obligation (once the split transactions are aggregated)
       and a separate STR obligation for the structuring behaviour itself (RFI-002).
       The product should surface both obligations when cash structuring is detected.
-    last_verified: null
-    snapshot_date: "2026-09-17"
+    last_verified: "2026-10-29"
+    snapshot_date: "2026-10-29"
     gap_notes: >
-      Verify the exact phrase "integrally connected" in the current FIU-IND RFG v2.2.
-      Verify whether the ₹10 lakh threshold has been revised in any 2024–2026 PMLA
-      amendment or FIU-IND circular.
+      Verify the exact phrase "integrally connected" in the current FIU-IND RFG v2.2. Verify
+      whether the ₹10 lakh threshold has been revised in any 2024–2026 PMLA amendment or
+      FIU-IND circular. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): source moved from the
+      Reporting Format Guide to the Rules ('more than ten lakhs rupees').
     related_rules:
       - CTR-002
       - RFI-002
@@ -54,11 +56,11 @@ rules:
       - banking_companies
       - financial_institutions
     primary_source:
-      document: "FIU-IND Reporting Format Guide v2.2"
-      url: "https://fiuindia.gov.in/files/Downloads/Downloads.html"
-      url_verified: false
-      section: "CTR — Filing deadline"
-      accessed_date: null
+      document: "PML (Maintenance of Records) Rules, 2005 — Rule 8(1); FIU-IND FAQs"
+      url: "https://fiuindia.gov.in/files/AML_Legislation/notification.html"
+      url_verified: true
+      section: "Rule 8(1)"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: PROVEN
     my_synthesis: >
@@ -66,12 +68,14 @@ rules:
       event-triggered within 7 working days of suspicion formation. The CTR deadline
       is in calendar days (not working days). The product's alert-to-STR ratio
       dashboard does not cover CTR volume — that is a separate compliance metric.
-    last_verified: null
-    snapshot_date: "2026-09-17"
+    last_verified: "2026-10-29"
+    snapshot_date: "2026-10-29"
     gap_notes: >
-      Confirm 15th day is still the deadline in FINGate 2.0 and that it is calendar
-      days not working days. Verify the interpretation for integrally connected
-      transactions spanning a month boundary.
+      Confirm 15th day is still the deadline in FINGate 2.0 and that it is calendar days not
+      working days. Verify the interpretation for integrally connected transactions spanning
+      a month boundary. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): the Rules state 'by the 15th
+      day of the succeeding month'.
     related_rules:
       - CTR-001
 
@@ -86,11 +90,11 @@ rules:
       - banking_companies
       - financial_institutions
     primary_source:
-      document: "FIU-IND Reporting Format Guide v2.2; FIU-IND FAQs"
-      url: "https://fiuindia.gov.in"
-      url_verified: false
-      section: "CTR — relationship with STR"
-      accessed_date: null
+      document: "PML (Maintenance of Records) Rules, 2005 — Rules 3(1)(A), 3(1)(D), 8(1)-(2); Reporting Format Guide v2.2 §3.4.7"
+      url: "https://fiuindia.gov.in/files/AML_Legislation/notification.html"
+      url_verified: true
+      section: "Rules 3(1)(A), 3(1)(D), 8(1)-(2)"
+      accessed_date: "2026-10-29"
     effective_date: null
     evidence_level: ASSUMED
     my_synthesis: >
@@ -99,8 +103,13 @@ rules:
       must flag this dual-obligation scenario when a suspicious cash transaction
       exceeds ₹10 lakh.
     last_verified: null
-    snapshot_date: "2026-09-11"
-    gap_notes: "Locate the specific FIU-IND FAQ that addresses dual CTR+STR filing. Confirm this interpretation is current."
+    snapshot_date: "2026-10-29"
+    gap_notes: >
+      Locate the specific FIU-IND FAQ that addresses dual CTR+STR filing. Confirm this
+      interpretation is current. 2026-10-29 source review
+      (primary sources fetched and read; approved by the human): two independent obligations in
+      the Rules; the guide says CTR and STR share a format and go in separate batches. No
+      explicit 'file both' sentence found.
     related_rules:
       - CTR-001
       - STR-001

@@ -50,7 +50,7 @@
 | `INSPECTION_FOCUS` | `INS-` | Areas FIU-IND inspectors scrutinise during on-site inspections |
 | `STATUTORY_BASIS` | `SB-` | PMLA / RBI / FATF statutory references |
 | `RECORD_RETENTION` | `RR-` | How long and in what form records must be retained |
-| `TIPPING_OFF` | `TO-` | Tipping-off prohibition (PMLA s.12A) |
+| `TIPPING_OFF` | `TO-` | Tipping-off prohibition (PML Rules 2005 Rule 8(6); PMLA s.12(2)) |
 | `MULE_ACCOUNT_CONTEXT` | `MAC-` | Regulatory context around mule accounts; secondary sources only |
 
 ---

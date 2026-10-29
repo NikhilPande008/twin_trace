@@ -1,0 +1,21 @@
+# Synthetic registry feed for the reopen watch (T12.5). Not real I4C data: the counterparties are
+# the synthetic ones in ddp/seed_data.py. Each item is one change a bank could receive from a
+# suspect registry after a decision was recorded. `action`: flag | unflag.
+version: 1
+registry: "I4C Suspect Registry (synthetic feed)"
+items:
+  - item_id: REG-0001
+    received_on: "2026-11-02"
+    action: flag
+    counterparty: "Sister (KYC-linked family)"
+    note: "Sister's UPI handle reported once."
+  - item_id: REG-0002
+    received_on: "2026-11-09"
+    action: flag
+    counterparty: "City General Hospital (invoice on file)"
+    note: "Hospital collection handle reported in a mule cluster."
+  - item_id: REG-0003
+    received_on: "2026-11-12"
+    action: unflag
+    counterparty: "UPI handle C (I4C-flagged)"
+    note: "Registry withdraws the flag on handle C as a shared-merchant false positive."

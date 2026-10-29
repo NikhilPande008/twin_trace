@@ -1,11 +1,12 @@
 # Twin Trace
 # Install: pip install -r requirements.txt   (Python 3.11+)
 
-streamlit>=1.32.0        # UI
+streamlit>=1.51.0        # UI (width="stretch" on button, dataframe, bar_chart)
 requests>=2.31           # Nebius Token Factory (OpenAI-compatible HTTP)
 python-dotenv>=1.0.0     # .env loading
 pyyaml>=6.0.1            # corpus YAML
 pandas>=2.0.0            # dataframe display
+Authlib>=1.3.2           # officer sign-in (st.login, OIDC); used only when .streamlit/secrets.toml has [auth]
 
 # Nebius Sandboxes (T1.3) — required only for COMPUTE_BACKEND=nebius-sandbox
 # pip install contree-sdk installs both contree-sdk and contree-client

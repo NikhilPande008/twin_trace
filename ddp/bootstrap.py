@@ -120,7 +120,11 @@ def build(settings: Settings | None = None, store: Store | None = None):
     llm = TokenFactoryClient(settings) if settings.llm_configured else None
     if llm is not None and settings.demo_mode:
         llm = CallBudget(llm, settings.demo_max_model_calls)
-    skills = CoPilotSkills(store, llm=llm)
+    embedder = None
+    if llm is not None and settings.retrieval_mode == "hybrid":
+        from .embeddings import TokenFactoryEmbedder
+        embedder = TokenFactoryEmbedder(settings, settings.embedding_model)
+    skills = CoPilotSkills(store, llm=llm, embedder=embedder)
     runner = ComputeRunner(store, backend_from_name(settings.compute_backend,
                                                     api_key=settings.api_key,
                                                     project_id=settings.nebius_project_id))
@@ -149,3 +153,20 @@ def build_investigator(store: Store, skills, runner, settings: Settings | None =
 def build_stress_tester(store: Store, skills, runner):
     from .stress import StressTester
     return StressTester(runner, store, skills)
+
+
+def build_panel(store: Store, settings: Settings | None = None, session_llm=None):
+    """Tier panel (T12.7): one fresh Token Factory client per tier so the calls can run in
+    parallel. In public demo mode the panel must spend the SESSION's call budget (`session_llm`,
+    the budgeted client the session's skills use), so the tiers run one after another on it; a
+    new budget per call would let a visitor bypass the cap. None without a key, or in demo mode
+    without the session's client."""
+    from .panel import TierPanel
+    settings = settings or get_settings()
+    if not settings.llm_configured:
+        return None
+    if settings.demo_mode:
+        if not isinstance(session_llm, CallBudget):
+            return None
+        return TierPanel(lambda: CoPilotSkills(store, llm=session_llm), parallel=False)
+    return TierPanel(lambda: CoPilotSkills(store, llm=TokenFactoryClient(settings)))

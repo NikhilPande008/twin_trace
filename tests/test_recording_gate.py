@@ -190,3 +190,21 @@ def test_failed_write_leaves_no_partial_decision():
         _record(skills, "Formed suspicion on the pass-through to the flagged handle.")
     assert _ledger_count(store) == 0
     assert store.verify_ledger_chain()["ok"]
+
+
+def test_needs_verification_rule_ids_never_reach_the_ledger():
+    import json as _json
+    from ddp.bootstrap import open_store as _open
+    from ddp.skills import CoPilotSkills as _Sk
+    store = _open(":memory:")
+    a = store.get_alert("ALERT-16")
+    cited = _json.loads(a["RULES_CITED"])
+    assert {"RFI-001", "RFI-005"} <= set(cited)              # the seed cites unverified rules
+    res = _Sk(store).alert_disposition_recorder(
+        alert_id="ALERT-16", customer_ref=a["CUSTOMER_REF"], disposition="NOT_FILE",
+        rationale_text="Family support and a hospital payment with an invoice on file; closed.",
+        rules_cited=cited, rfi_triggers=[], poe_assessment=[])
+    row = store.query("SELECT RULES_CITED, METADATA_JSON FROM DECISION_LEDGER WHERE DECISION_ID = ?",
+                      (res["decision_id"],))[0]
+    assert "RFI-001" not in row["RULES_CITED"] and "RFI-001" not in row["METADATA_JSON"]
+    assert _json.loads(row["METADATA_JSON"])["rules_cited_dropped_unverified"] == 2

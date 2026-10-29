@@ -60,7 +60,7 @@ _TIPPING_OFF_PATTERNS: list[tuple[str, re.Pattern, str]] = [
             r"we\s+(have\s+)?filed|fiu.{0,10}report|atr\s+filed|CTR\s+filed)\b",
             re.IGNORECASE,
         ),
-        "Text discloses or implies a regulatory filing (PMLA s.12A tipping-off prohibition, SB-003)",
+        "Text discloses or implies a regulatory filing (tipping-off: PML Rules Rule 8(6), SB-003)",
     ),
     (
         "tipping_off_disclosure",
@@ -82,7 +82,7 @@ _TIPPING_OFF_PATTERNS: list[tuple[str, re.Pattern, str]] = [
             re.IGNORECASE,
         ),
         "Text says the customer was or will be told about a report, the FIU, or the suspicion "
-        "(PMLA s.12A tipping-off prohibition, SB-003)",
+        "(tipping-off: PML Rules Rule 8(6), SB-003)",
     ),
     (
         "accusation_without_evidence",
