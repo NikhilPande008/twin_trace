@@ -24,8 +24,8 @@ STAKES = [
     {"rule_id": "INS-002",
      "claim": "Inspectors check that the decision was made by the Principal Officer or an "
               "authorised delegate.",
-     "here": "Each ledger row records the officer ID and time (self-asserted: no sign-in in "
-             "this build)."},
+     "here": "Each ledger row records the officer ID and time (self-asserted unless OpenID "
+             "Connect sign-in is configured; this demo has none)."},
     {"rule_id": "SB-003",
      "claim": "No one may reveal to the customer that an STR is filed or being considered "
               "(tipping-off).",

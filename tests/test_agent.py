@@ -204,3 +204,26 @@ def test_stress_tool_tells_the_agent_when_a_file_is_unsupported():
     out = inv._tool_stress_test(s, "FILE")
     assert out["base_verdict"] == "LOW" and out["robustness"]["meaningful"] is False
     assert "does not support this FILE" in out["summary"] and "Survives" not in out["summary"]
+
+
+# ALERT-01: F-INCOME-MULTIPLE-X10 = 123 (tenths, i.e. 12.3x); F-FLAGGED-SHARE-BP = 9875 (98.75%).
+def test_scaled_fact_written_as_a_plain_multiple_is_rejected():
+    """'123 times income' from a tenths fact of 123 is a 10x error (seen live on 2026-10-29)."""
+    for text in ("credits are 123 times declared income", "9875 of credits went to handle C"):
+        bad = dict(GOOD_SUBMIT, rationale=GOOD_SUBMIT["rationale"] + " Also, " + text + ".")
+        preview = _rejection_for(bad)
+        assert "numbers not from the tools" in preview, preview
+        assert "in tenths" in preview or "in basis_points" in preview, preview
+
+
+def test_scaled_fact_with_its_unit_or_fact_id_is_accepted():
+    for text in ("the multiple is 123 tenths", "F-INCOME-MULTIPLE-X10=123",
+                 "the flagged share is 9,875 basis points"):
+        ok = dict(GOOD_SUBMIT, rationale=GOOD_SUBMIT["rationale"] + " Also, " + text + ".")
+        inv, _, _ = _inv([
+            {"calls": [("get_case", {}), ("run_calculator", {}),
+                       ("stress_test", {"disposition": "FILE"})]},
+            {"calls": [("submit_assessment", ok)]},
+        ])
+        t = inv.investigate("ALERT-01")
+        assert t["status"] == "submitted" and t["rejections"] == 0, (text, t["steps"][-1])

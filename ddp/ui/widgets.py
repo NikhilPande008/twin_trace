@@ -138,6 +138,7 @@ def _style():
 .ddp-queue-meta{{display:flex;flex-wrap:wrap;gap:8px 16px;color:{MUTED_TEXT};font-size:.82rem;margin-top:5px}}
 .ddp-provenance{{border-left:3px solid {ACCENT};padding:8px 12px;margin:8px 0;background:{var('brand_bg')};
   font-size:.84rem}}
+.st-key-signal_brief_tiles [data-testid="stMetricValue"]{{font-size:1.5rem}}
 abbr[title]{{text-decoration:underline dotted;text-underline-offset:3px;cursor:help}}
 :focus-visible{{outline:2px solid {FOCUS} !important;outline-offset:2px}}
 @media (max-width: 760px){{

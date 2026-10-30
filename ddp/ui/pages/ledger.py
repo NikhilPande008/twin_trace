@@ -7,6 +7,7 @@ import json
 import streamlit as st
 
 from ...compute import reproduce_recorded
+from ...money import format_inr
 from ...package import build_package, check_uploaded_package
 from ...palette import EVIDENCE_BADGE, EVIDENCE_UNKNOWN, SLA_OK, SLA_SOON, SLA_URGENT
 from ..inspection_view import inspection_view
@@ -199,7 +200,7 @@ def page_ledger():
                 st.markdown(f"**Alert type:** {r.get('ALERT_TYPE') or '—'}")
                 amt = r.get("ALERT_AMOUNT_INR")
                 if amt:
-                    st.markdown(f"**Amount:** ₹{float(amt):,.0f}")
+                    st.markdown(f"**Amount:** {format_inr(amt)}")
                 st.markdown(f"**Customer profile:** {str(r.get('CUSTOMER_PROFILE') or '—')[:100]}")
 
             st.markdown("**Rationale text (as recorded):**")

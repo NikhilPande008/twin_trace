@@ -6,6 +6,10 @@ evidence would change it, and why each figure in it can be defended to FIU-IND.*
 Built for the **Nebius × NVIDIA Global AI Hackathon 2026** · Track: Best Apps & Agents
 (+ Best Use of Tavily).
 
+**▶ Demo video (2:55):** <https://youtu.be/zLL_1Q_YnSg> · **Live app:**
+<https://twintrace.streamlit.app> (synthetic data; each visitor's session has its own data, reset
+on reload, and up to 40 Nemotron calls)
+
 > **The model drafts. A fixed, hashed calculator supplies every number. A gate refuses anything
 > else, again at the moment a decision is recorded.**
 >
@@ -13,8 +17,8 @@ Built for the **Nebius × NVIDIA Global AI Hackathon 2026** · Track: Best Apps 
 > run shows it), **STUBBED** or **ASSUMED**. Every public claim and its evidence is in
 > [docs/CLAIMS_REGISTER.md](docs/CLAIMS_REGISTER.md).
 
-**Try it in three minutes (no API key needed):** run the app, open **Twin Cases** to see two
-look-alike alerts and what each decision rests on, then **Proof Check** and try to slip a made-up
+**Try it in three minutes:** use the live app (or run it locally; no API key needed). Open
+**Twin Cases** to see two look-alike alerts and what each decision rests on, then **Proof Check** and try to slip a made-up
 total past the gate, then **Watch** and apply the synthetic registry feed to see the closed twin
 reopen (and see why flagging the sister does not), then **Decision Ledger** to check the hash chain,
 run an inspection replay and verify a decision package. **Measured Results** shows every number we
@@ -42,7 +46,7 @@ FIU-IND inspector months later. Generic LLM copilots fail this job in two ways. 
 figures themselves, and they sound certain. A PO cannot sign a Ground of Suspicion with a total
 the model invented.
 
-This copilot does three things instead.
+This copilot does five things instead.
 
 1. **It never does the arithmetic.** Every ₹ figure comes from a fixed, hashed *calculator of
    record* or from a single transaction row. A draft that cites any other number cannot be
@@ -64,9 +68,11 @@ This copilot does three things instead.
 3. **An agent investigates, and the system checks its work.** Nemotron decides which tools to
    call and in what order. Its final assessment is rejected and sent back if it cites a fact,
    transaction or rule that the tools never returned. It is also rejected if it contains a number
-   that did not come from the calculator. (**PROVEN live** on 16 synthetic alerts, 2026-10-21
-   09:12 UTC: 12/12 agreement on clear FILE/NOT_FILE; 16 submissions rejected by validation and
-   corrected, across 12 alerts. Source: the final live report, below.)
+   that did not come from the calculator, or a scaled fact written bare (420 tenths stated as
+   "420 times income" instead of 42). (**PROVEN live** on 16 synthetic alerts, 2026-10-28
+   13:38 UTC: 12/12 agreement on clear FILE/NOT_FILE; 14 submissions rejected by validation and
+   corrected, across 9 alerts. Source: the live report, below. The scaled-fact check is newer than
+   that run and is PROVEN offline: `tests/test_agent.py`.)
 
 4. **It keeps checking the decision after it is recorded.** A decision rests on a few facts, so
    when one of them changes (a registry flags or withdraws a counterparty, a cited rule changes at
@@ -107,7 +113,7 @@ can be reconstructed, and re-computed, from its hashes.
 ```
 Alert ─► screen_request ─► calculator of record ─► Decision Stress Test ─► evidence ─► AI steps ─► PO decides ─► hash-chained ledger
           (tipping-off)     (hashed program,        (branch runs on            (Tavily:        (Nemotron     (AI shown last,
-                             local or Sandbox)       counter-hypotheses,        adverse media,   Nano/Super/   anti-anchoring)
+                             local or Sandbox)       counter-hypotheses,        typology topic,  Nano/Super/   anti-anchoring)
                                                      minimal flip sets)         regulator sites) Ultra)
 
 Agentic investigator (Nemotron Super, tool calling, ≤10 steps):

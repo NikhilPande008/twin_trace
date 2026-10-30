@@ -171,7 +171,7 @@ class StressTester:
             return {"status": "unavailable", "reason": str(e)[:200]}
         allowed = allowed_numbers(report, transactions, facts)
         text = " ".join([obj["summary"], *obj["load_bearing_evidence"], *obj["reopen_triggers"]])
-        bad = sorted(n for n in numbers_in(text) if n not in allowed)
+        bad = sorted(n for n in numbers_in(strip_labelled_scaled(text, facts)) if n not in allowed)
         bad += unsupported_money(text, rupee_evidence(transactions, facts))
         if bad:
             return {"status": "rejected", "reason": f"ungrounded numbers: {bad[:5]}",
@@ -193,11 +193,56 @@ def numbers_in(text: str) -> set[float]:
     return out
 
 
+# Scaled facts are stored as integers: "tenths" (x10, 420 = 42.0x) and "basis_points" (x10000,
+# 9875 = 98.75%). Their raw value is allowed in prose only next to its unit or fact ID
+# ("420 tenths", "F-INCOME-MULTIPLE-X10=420"); written bare ("420 times income") it is a 10x or
+# 100x error, so it is not an allowed number. The display forms (42, 98.75) are.
+_SCALED_UNIT = {"tenths": r"tenths?\b",
+                "basis_points": r"(?:basis[\s-]?points?|bps?)\b"}
+
+
+def fact_numbers(facts) -> set[float]:
+    """Allowed numbers from calculator facts: plain values, and scaled facts in display form."""
+    out = set()
+    for f in facts:
+        v = f.get("value")
+        if not isinstance(v, (int, float)):
+            continue
+        if f.get("unit") == "tenths":
+            out.add(round(v / 10, 1))
+        elif f.get("unit") == "basis_points":
+            out |= {round(v / 100, 2), round(v / 100, 1), float(round(v / 100))}
+        else:
+            out.add(float(v))
+    return out
+
+
+def strip_labelled_scaled(text: str, facts) -> str:
+    """`text` with raw scaled values removed where they carry their unit or fact ID."""
+    for f in facts:
+        unit, v = f.get("unit"), f.get("value")
+        if unit not in _SCALED_UNIT or not isinstance(v, (int, float)):
+            continue
+        raw = rf"{int(v):,}|{int(v)}"
+        text = re.sub(rf"(?<![\d,.])(?:{raw})\s*{_SCALED_UNIT[unit]}", " ", text, flags=re.I)
+        text = re.sub(rf"{re.escape(f['fact_id'])}\s*[=:]\s*(?:{raw})(?![\d,]|\.\d)", " ", text)
+    return text
+
+
+def scaled_misstatements(bad: list[float], facts) -> list[str]:
+    """For a rejection message: which rejected numbers are a scaled fact's raw value."""
+    out = []
+    for f in facts:
+        v = f.get("value")
+        if f.get("unit") in _SCALED_UNIT and isinstance(v, (int, float)) and float(v) in bad:
+            div = 10 if f["unit"] == "tenths" else 100
+            out.append(f"{int(v)} is {f['fact_id']} in {f['unit']}; write {v / div:g}")
+    return out
+
+
 def allowed_numbers(report: dict, transactions: list[dict], facts: list[dict]) -> set[float]:
     allowed = {float(t.get("amount_inr") or 0) for t in transactions}
-    for f in facts:
-        if isinstance(f.get("value"), (int, float)):
-            allowed.add(float(f["value"]))
+    allowed |= fact_numbers(facts)
     rob = report["robustness"]
     allowed |= {float(rob["single_hypotheses"]), float(rob["survived"]),
                 float(report["smallest_flip_size"] or 0), float(len(report["minimal_flip_sets"]))}

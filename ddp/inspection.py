@@ -28,6 +28,7 @@ import re
 from .compute.runner import reproduce_recorded
 from .store import event_row_hash, json_list, json_obj, ledger_row_hash
 from .enforcement import question_bank
+from .verdict import reading
 
 STATUSES = ("answered", "needs_review", "unanswered", "not_applicable")
 MIN_RATIONALE_WORDS = 15
@@ -89,12 +90,16 @@ def decision_basis_recorded(c):
                     "decision, so the record does not show what it rests on.")
     ev = tests[-1]
     r = _j(ev["CONTENT_JSON"], {})
-    if disp == "FILE":
-        lb = [h["label"] for h in r.get("load_bearing", [])]
-        msg = ("Rests on: " + "; ".join(lb[:3])) if lb else r.get("summary", "")
-    else:
-        trig = [" + ".join(t["if"]) for t in r.get("reopen_triggers", [])]
-        msg = ("Reopen if: " + "; ".join(trig[:3])) if trig else r.get("summary", "")
+    # the same chips, in the same order (smallest flip set first), as the verdict card
+    try:
+        side = reading(r)
+    except (KeyError, TypeError):           # an older or partial report: fall back to its summary
+        side = {"chips": []}
+    chips = side["chips"]
+    label = "Rests on" if disp == "FILE" else "Reopen if"
+    msg = (f"{label}: " + "; ".join(chips)
+           + (f" (+{side['more']} more in the stress test)" if side.get("more") else "")
+           ) if chips else r.get("summary", "")
     return _ans("answered", msg, [f"evidence:{ev['EVIDENCE_ID']}"])
 
 
