@@ -556,7 +556,8 @@ class Store:
 
     # ── dashboard ────────────────────────────────────────────────────────────
     def dashboard_alerts(self) -> list[dict]:
-        return self.query("SELECT ALERT_STATUS, ALERT_TYPE, SIGNAL_SOURCE, ALERT_AMOUNT_INR FROM ALERTS")
+        return self.query("SELECT ALERT_STATUS, ALERT_TYPE, SIGNAL_SOURCE, ALERT_AMOUNT_INR, "
+                          "ALERT_DATE FROM ALERTS")
 
     def dashboard_ledger(self) -> list[dict]:
         return self.query("SELECT DISPOSITION, SLA_DAYS_REMAINING, DECISION_MADE_AT FROM DECISION_LEDGER")

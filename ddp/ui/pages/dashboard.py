@@ -5,6 +5,7 @@ from __future__ import annotations
 import streamlit as st
 
 from ..runtime import get_store
+from ..widgets import sla_days_left
 
 
 def page_dashboard():
@@ -21,7 +22,11 @@ def page_dashboard():
     filed     = sum(1 for r in ledger_rows if r["DISPOSITION"] == "FILE")
     not_filed = sum(1 for r in ledger_rows if r["DISPOSITION"] == "NOT_FILE")
     deferred  = sum(1 for r in ledger_rows if r["DISPOSITION"] == "DEFERRED")
-    overdue   = sum(1 for r in ledger_rows if (r["SLA_DAYS_REMAINING"] or 99) < 0)
+    # open alerts past the window, counted as the Alert Queue counts them; and decisions
+    # that were recorded after it
+    open_overdue = sum(1 for r in alerts_rows if r["ALERT_STATUS"] == "OPEN"
+                       and r.get("ALERT_DATE") and sla_days_left(r["ALERT_DATE"]) < 0)
+    late      = sum(1 for r in ledger_rows if (r["SLA_DAYS_REMAINING"] or 99) < 0)
     ratio     = round(filed * 100 / (filed + not_filed), 1) if (filed + not_filed) > 0 else None
 
     st.subheader("Alert Pipeline")
@@ -31,7 +36,7 @@ def page_dashboard():
     c3.metric("Filed (STR)", filed)
     c4.metric("Not Filed", not_filed)
 
-    st.subheader("Key FIU-IND Inspection Metrics")
+    st.subheader("Inspection readiness (internal metrics)")
     m1, m2, m3 = st.columns(3)
 
     if ratio is not None:
@@ -43,9 +48,9 @@ def page_dashboard():
     else:
         m1.metric("Alert-to-STR Ratio", "—", help="Record some decisions first.")
 
-    m2.metric("SLA Breaches (>7 WD)", overdue,
-              delta=f"{overdue} overdue" if overdue else None,
-              delta_color="inverse")
+    m2.metric("Open alerts past 7 WD", open_overdue,
+              help="Counted from the alert date, as on the Alert Queue. Decisions recorded "
+                   f"after the 7-working-day window: {late}.")
     m3.metric("Deferred / Pending Info", deferred)
 
     st.divider()
@@ -71,7 +76,7 @@ def page_dashboard():
         s = r.get("SIGNAL_SOURCE") or "UNKNOWN"
         src_counts[s] = src_counts.get(s, 0) + 1
     for src, cnt in sorted(src_counts.items(), key=lambda x: -x[1]):
-        pct = cnt * 100 // len(alerts_rows) if alerts_rows else 0
+        pct = round(cnt * 100 / len(alerts_rows)) if alerts_rows else 0
         st.markdown(f"`{src}` — {cnt} alerts ({pct}%)")
 
     st.divider()

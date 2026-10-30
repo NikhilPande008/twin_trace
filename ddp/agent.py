@@ -10,7 +10,7 @@ from the corpus; every tool call is written to EVIDENCE (type 'agent_step') with
   stress_test               counterfactual branch runs (ddp.stress) for a proposed disposition
   lookup_rule               BM25 over PROVEN/ASSUMED corpus rules; abstains when nothing covers it
   check_regulator_updates   Tavily, regulator domains only; results are unverified pointers
-  screen_adverse_media      Tavily adverse-media search on the case subject
+  screen_adverse_media      Tavily typology search (topic only, never the customer)
   submit_assessment         terminal: disposition + rationale + citations, validated here
 
 submit_assessment is REJECTED back to the model (it may fix and resubmit) when it cites a fact,
